@@ -426,11 +426,21 @@ select:hover {
   border-color: var(--ongc-success);
 }
 
+
 .field-selection-table {
   width: auto;
   margin: 0 auto;
   border-collapse: separate;
   border-spacing: 8px;
+}
+.field-selection-table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--ongc-white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px var(--ongc-shadow);
+  margin: 16px 0;
 }
 
 .field-selection-table td {
