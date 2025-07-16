@@ -5,8 +5,9 @@ import autoTable from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType } from 'docx';
 
+// MODIFICATION: Removed the internal sortConfig state and getSortedData function.
+// The component now expects the 'data' prop to be pre-sorted by the parent.
 const ExportButtons = ({ data, headers, selectedFields, setSelectedFields }) => {
-  const [sortConfig, setSortConfig] = useState({ field: null, direction: 'asc' });
   const [fileName, setFileName] = useState("Contracts Details");
   const [isExporting, setIsExporting] = useState(false);
   const [showFieldSelection, setShowFieldSelection] = useState(false);
@@ -23,23 +24,12 @@ const ExportButtons = ({ data, headers, selectedFields, setSelectedFields }) => 
     setSelectedFields(selectedFields.length === headers.length ? [] : headers);
   };
 
-  const getSortedData = () => {
-    if (!sortConfig.field) return data;
-    return [...data].sort((a, b) => {
-      const valA = a[sortConfig.field]?.toString().toLowerCase() || '';
-      const valB = b[sortConfig.field]?.toString().toLowerCase() || '';
-      if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-  };
-
   const exportToCSV = () => {
     setIsExporting(true);
     try {
-      const sorted = getSortedData();
+      // Directly use the 'data' prop, which is now pre-sorted.
       const csvContent = [selectedFields.join(",")].concat(
-        sorted.map(row =>
+        data.map(row =>
           selectedFields.map(h => `"${(row[h] || '').toString().replace(/"/g, '""')}"`).join(",")
         )
       );
@@ -57,11 +47,11 @@ const ExportButtons = ({ data, headers, selectedFields, setSelectedFields }) => 
       const worksheet = workbook.addWorksheet("Contracts Details");
       worksheet.addRow(selectedFields);
 
-      const sortedData = getSortedData();
-      sortedData.forEach(row => worksheet.addRow(selectedFields.map(h => row[h] || "")));
+      // Directly use the 'data' prop.
+      data.forEach(row => worksheet.addRow(selectedFields.map(h => row[h] || "")));
 
       worksheet.columns = selectedFields.map(h => {
-        const max = Math.max(h.length, ...sortedData.map(r => (r[h] || '').toString().length));
+        const max = Math.max(h.length, ...data.map(r => (r[h] || '').toString().length));
         return { width: Math.min(50, max * 0.8 + 2) };
       });
 
@@ -76,117 +66,62 @@ const ExportButtons = ({ data, headers, selectedFields, setSelectedFields }) => 
     }
   };
 
-const exportToPDF = () => {
-  setIsExporting(true);
-  try {
-    const selectedData = getSortedData(); // Already filtered + sorted
-    const numCols = selectedFields.length;
+  const exportToPDF = () => {
+    setIsExporting(true);
+    try {
+      const numCols = selectedFields.length;
+      let format = 'a4';
+      if (numCols > 10) format = 'a3';
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
 
-    // Decide format based on column count
-    let format = 'a4';
-    if (numCols > 10) format = 'a3';
+      const scale = Math.max(0.45, 1 - (numCols / 30));
+      const fontSize = 10 * scale;
+      const titleSize = 16 * scale;
+      const cellPadding = 2.5 * scale;
 
-    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(titleSize);
+      doc.text(fileName.replace(/_/g, ' '), 14, 14);
 
-    const maxColsAllowed = 30;
-    const scale = Math.max(0.45, 1 - (numCols / maxColsAllowed));
+      autoTable(doc, {
+        startY: 22,
+        head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
+        body: data.map(row => selectedFields.map(h => row[h]?.toString() || "")),
+        theme: 'grid',
+        tableWidth: 'auto',
+        margin: { top: 30, left: 10, right: 10 },
+        styles: { fontSize, fontStyle: 'normal', font: 'helvetica', halign: 'center', valign: 'middle', textColor: [26, 26, 26], lineColor: [210, 210, 210], lineWidth: 0.3, fillColor: [249, 249, 246], cellPadding },
+        headStyles: { fontSize: fontSize + 1.2, fontStyle: 'bold', textColor: [255, 255, 255], fillColor: [45, 106, 79], halign: 'center', valign: 'middle', cellPadding },
+        alternateRowStyles: { fillColor: [233, 242, 239] },
+        didDrawPage: (data) => {
+          const pageCount = doc.internal.getNumberOfPages();
+          doc.setFontSize(9);
+          doc.setTextColor(120);
+          doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
+        }
+      });
 
-    const fontSize = 10 * scale;
-    const titleSize = 16 * scale;
-    const cellPadding = 2.5 * scale;
-
-    // PDF Title
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(titleSize);
-    doc.text(fileName.replace(/_/g, ' '), 14, 14);
-
-    autoTable(doc, {
-      startY: 22,
-      head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
-      body: selectedData.map(row =>
-        selectedFields.map(h => row[h]?.toString() || "")
-      ),
-      theme: 'grid',
-      tableWidth: 'auto',
-      margin: { top: 30, left: 10, right: 10 },
-      styles: {
-        fontSize,
-        fontStyle: 'normal',
-        font: 'helvetica',
-        halign: 'center',
-        valign: 'middle',
-        textColor: [26, 26, 26], // var(--ongc-black)
-        lineColor: [210, 210, 210], // subtle border like UI
-        lineWidth: 0.3,
-        fillColor: [249, 249, 246], // var(--ongc-white)
-        cellPadding
-      },
-      headStyles: {
-        fontSize: fontSize + 1.2,
-        fontStyle: 'bold',
-        textColor: [255, 255, 255], // white
-        fillColor: [45, 106, 79], // var(--ongc-green)
-        halign: 'center',
-        valign: 'middle',
-        cellPadding,
-      },
-      alternateRowStyles: {
-        fillColor: [233, 242, 239], // var(--ongc-hover-bg)
-      },
-      didDrawPage: (data) => {
-        const pageCount = doc.internal.getNumberOfPages();
-        doc.setFontSize(9);
-        doc.setTextColor(120);
-        doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
-      }
-    });
-
-    doc.save(`${fileName}.pdf`);
-  } catch (error) {
-    console.error("PDF Export Error:", error);
-    alert("Export failed. Try reducing the number of selected fields.");
-  } finally {
-    setIsExporting(false);
-  }
-};
+      doc.save(`${fileName}.pdf`);
+    } catch (error) {
+      console.error("PDF Export Error:", error);
+      alert("Export failed. Try reducing the number of selected fields.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const exportToDocx = async () => {
     setIsExporting(true);
     try {
-      const sortedData = getSortedData();
       const colWidths = selectedFields.map(h => {
-        const maxLength = Math.max(h.length, ...sortedData.map(r => (r[h] || '').toString().length));
+        const maxLength = Math.max(h.length, ...data.map(r => (r[h] || '').toString().length));
         return Math.min(8000, Math.max(1500, 6000 / selectedFields.length + maxLength * 100));
       });
 
-      const headerRow = new TableRow({
-        children: selectedFields.map((h, i) =>
-          new TableCell({
-            width: { size: colWidths[i], type: WidthType.DXA },
-            children: [new Paragraph(h)]
-          })
-        )
-      });
+      const headerRow = new TableRow({ children: selectedFields.map((h, i) => new TableCell({ width: { size: colWidths[i], type: WidthType.DXA }, children: [new Paragraph(h)] })) });
+      const dataRows = data.map(row => new TableRow({ children: selectedFields.map((h, i) => new TableCell({ width: { size: colWidths[i], type: WidthType.DXA }, children: [new Paragraph(row[h]?.toString() || "")] })) }));
 
-      const dataRows = sortedData.map(row =>
-        new TableRow({
-          children: selectedFields.map((h, i) =>
-            new TableCell({
-              width: { size: colWidths[i], type: WidthType.DXA },
-              children: [new Paragraph(row[h]?.toString() || "")]
-            })
-          )
-        })
-      );
-
-      const doc = new Document({
-        sections: [{
-          children: [
-            new Paragraph({ text: fileName.replace(/_/g, ' '), heading: "Heading1" }),
-            new Table({ rows: [headerRow, ...dataRows] })
-          ]
-        }]
-      });
+      const doc = new Document({ sections: [{ children: [ new Paragraph({ text: fileName.replace(/_/g, ' '), heading: "Heading1" }), new Table({ rows: [headerRow, ...dataRows] }) ] }] });
 
       const blob = await Packer.toBlob(doc);
       saveAs(blob, `${fileName}.docx`);
@@ -246,7 +181,6 @@ const exportToPDF = () => {
           <div className="export-heading-container">
             <h3 className="export-heading">SELECT COLUMNS</h3>
           </div>
-
           <div className="field-selection-table-container">
             <table className="field-selection-table">
               <tbody>
@@ -269,7 +203,6 @@ const exportToPDF = () => {
               </tbody>
             </table>
           </div>
-
           <div className="select-button-container">
             <button
               onClick={toggleAllFields}

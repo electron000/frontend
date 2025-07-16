@@ -1,0 +1,204 @@
+/*
+ * Enhanced and Responsive Styles for the EditPage component.
+ * Assumes the root CSS variables (e.g., --ongc-maroon) are defined globally.
+ */
+
+.edit-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Slightly less intense background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out; /* Smoother fade-in for the overlay */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.edit-page-container {
+  background: var(--ongc-white, #fff);
+  padding: var(--space-xl, 2rem);
+  border-radius: var(--radius-lg, 0.75rem); /* Slightly larger radius */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.edit-page-container h2 {
+  color: var(--ongc-green-dark, #22543D);
+  margin-top: 0;
+  margin-bottom: var(--space-md, 1rem);
+  border-bottom: 2px solid var(--ongc-green, #2D6A4F);
+  padding-bottom: var(--space-sm, 0.5rem);
+  font-size: var(--font-xl, 1.25rem);
+}
+
+.edit-page-container p {
+    margin-bottom: 1.5rem;
+    color: var(--ongc-medium-gray);
+}
+
+.edit-form .form-grid {
+  display: grid;
+  /* This is already responsive, but we can tweak it for smaller screens */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg, 1.5rem);
+  margin-bottom: var(--space-xl, 2rem);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--ongc-dark-gray, #334155);
+  margin-bottom: var(--space-sm, 0.5rem);
+  font-size: var(--font-sm, 0.875rem);
+}
+
+/* Unified style for all form inputs */
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--ongc-border, #E2E8F0);
+  border-radius: var(--radius-sm, 0.375rem);
+  font-size: var(--font-base, 1rem);
+  background: var(--ongc-white, #FFFFFF);
+  transition: all 0.2s ease;
+  color: var(--ongc-dark-gray);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--ongc-green, #2D6A4F);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+}
+
+/* Specific styling for select dropdown arrow */
+select.form-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
+}
+
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-lg, 1.5rem);
+  padding-top: var(--space-lg, 1.5rem);
+  border-top: 1px solid var(--ongc-border, #E2E8F0);
+  gap: 1rem; /* Add gap for responsive layout */
+}
+
+.main-actions {
+  display: flex;
+  gap: var(--space-md, 1rem);
+}
+
+.action-button {
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm, 0.375rem);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px var(--ongc-shadow, rgba(0, 0, 0, 0.1));
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
+}
+
+.save-button {
+  color: var(--ongc-white, #fff);
+  background: linear-gradient(135deg, var(--ongc-green, #2D6A4F), var(--ongc-green-dark, #22543D));
+}
+
+.cancel-button {
+  color: var(--ongc-dark-gray, #334155);
+  background: var(--ongc-light-gray, #F8FAFC);
+  border: 1px solid var(--ongc-border, #E2E8F0);
+}
+
+.delete-button {
+  color: var(--ongc-white, #fff);
+  background: linear-gradient(135deg, var(--ongc-error, #DC2626), var(--ongc-maroon, #9B1C1C));
+}
+
+
+/* ==========================================================================
+   Responsive Design for Edit Page
+   ========================================================================== */
+
+/* Tablets and smaller */
+@media (max-width: 768px) {
+  .edit-page-container {
+    padding: 1.5rem;
+    max-height: 85vh;
+  }
+  .edit-form .form-grid {
+    /* Use a single column on tablets */
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .edit-page-container h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .edit-page-container {
+    width: 95%;
+    padding: 1rem;
+    max-height: 90vh;
+  }
+  .form-actions {
+    /* Stack buttons vertically on small screens */
+    flex-direction: column-reverse;
+    align-items: stretch; /* Make buttons full width */
+  }
+  .main-actions {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+  .action-button {
+    width: 100%;
+    text-align: center;
+  }
+  .delete-button {
+    margin-bottom: 0.5rem;
+  }
+}

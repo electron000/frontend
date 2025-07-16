@@ -1,4 +1,4 @@
-/* Enhanced ONGC Professional CSS - Optimized for Employee Experience */
+/* Enhanced ONGC Professional CSS - Final Optimized Version */
 
 /* CSS Variables - Enhanced ONGC Color Palette */
 :root {
@@ -66,17 +66,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Compact Layout & Logo */
-.leaderboard {
+/* Main Layout & Header */
+.leaderboard-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding-top: 80px;
+  padding: 2rem;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: center; /* Center the logo */
+  margin-bottom: 2rem;
 }
 
 .ongc-logo {
-  display: block;
-  margin: 0 auto 20px;
-  width: 280px;
+  width: 200px;
   max-width: 90%;
   filter: drop-shadow(0 2px 4px var(--ongc-shadow));
   transition: transform 0.3s ease;
@@ -88,9 +92,8 @@ body {
 
 /* Enhanced Cursor Controls */
 input, select, textarea { cursor: text; }
-button, .filter-btn, .export-btn, .toggle-select-btn, .select-toggle-btn, .field-checkbox, th { cursor: pointer; }
+button, .filter-btn, .export-btn, .toggle-select-btn, .select-toggle-btn, .field-checkbox, th[class*="cursor-pointer"] { cursor: pointer; }
 td { cursor: default; }
-td.clickable, td[data-clickable="true"] { cursor: pointer; }
 
 /* Compact Table Styling */
 .table-wrapper {
@@ -117,7 +120,7 @@ td.clickable, td[data-clickable="true"] { cursor: pointer; }
 th, td {
   border: 1px solid var(--ongc-border);
   white-space: nowrap;
-  padding: 8px 10px;
+  padding: 8px 12px; /* Adjusted padding for better spacing */
   text-align: center;
   vertical-align: middle;
   transition: background-color 0.2s ease;
@@ -140,23 +143,13 @@ td {
   font-size: 13px;
 }
 
-tr:nth-child(even) { 
-  background-color: var(--ongc-light-gray); 
-}
-
-tr:nth-child(odd) { 
+tbody tr {
   background-color: var(--ongc-light-gray); 
 }
 
 tr:hover {
   background-color: var(--ongc-hover-bg);
 }
-
-/* Rounded corners */
-thead tr:first-child th:first-child { border-top-left-radius: var(--radius-md); }
-thead tr:first-child th:last-child { border-top-right-radius: var(--radius-md); }
-tbody tr:last-child td:first-child { border-bottom-left-radius: var(--radius-md); }
-tbody tr:last-child td:last-child { border-bottom-right-radius: var(--radius-md); }
 
 /* Remarks column */
 .remarks-column {
@@ -232,9 +225,7 @@ tbody tr:last-child td:last-child { border-bottom-right-radius: var(--radius-md)
   color: var(--ongc-medium-gray);
 }
 
-/* === FILTER + EXPORT PANEL - FINAL STYLES === */
-
-/* Horizontal Filter and Export Panel Containers */
+/* Filter + Export Panel */
 .filter-panel-row,
 .export-panel-row {
   display: flex;
@@ -246,7 +237,6 @@ tbody tr:last-child td:last-child { border-bottom-right-radius: var(--radius-md)
   margin-bottom: 16px;
 }
 
-/* Groups inside each panel */
 .filter-input-group,
 .export-btn-group {
   display: flex;
@@ -256,7 +246,6 @@ tbody tr:last-child td:last-child { border-bottom-right-radius: var(--radius-md)
   justify-content: center;
 }
 
-/* Inputs and dropdowns styled like buttons */
 .filter-input,
 .filename-input,
 select {
@@ -277,154 +266,116 @@ select {
 select:focus {
   outline: none;
   border-color: var(--ongc-green);
-  background-color: #E9F2EF; /* same as ongc-hover-bg */
+  background-color: #E9F2EF;
   box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.1);
-  transition: all 0.2s ease;
 }
 
-.filter-input:hover,
-.filename-input:hover,
-select:hover {
-  border-color: var(--ongc-green);
-  background-color: #E9F2EF; /* same as ongc-soft-bg */
-  transition: all 0.2s ease;
-}
-
-
-/* Unified Buttons (Filter, Export, Toggle) */
+/* Unified Buttons */
 .filter-btn,
 .export-btn,
-.toggle-select-btn {
+.toggle-select-btn,
+.logout-button,
+.edit-button,
+.select-toggle-btn {
   font-weight: 600 !important;
-
   padding: 10px 20px;
   border-radius: var(--radius-sm);
   border: none;
   color: var(--ongc-white);
-  min-width: 140px;
-  min-height: 40px;
   text-align: center;
   font-size: 14px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px var(--ongc-shadow);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Shimmer Effect on Hover */
-.filter-btn::before,
-.export-btn::before,
-.toggle-select-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.filter-btn:hover::before,
-.export-btn:hover::before,
-.toggle-select-btn:hover::before {
-  left: 100%;
 }
 
 .filter-btn:hover,
 .export-btn:hover,
-.toggle-select-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px var(--ongc-shadow-hover);
-}
-
-.filter-btn:active,
-.export-btn:active,
-.toggle-select-btn:active {
-  transform: translateY(0);
-}
-
-/* Button Colors */
-.filter-btn.apply,
-.filter-btn.clear {
-  background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust));
-}
-
-.export-btn.csv {
-  background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
-}
-
-.export-btn.excel {
-  background: linear-gradient(135deg, var(--ongc-success), #16A34A);
-}
-
-.export-btn.pdf {
-  background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust));
-}
-
-.export-btn.word {
-  background: linear-gradient(135deg, var(--ongc-info), #1E40AF);
-}
-
-.export-btn.all {
-  background: linear-gradient(135deg, var(--ongc-black), var(--ongc-dark-gray));
-}
-
-.export-btn.preview {
-  background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-warning));
-}
-
-
-/* Exporting Message */
-.exporting-message {
-  color: var(--ongc-error);
-  font-weight: 600;
-  font-size: var(--font-sm);
-  margin-top: var(--space-md);
-  padding: var(--space-md);
-  background: rgba(220, 38, 38, 0.1);
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--ongc-error);
-}
-
-/* Field Selection Buttons */
-.select-button-container {
-  margin-top: 12px;
-  text-align: center;
-}
-
-.select-toggle-btn {
-  font-size: 14px;
-  padding: 10px 20px;
-  min-width: 140px;
-  min-height: 40px;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px var(--ongc-shadow);
-  color: var(--ongc-white);
-}
-
+.toggle-select-btn:hover,
+.logout-button:hover,
+.edit-button:hover,
 .select-toggle-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px var(--ongc-shadow-hover);
 }
 
-.select-toggle-btn:active {
-  transform: translateY(0);
+/* Button Colors */
+.filter-btn.apply { background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark)); }
+.filter-btn.clear { background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust)); }
+.export-btn.csv { background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark)); }
+.export-btn.excel { background: linear-gradient(135deg, var(--ongc-success), #16A34A); }
+.export-btn.pdf { background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust)); }
+.export-btn.word { background: linear-gradient(135deg, var(--ongc-info), #1E40AF); }
+.export-btn.all { background: linear-gradient(135deg, var(--ongc-black), var(--ongc-dark-gray)); }
+.export-btn.preview { background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-warning)); }
+
+/* Edit & Logout Buttons */
+.edit-button {
+  padding: 5px 14px;
+  font-size: 13px;
+  background-color: var(--ongc-green);
+}
+.logout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem; /* This adds a 1rem space between the buttons */
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
-.deselect-state {
-  background: linear-gradient(135deg, var(--ongc-medium-gray), var(--ongc-dark-gray));
-  border-color: var(--ongc-medium-gray);
+/* 2. Define the look for the new 'Add New' button */
+/* It inherits the base styles from .logout-button, but gets a new color */
+.add-new-button {
+  /* Use the theme's green color for a positive action */
+  background: linear-gradient(135deg, var(--ongc-green, #2D6A4F), var(--ongc-green-dark, #22543D));
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm, 0.375rem);
+  border: none;
+  color: var(--ongc-white, #fff);
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px var(--ongc-shadow, rgba(0, 0, 0, 0.1));
 }
 
-.select-state {
-  background: linear-gradient(135deg, var(--ongc-success), var(--ongc-green));
-  border-color: var(--ongc-success);
+.add-new-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
 }
+
+
+/* 3. Ensure the logout button has its specific style (already in your code) */
+.logout-button {
+  background: linear-gradient(135deg, var(--ongc-maroon, #9B1C1C), var(--ongc-orange-rust, #B54828));
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm, 0.375rem);
+  border: none;
+  color: var(--ongc-white, #fff);
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px var(--ongc-shadow, rgba(0, 0, 0, 0.1));
+}
+
+.logout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
+}
+
+/* Field Selection & Messages */
+.exporting-message, .error-message, .no-results, .loader {
+  text-align: center;
+  padding: var(--space-lg);
+  margin: var(--space-md) 0;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+.exporting-message { color: var(--ongc-info); background-color: rgba(59, 130, 246, 0.1); }
+.error-message { color: var(--ongc-error); background-color: rgba(220, 38, 38, 0.1); }
+.no-results, .loader { color: var(--ongc-medium-gray); background-color: var(--ongc-light-gray); }
 
 
 .field-selection-table {
@@ -437,9 +388,9 @@ select:hover {
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  background: var(--ongc-white);
+
   border-radius: var(--radius-md);
-  box-shadow: 0 2px 8px var(--ongc-shadow);
+
   margin: 16px 0;
 }
 
@@ -479,368 +430,65 @@ select:hover {
 .field-checkbox input[type="checkbox"]:checked {
   accent-color: var(--ongc-success);
 }
-
-/* Compact Export Heading */
 .export-heading {
-  font-family: 'Segoe UI', 'Inter', sans-serif;
   text-align: center;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 1.2rem;
-  background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-green), var(--ongc-yellow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 1px;
-  margin-bottom: 16px;
+  color: var(--ongc-green);
+  margin-bottom: 1rem;
+}
+.select-button-container {
+  text-align: center;
+  margin-top: 1rem;
 }
 
-/* Loading States */
-.loading {
-  opacity: 0.7;
-  pointer-events: none;
-  position: relative;
+/* TO THIS (in the artifact): */
+.select-toggle-btn.select-state { 
+  background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
+  color: var(--ongc-white); /* Ensures white text on green */
+}
+.select-toggle-btn.deselect-state { 
+  background: linear-gradient(135deg, var(--ongc-dark-gray), var(--ongc-black));
+  color: var(--ongc-white); /* Ensures white text on black */
 }
 
-.loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border: 2px solid var(--ongc-border);
-  border-top: 2px solid var(--ongc-green);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+/* ==========================================================================
+   Fully Responsive Design
+   ========================================================================== */
 
-/* Status Indicators */
-.status-indicator {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: var(--space-sm);
-}
-
-.status-active { background-color: var(--ongc-success); }
-.status-inactive { background-color: var(--ongc-medium-gray); }
-.status-warning { background-color: var(--ongc-warning); }
-.status-error { background-color: var(--ongc-error); }
-
-/* Professional Tooltips */
-.tooltip {
-  position: relative;
-  cursor: help;
-}
-
-.tooltip::before {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--ongc-black);
-  color: var(--ongc-white);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-xs);
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  z-index: 1000;
-}
-
-.tooltip:hover::before {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Professional Responsive Design */
+/* Medium devices (tablets, 768px and down) */
 @media (max-width: 768px) {
-  body {
-    padding: 8px;
-  }
-
-  .leaderboard {
-    padding-top: 40px;
-  }
-
-  .ongc-logo {
-    width: 180px;
-    margin-bottom: 16px;
-  }
-
-  .filter-panel-row,
-  .export-panel-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-
-  .filter-input-group {
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .filter-input-group .filter-btn {
-    flex: 1;
-    max-width: 150px;
-  }
-
-  .export-btn-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-  }
-
-  .filter-input,
-  .filename-input {
-    width: 100%;
-    min-width: 0;
-    padding: 8px 10px;
-    font-size: 14px;
-  }
-
-  .filter-btn {
-    flex: 1;
-    max-width: 150px;
-    min-width: 0;
-    padding: 10px 16px;
-    font-size: 14px;
-    min-height: 40px;
-  }
-
-  .export-btn {
-    padding: 10px 8px;
-    font-size: 12px;
-    min-width: 0;
-    min-height: 40px;
-    text-align: center;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-  }
-
-  .filename-group {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-    width: 100%;
-  }
-
-  .table {
-    min-width: 480px;
-    font-size: 11px;
-  }
-
-  .table th,
-  .table td {
-    padding: 4px 6px;
-    font-size: 10px;
-  }
-
-  .pagination {
-    margin: 16px 0;
-    gap: 4px;
-  }
-
-  .pagination button {
-    padding: 6px 10px;
-    font-size: 12px;
-    min-width: 32px;
-    min-height: 32px;
-  }
-
-  .field-selection-table {
-    border-spacing: 6px;
-  }
-
-  .field-checkbox {
-    font-size: 11px;
-    padding: 4px 8px;
-  }
+  body { padding: 0.5rem; }
+  .leaderboard-container { padding: 1rem; }
+  .filter-panel-row, .export-panel-row { flex-direction: column; gap: 1rem; }
+  .filter-input-group, .export-btn-group, .filename-group { width: 100%; max-width: 450px; }
+  .filter-input, .filename-input, select { width: 100%; min-width: auto; }
+  .export-btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  .table th, .table td { padding: 6px 8px; font-size: 12px; }
+  /* MODIFICATION: Made pagination buttons smaller */
+  .pagination button { padding: 5px 9px; font-size: 10px; min-width: 30px; min-height: 30px; }
 }
 
+/* Small devices (large phones, 640px and down) */
+@media (max-width: 640px) {
+  .leaderboard-header { margin-bottom: 1.5rem; }
+  .ongc-logo { width: 180px; }
+  .export-btn-group { grid-template-columns: 1fr 1fr 1fr; } /* 3 columns for a cleaner look */
+}
+
+/* Extra small devices (phones, 480px and down) */
 @media (max-width: 480px) {
-  body {
-    padding: 6px;
-  }
-
-  .ongc-logo {
-    width: 160px;
-    margin-bottom: 12px;
-  }
-
-  .filter-panel-row,
-  .export-panel-row {
-    padding: 10px;
-    gap: 10px;
-  }
-
-  .filter-input-group,
-  .export-btn-group {
-    max-width: 280px;
-  }
-
-  .export-btn-group {
-    gap: 6px;
-  }
-
-  .export-btn {
-    padding: 8px 6px;
-    font-size: 11px;
-    min-height: 36px;
-  }
-
-  .filter-btn {
-    flex: 1;
-    max-width: 130px;
-    min-width: 0;
-    padding: 8px 12px;
-    font-size: 13px;
-    min-height: 36px;
-  }
-
-  .filter-input,
-  .filename-input {
-    padding: 6px 8px;
-    font-size: 13px;
-  }
-
-  .table th,
-  .table td {
-    padding: 4px 6px;
-    font-size: 11px;
-  }
-
-  .pagination button {
-    padding: 4px 8px;
-    font-size: 11px;
-    min-width: 28px;
-    min-height: 28px;
-  }
+  .leaderboard-container { padding: 0.5rem; }
+  .ongc-logo { width: 160px; }
+  .table th, .table td { padding: 4px 6px; font-size: 11px; }
+  .export-btn-group { grid-template-columns: 1fr 1fr; } /* Back to 2 columns */
+  .filter-btn, .export-btn, .select-toggle-btn, .logout-button { font-size: 13px; height: 40px; padding: 8px 16px; }
+  .edit-button { padding: 4px 12px; font-size: 12px; }
+  /* MODIFICATION: Made pagination buttons even smaller */
+  .pagination button { padding: 4px 8px; font-size: 9px; min-width: 28px; min-height: 28px; }
 }
 
-@media (max-width: 360px) {
-  .ongc-logo {
-    width: 140px;
-  }
 
-  .filter-input-group,
-  .export-btn-group {
-    max-width: 260px;
-  }
 
-  .export-btn-group {
-    gap: 4px;
-  }
-
-  .export-btn {
-    padding: 6px 4px;
-    font-size: 10px;
-    min-height: 32px;
-  }
-
-  .filter-btn {
-    flex: 1;
-    max-width: 120px;
-    min-width: 0;
-    padding: 6px 10px;
-    font-size: 12px;
-    min-height: 32px;
-  }
-
-  .filter-input,
-  .filename-input {
-    padding: 6px;
-    font-size: 12px;
-  }
-
-  .table {
-    min-width: 350px;
-    font-size: 9px;
-  }
-
-  .table th,
-  .table td {
-    padding: 2px 3px;
-    font-size: 9px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .export-btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .export-btn {
-    min-width: 120px;
-    padding: 10px 16px;
-    font-size: 14px;
-  }
-}
-
-/* Print Styles */
-@media print {
-  body {
-    background: white;
-    color: black;
-    padding: 0;
-  }
-
-  .filter-panel-row,
-  .export-panel-row,
-  .pagination {
-    display: none;
-  }
-
-  .table {
-    box-shadow: none;
-    border: 2px solid black;
-  }
-
-  .ongc-logo {
-    width: 200px;
-  }
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-  :root {
-    --ongc-border: #000;
-    --ongc-shadow: rgba(0, 0, 0, 0.5);
-  }
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}

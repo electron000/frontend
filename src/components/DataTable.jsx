@@ -1,6 +1,18 @@
 import React, { useMemo } from 'react';
 
-const DataTable = ({ data = [], headers = [], selectedFields = [], sortConfig, setSortConfig }) => {
+// MODIFICATION: Added default values and comments for clarity.
+const DataTable = ({ 
+  data = [], 
+  headers = [], 
+  selectedFields = [], 
+  sortConfig, 
+  setSortConfig, 
+  onEdit, 
+  // These props are essential for correct row numbering.
+  // They must be passed from the parent component (Leaderboard.jsx).
+  currentPage = 1, 
+  rowsPerPage = 5 
+}) => {
   // Only show columns that are selected
   const visibleHeaders = headers.filter(header => selectedFields.includes(header));
 
@@ -8,6 +20,8 @@ const DataTable = ({ data = [], headers = [], selectedFields = [], sortConfig, s
     if (!sampleRow) return false;
     const value = sampleRow[field];
     if (field.toLowerCase().includes("date")) return true;
+    // We don't want to sort our dynamically generated SL No column
+    if (field === "SL No") return false; 
     if (typeof value === "number") return true;
     return false;
   };
@@ -73,18 +87,21 @@ const DataTable = ({ data = [], headers = [], selectedFields = [], sortConfig, s
                 </th>
               );
             })}
+            <th className="border px-4 py-2 text-left text-sm font-semibold align-top">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
           {sortedData.length === 0 ? (
             <tr>
-              <td colSpan={visibleHeaders.length} className="text-center py-4">
+              <td colSpan={visibleHeaders.length + 1} className="text-center py-4">
                 No data found
               </td>
             </tr>
           ) : (
-            sortedData.map((row, i) => (
-              <tr key={i} className="odd:bg-white even:bg-gray-50">
+            sortedData.map((row, index) => (
+              <tr key={row['SL No']} className="odd:bg-white even:bg-gray-50">
                 {visibleHeaders.map((h) => (
                   <td
                     key={h}
@@ -92,17 +109,31 @@ const DataTable = ({ data = [], headers = [], selectedFields = [], sortConfig, s
                       h.toLowerCase().includes("remark")
                         ? "remarks-column"
                         : `border px-4 py-2 text-sm ${
-                            typeof row[h] === "number" ? "text-right" : "text-left"
+                            typeof row[h] === "number" || h === 'SL No' ? "text-right" : "text-left"
                           }`
                     }
                   >
-                    {typeof row[h] === "number"
+                    {h === 'SL No'
+                      // This calculation creates a sequential row number across all pages.
+                      // It requires 'currentPage' and 'rowsPerPage' to be passed correctly from the parent component.
+                      // If numbering resets on each page, please ensure you are passing these props from Leaderboard.jsx, for example:
+                      // <DataTable currentPage={currentPage} rowsPerPage={rowsPerPage} ... />
+                      ? (currentPage - 1) * rowsPerPage + index + 1
+                      : typeof row[h] === "number"
                       ? row[h].toLocaleString()
                       : h.toLowerCase().includes("date")
                       ? formatDate(row[h])
                       : row[h] || "-"}
                   </td>
                 ))}
+                <td className="border px-4 py-2 text-center">
+                  <button
+                    onClick={() => onEdit(row)}
+                    className="edit-button"
+                  >
+                    Edit
+                  </button>
+                </td>
               </tr>
             ))
           )}
