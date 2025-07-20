@@ -55,7 +55,7 @@ function UploadPage({ onCancel, onUploadSuccess }) {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('http://localhost:5001/api/upload', {
+      const response = await fetch('https://backend-2m6l.onrender.com/api/upload', {
         method: 'POST',
         body: formData,
       });

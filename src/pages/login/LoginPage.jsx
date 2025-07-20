@@ -26,7 +26,7 @@ const LoginPage = ({ onLogin }) => {
 
     try {
       // Call your Python backend API endpoint
-      const response = await fetch('http://localhost:5001/api/login', {
+      const response = await fetch('https://backend-2m6l.onrender.com/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

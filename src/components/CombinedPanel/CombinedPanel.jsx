@@ -77,7 +77,7 @@ const CombinedPanel = ({
         selectedFields: selectedFields.join(','),
         ...getCleanFilters(),
       });
-      const response = await axios.get(`/api/export?${params}`, { responseType: 'blob' });
+      const response = await axios.get(`https://backend-2m6l.onrender.com/api/export?${params}`, { responseType: 'blob' });
       saveAs(response.data, `${fileName}.${format}`);
     } catch (error) {
       console.error("Export error:", error);
@@ -98,7 +98,7 @@ const CombinedPanel = ({
         selectedFields: selectedFields.join(','),
         ...getCleanFilters()
       });
-      const response = await axios.get(`/api/contracts?${params}`);
+      const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
       const allData = response.data.data || response.data; // Get the actual data array
 
       const numCols = selectedFields.length;
