@@ -1,4 +1,6 @@
 import React from "react";
+import './Pagination.css';
+
 
 // Unused props 'rowsPerPage' and 'currentData' have been removed.
 const Pagination = ({ currentPage, setPage, totalPages }) => {

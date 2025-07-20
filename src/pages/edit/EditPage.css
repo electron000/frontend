@@ -33,6 +33,7 @@
   max-height: 90vh;
   overflow-y: auto;
   animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative; /* Added for absolute positioning of close button */
 }
 
 @keyframes slideIn {
@@ -46,6 +47,42 @@
   }
 }
 
+/* === Close Button (for the 'x' icon) === */
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  color: var(--ongc-medium-gray);
+  transition: all 0.3s ease;
+  display: flex; /* Ensures SVG is centered if padding is used */
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: var(--ongc-light-gray);
+  color: var(--ongc-error);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.close-button:active {
+  background-color: var(--ongc-green-dark);
+  color: var(--ongc-white);
+  transform: scale(0.95);
+}
+
+.close-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+
+/* === Header === */
 .edit-page-container h2 {
   color: var(--ongc-green-dark, #22543D);
   margin-top: 0;
@@ -56,13 +93,12 @@
 }
 
 .edit-page-container p {
-    margin-bottom: 1.5rem;
-    color: var(--ongc-medium-gray);
+  margin-bottom: 1.5rem;
+  color: var(--ongc-medium-gray);
 }
 
 .edit-form .form-grid {
   display: grid;
-  /* This is already responsive, but we can tweak it for smaller screens */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-lg, 1.5rem);
   margin-bottom: var(--space-xl, 2rem);
@@ -82,7 +118,8 @@
 
 /* Unified style for all form inputs */
 .form-input {
-  width: 100%;
+  width: auto; /* Changed from 100% to auto */
+  max-width: 358px; /* Reduced max-width for narrower input fields */
   padding: 10px 14px;
   border: 1.5px solid var(--ongc-border, #E2E8F0);
   border-radius: var(--radius-sm, 0.375rem);
@@ -98,6 +135,10 @@
   box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
+.form-input:hover {
+  background-color: #f0f6f2; /* Hover effect as previously provided */
+}
+
 /* Specific styling for select dropdown arrow */
 select.form-input {
   -webkit-appearance: none;
@@ -110,7 +151,56 @@ select.form-input {
   padding-right: 2.5rem;
 }
 
+/* Support for Remarks Textarea */
+textarea.form-input {
+  min-height: 80px;
+  resize: vertical;
+}
 
+/* === Custom Yes/No Toggle Buttons === */
+.yes-no-toggle {
+  display: flex;
+  gap: 0.5rem; /* Space between Yes and No buttons */
+}
+
+.yes-no-toggle button {
+  flex: 1; /* Make buttons take equal width */
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--ongc-border);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  background-color: var(--ongc-white); /* Default background */
+}
+
+.yes-no-toggle .yes-button {
+  color: var(--ongc-green-dark); /* Default text color for Yes */
+}
+
+.yes-no-toggle .no-button {
+  color: var(--ongc-maroon); /* Default text color for No */
+}
+
+.yes-no-toggle .active.yes-button {
+  background-color: var(--ongc-green);
+  color: var(--ongc-white);
+  border-color: var(--ongc-green);
+}
+
+.yes-no-toggle .active.no-button {
+  background-color: var(--ongc-maroon);
+  color: var(--ongc-white);
+  border-color: var(--ongc-maroon);
+}
+
+.yes-no-toggle button:hover {
+  opacity: 0.9;
+}
+
+
+/* === Form Actions (Save/Delete Buttons) === */
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -124,6 +214,7 @@ select.form-input {
 .main-actions {
   display: flex;
   gap: var(--space-md, 1rem);
+  margin-left: auto; /* Pushes main actions to the right */
 }
 
 .action-button {
@@ -141,15 +232,25 @@ select.form-input {
   box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
 }
 
+.action-button:active {
+  transform: scale(0.98);
+  filter: brightness(90%);
+}
+
 .save-button {
   color: var(--ongc-white, #fff);
   background: linear-gradient(135deg, var(--ongc-green, #2D6A4F), var(--ongc-green-dark, #22543D));
 }
 
-.cancel-button {
+.cancel-button { /* This button is no longer used in the JSX for closing, but kept for consistency if needed elsewhere */
   color: var(--ongc-dark-gray, #334155);
   background: var(--ongc-light-gray, #F8FAFC);
   border: 1px solid var(--ongc-border, #E2E8F0);
+  box-shadow: none;
+}
+
+.cancel-button:hover {
+  background: #e2e8f0;
 }
 
 .delete-button {
@@ -158,11 +259,38 @@ select.form-input {
 }
 
 
-/* ==========================================================================
-   Responsive Design for Edit Page
-   ========================================================================== */
+/* --- Styles for Delete Confirmation --- */
+.confirmation-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens if needed */
+}
 
-/* Tablets and smaller */
+.confirmation-group span {
+  font-weight: 600;
+  color: var(--ongc-dark-gray, #334155);
+  font-size: 0.9rem;
+}
+
+.confirm-delete-button {
+  color: var(--ongc-white, #fff);
+  background: linear-gradient(135deg, var(--ongc-error, #DC2626), var(--ongc-maroon, #9B1C1C));
+}
+
+.cancel-delete-button { /* Used for the "Cancel" button in the delete confirmation */
+  color: var(--ongc-dark-gray, #334155);
+  background: var(--ongc-light-gray, #F8FAFC);
+  border: 1px solid var(--ongc-border, #E2E8F0);
+  box-shadow: none; /* A more subtle look for the cancel button */
+}
+
+.cancel-delete-button:hover {
+  background-color: var(--ongc-border, #E2E8F0);
+  border-color: #d1d9e6;
+  box-shadow: none;
+}
+/* Tablet styles (keeping original tablet styles) */
 @media (max-width: 768px) {
   .edit-page-container {
     padding: 1.5rem;
@@ -176,29 +304,126 @@ select.form-input {
   .edit-page-container h2 {
     font-size: 1.1rem;
   }
+  /* Adjust main-actions for better spacing on tablets */
+  .main-actions {
+    margin-left: 0; /* Remove auto margin to allow full width */
+    width: 100%; /* Ensure buttons take full width */
+    justify-content: space-around; /* Distribute buttons evenly */
+  }
 }
 
-/* Mobile phones */
+/* Mobile phones only */
 @media (max-width: 480px) {
+  .edit-page-overlay {
+    backdrop-filter: blur(2px); /* Slightly less blur for mobile */
+  }
+
   .edit-page-container {
     width: 95%;
-    padding: 1rem;
-    max-height: 90vh;
+    padding: 0.75rem; /* Reduced padding for mobile */
+    max-height: 95vh; /* Allow more height on mobile */
+    border-radius: 0.5rem; /* Slightly smaller border-radius */
   }
+
+  .close-button {
+    top: 0.5rem; /* Adjusted position */
+    right: 0.5rem; /* Adjusted position */
+    padding: 0.3rem; /* Smaller padding */
+  }
+
+  .close-button svg {
+    width: 20px; /* Smaller icon */
+    height: 20px; /* Smaller icon */
+  }
+
+  .edit-page-container h2 {
+    font-size: 1rem; /* Smaller header font size */
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .edit-page-container p {
+    margin-bottom: 1rem; /* Reduced margin */
+    font-size: 0.8rem; /* Smaller paragraph font */
+  }
+
+  .edit-form .form-grid {
+    grid-template-columns: 1fr; /* Ensure single column */
+    gap: 0.75rem; /* Reduced gap */
+    margin-bottom: 1.5rem; /* Reduced margin */
+  }
+
+  .form-group label {
+    font-size: 0.8rem; /* Smaller label font */
+    margin-bottom: 0.3rem; /* Reduced margin */
+  }
+
+  .form-input {
+    padding: 8px 10px; /* Reduced padding */
+    font-size: 0.9rem; /* Smaller font size */
+    height: 23px; /* MODIFIED: Restored height */
+  }
+
+  select.form-input {
+    background-position: right 0.5rem center; /* Adjusted dropdown arrow */
+    padding-right: 2rem;
+  }
+
+  textarea.form-input {
+    min-height: 60px; /* MODIFIED: Increased min-height for textarea */
+  }
+
+  .yes-no-toggle {
+    gap: 0.25rem; /* Reduced gap */
+  }
+
+  .yes-no-toggle button {
+    padding: 0.4rem 0.8rem; /* Reduced padding */
+    font-size: 0.8rem; /* Smaller font size */
+    height: 36px; /* MODIFIED: Restored height */
+  }
+
   .form-actions {
-    /* Stack buttons vertically on small screens */
-    flex-direction: column-reverse;
+    flex-direction: column-reverse; /* Stack buttons vertically */
     align-items: stretch; /* Make buttons full width */
+    margin-top: 1rem; /* Reduced margin */
+    padding-top: 1rem; /* Reduced padding */
+    gap: 0.5rem; /* Reduced gap */
   }
+
   .main-actions {
-    flex-direction: column-reverse;
+    flex-direction: column-reverse; /* Stack main actions vertically */
     width: 100%;
+    gap: 0.5rem; /* Reduced gap */
   }
+
   .action-button {
-    width: 100%;
+    width: 100%; /* Make buttons full width */
+    text-align: center;
+    padding: 8px 15px; /* Reduced padding */
+    font-size: 0.9rem; /* Smaller font size */
+    height: 38px; /* MODIFIED: Restored height */
+  }
+
+  .delete-button {
+    margin-bottom: 0.5rem; /* Add some space below delete button when stacked */
+  }
+
+  .confirmation-group {
+    flex-direction: column; /* Stack confirmation buttons too */
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .confirmation-group span {
+    font-size: 0.8rem; /* Smaller font size */
     text-align: center;
   }
-  .delete-button {
-    margin-bottom: 0.5rem;
+
+  .confirm-delete-button,
+  .cancel-delete-button {
+    padding: 8px 15px; /* Reduced padding */
+    font-size: 0.9rem; /* Smaller font size */
+    height: 38px; /* MODIFIED: Restored height */
   }
 }

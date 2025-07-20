@@ -1,289 +1,282 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import './Leaderboard.css';
 import ongcLogo from '../../assets/ongc-logo.png';
-import EditPage from '../edit/EditPage'; // Make sure this path is correct
+import EditPage from '../edit/EditPage';
+import UploadPage from '../upload/UploadPage';
+import { DataTable, Pagination, CombinedPanel } from "../../components";
 
-import { FilterPanel, DataTable, ExportButtons, Pagination } from "../../components";
-
-const fieldTypes = {
-  range: [ "Contract Value (₹)", "Invoice Submitted & Amount Claimed (₹)", "Amount Passed (₹)", "Deduction (₹)", "PBG Amount (₹)", "Security Deposit Amount (₹)", "AMC Charges for Entire Duration (₹)", "Yearly Outflow as per OLA (₹)" ],
-  date: [ "Date of Commissioning", "Warranty End Date", "AMC Start Date", "AMC End Date" ],
-  yesNo: [ "Quarterly AMC Payment Status", "Post Contract Issues" ],
-  number: [ "SL No" ],
-  yearDropdown: [ "Warranty Duration (Yr)", "AMC Duration (Yr)" ],
-  text: [ "DISHA File No", "OLA No", "PR No", "PO No", "Name of Contract", "Brief Objective", "Name of Contractor", "------------------------- Remarks -------------------------" ]
-};
-
-const headers = [ "SL No", "Name of Contract", "Name of Contractor", "Brief Objective", "DISHA File No", "Contract Value (₹)", "Date of Commissioning", "Warranty Duration (Yr)", "Warranty End Date", "AMC Duration (Yr)", "AMC Start Date", "AMC End Date", "Quarterly AMC Payment Status", "AMC Charges for Entire Duration (₹)", "PR No", "PO No", "OLA No", "Yearly Outflow as per OLA (₹)", "PBG Amount (₹)", "Security Deposit Amount (₹)", "Invoice Submitted & Amount Claimed (₹)", "Amount Passed (₹)", "Deduction (₹)", "Post Contract Issues", "------------------------- Remarks -------------------------" ];
-
-const pad = (num) => (num < 10 ? `0${num}` : `${num}`);
-
-const generateDummyData = () => {
-  const data = [];
-  for (let i = 1; i <= 500; i++) {
-    const year = 2020 + (i % 10);
-    const nextYear = year + 1;
-    const yearAfter = year + 2;
-    const month = pad((i % 12) + 1);
-    const day = pad((i % 28) + 1);
-    data.push({
-      "SL No": i, "Name of Contract": `Contract ${i} - Name`, "Name of Contractor": `Contractor ${i} Ltd`, "Brief Objective": `Objective for contract ${i}`, "DISHA File No": 100000 + i, "Contract Value (₹)": i * 100000, "Date of Commissioning": `${year}-${month}-${day}`, "Warranty Duration (Yr)": (i % 5) + 1, "Warranty End Date": `${nextYear}-${month}-${day}`, "AMC Duration (Yr)": (i % 4) + 1, "AMC Start Date": `${nextYear}-${month}-${day}`, "AMC End Date": `${yearAfter}-${month}-${day}`, "Quarterly AMC Payment Status": i % 2 === 0 ? "Yes" : "No", "AMC Charges for Entire Duration (₹)": i * 10000, "PR No": 300000 + i, "PO No": 400000 + i, "OLA No": 200000 + i, "Yearly Outflow as per OLA (₹)": i * 5000, "PBG Amount (₹)": i * 5000, "Security Deposit Amount (₹)": i * 2000, "Invoice Submitted & Amount Claimed (₹)": i * 2000, "Amount Passed (₹)": i * 1800, "Deduction (₹)": i * 100, "Post Contract Issues": i % 3 === 0 ? "Yes" : "No", "------------------------- Remarks -------------------------": `Remarks for contract ${i}`
-    });
-  }
-  return data;
-};
+const API_URL = '/api/contracts';
 
 const Leaderboard = ({ onLogout }) => {
-  const [originalData, setOriginalData] = useState([]);
   const [currentData, setCurrentData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [sortConfig, setSortConfig] = useState({ field: 'SL No', direction: 'asc' });
   const [filterField, setFilterField] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [rangeValues, setRangeValues] = useState(["", ""]);
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
-  const [currentPage, setCurrentPage] = useState(1);
+  const [activeFilters, setActiveFilters] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedFields, setSelectedFields] = useState(headers);
-  const rowsPerPage = 10;
-  const [sortConfig, setSortConfig] = useState({ field: null, direction: 'asc' });
-
   const [isEditing, setIsEditing] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
   const [isNewRow, setIsNewRow] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
-  useEffect(() => {
+  // State for dynamically fetched headers and fieldTypes
+  const [dynamicHeaders, setDynamicHeaders] = useState([]);
+  const [dynamicFieldTypes, setDynamicFieldTypes] = useState({});
+  const [selectedFields, setSelectedFields] = useState([]); 
+
+  const [editingDisplaySlNo, setEditingDisplaySlNo] = useState(null);
+
+  // Helper to compare arrays
+  const arraysAreEqual = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  };
+
+  const fetchData = useCallback(async (resetSelectedFields = false) => {
+    setLoading(true);
+    setError(null);
+    const params = new URLSearchParams({
+      page: currentPage,
+      limit: 10,
+      sortField: sortConfig.field,
+      sortDirection: sortConfig.direction,
+      ...activeFilters,
+    });
     try {
-      const dummyData = generateDummyData();
-      setOriginalData(dummyData);
-      setCurrentData(dummyData);
-    } catch (error) {
-      setError("Error loading data. Please try again later.");
-      console.error("Error loading data:", error);
+      const response = await axios.get(`${API_URL}?${params.toString()}`);
+      const fetchedData = response.data.data || [];
+      const fetchedTotalPages = response.data.totalPages || 0;
+
+      setCurrentData(fetchedData);
+      setTotalPages(fetchedTotalPages);
+
+      if (fetchedData.length === 0 && currentPage > 1 && currentPage > fetchedTotalPages) {
+        setCurrentPage(fetchedTotalPages > 0 ? fetchedTotalPages : 1);
+      }
+
+      if (response.data.headers && response.data.fieldTypes) {
+        const newHeaders = response.data.headers;
+        const newFieldTypes = response.data.fieldTypes;
+
+        // Use functional updates to prevent dependency loops
+        setDynamicHeaders(prevHeaders => 
+          arraysAreEqual(prevHeaders, newHeaders) ? prevHeaders : newHeaders
+        );
+        
+        setDynamicFieldTypes(newFieldTypes); 
+        
+        setSelectedFields(prevSelected => 
+          (resetSelectedFields || prevSelected.length === 0) ? newHeaders : prevSelected
+        );
+
+      } else {
+        setDynamicHeaders([]);
+        setDynamicFieldTypes({});
+        setSelectedFields([]); 
+        setError("Backend did not provide headers or fieldTypes metadata.");
+      }
+
+    } catch (err) {
+      console.error("Fetch data error:", err);
+      if (err.response) {
+        setError(`Failed to fetch data: ${err.response.status} - ${err.response.data?.error || err.response.statusText}`);
+      } else if (err.request) {
+        setError("Failed to fetch data: No response from server. Check network connection or backend server status.");
+      } else {
+        setError(`Failed to fetch data: ${err.message}. Please ensure the backend server is running and provides headers/fieldTypes.`);
+      }
+      setCurrentData([]);
+      setTotalPages(0);
+      setDynamicHeaders([]);
+      setDynamicFieldTypes({});
+      setSelectedFields([]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [currentPage, sortConfig, activeFilters]); // Optimized dependency array
 
-  const handleEditClick = (row) => {
-    setIsNewRow(false);
-    setEditingRow(row);
-    setIsEditing(true);
-  };
-
-  const handleAddClick = () => {
-    setIsNewRow(true);
-    const newRowObject = headers.reduce((acc, header) => {
-      acc[header] = '';
-      return acc;
-    }, {});
-    setEditingRow(newRowObject);
-    setIsEditing(true);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setEditingRow(null);
-    setIsNewRow(false);
-  };
-
-  const handleSave = (newOrUpdatedRow) => {
-    if (isNewRow) {
-      const newSlNo = originalData.length > 0 ? Math.max(...originalData.map(row => row['SL No'])) + 1 : 1;
-      const finalNewRow = { ...newOrUpdatedRow, 'SL No': newSlNo };
-      setOriginalData(prev => [...prev, finalNewRow]);
-      setCurrentData(prev => [...prev, finalNewRow]);
-    } else {
-      const updatedOriginalData = originalData.map(row =>
-        row['SL No'] === newOrUpdatedRow['SL No'] ? newOrUpdatedRow : row
-      );
-      setOriginalData(updatedOriginalData);
-      const updatedCurrentData = currentData.map(row =>
-        row['SL No'] === newOrUpdatedRow['SL No'] ? newOrUpdatedRow : row
-      );
-      setCurrentData(updatedCurrentData);
-    }
-    handleCancelEdit();
-  };
-
-  const handleDeleteRow = (slNo) => {
-    setOriginalData(prev => prev.filter(row => row['SL No'] !== slNo));
-    setCurrentData(prev => prev.filter(row => row['SL No'] !== slNo));
-    handleCancelEdit();
-  };
+  useEffect(() => {
+    fetchData(); // Initial data fetch on component mount
+  }, [fetchData]);
 
   const handleFilterApply = () => {
-    let filtered = [...originalData];
+    const newFilters = {};
     if (filterField) {
-      if (filterField === "SL No" && rangeValues[0] !== "" && rangeValues[1] !== "") {
-        const min = parseInt(rangeValues[0], 10);
-        const max = parseInt(rangeValues[1], 10);
-        filtered = filtered.filter(row => {
-          const val = parseInt(row[filterField], 10);
-          return val >= min && val <= max;
-        });
-      }
-      else if (fieldTypes.range.includes(filterField)) {
-        const [min, max] = rangeValues;
-        filtered = filtered.filter(row => {
-          const val = parseFloat(row[filterField]) || 0;
-          const isMinValid = min !== "" ? val >= parseFloat(min) : true;
-          const isMaxValid = max !== "" ? val <= parseFloat(max) : true;
-          return isMinValid && isMaxValid;
-        });
-      }
-      else if (fieldTypes.date.includes(filterField)) {
-        const from = dateRange.from ? new Date(dateRange.from) : null;
-        const to = dateRange.to ? new Date(dateRange.to) : null;
-        filtered = filtered.filter(row => {
-          const val = new Date(row[filterField] || "");
-          const isAfterFrom = from ? val >= from : true;
-          const isBeforeTo = to ? val <= to : true;
-          return isAfterFrom && isBeforeTo;
-        });
-      }
-      else {
-        filtered = filtered.filter(row =>
-          row[filterField]?.toString().toLowerCase().includes(filterValue.toLowerCase())
-        );
+      newFilters.filterField = filterField;
+      // Use dynamicFieldTypes for filter logic
+      if (dynamicFieldTypes.range?.includes(filterField) || dynamicFieldTypes.number?.includes(filterField) || dynamicFieldTypes.yearDropdown?.includes(filterField)) {
+        newFilters.minRange = rangeValues[0];
+        newFilters.maxRange = rangeValues[1];
+      } else if (dynamicFieldTypes.date?.includes(filterField)) {
+        newFilters.fromDate = dateRange.from;
+        newFilters.toDate = dateRange.to;
+      } else {
+        newFilters.filterValue = filterValue;
       }
     }
-    setCurrentData(filtered);
-    setCurrentPage(1);
+    setActiveFilters(newFilters);
+    setCurrentPage(1); // Always go to first page on new filter
   };
-
-  const resetSort = () => setSortConfig({ field: "SL No", direction: "asc" });
 
   const handleClearFilters = () => {
     setFilterField("");
     setFilterValue("");
     setRangeValues(["", ""]);
     setDateRange({ from: "", to: "" });
-    setCurrentData(originalData);
-    setCurrentPage(1);
-    resetSort();
+    setActiveFilters({});
+    setCurrentPage(1); // Reset to first page
+    setSortConfig({ field: 'SL No', direction: 'asc' }); // Reset sort
   };
 
-  const sortedData = useMemo(() => {
-    let sortableItems = [...currentData];
-    if (sortConfig.field) {
-        sortableItems.sort((a, b) => {
-            const field = sortConfig.field;
-            const valA = a[field];
-            const valB = b[field];
-            if (valA == null) return 1;
-            if (valB == null) return -1;
-            let comparison = 0;
-            const isDate = field.toLowerCase().includes("date");
-            const isNumber = typeof valA === 'number' && typeof valB === 'number';
-            if (isDate) {
-                comparison = new Date(valA) - new Date(valB);
-            } else if (isNumber) {
-                comparison = valA - valB;
-            } else {
-                comparison = String(valA).toLowerCase().localeCompare(String(valB).toLowerCase());
-            }
-            return sortConfig.direction === 'asc' ? comparison : -comparison;
-        });
+  const handleResetSort = useCallback(() => {
+    setSortConfig({ field: 'SL No', direction: 'asc' });
+  }, []);
+
+  const handleSave = async (newOrUpdatedRow) => {
+    const config = { headers: { 'Content-Type': 'application/json' } };
+    try {
+      if (isNewRow) {
+        await axios.post(API_URL, newOrUpdatedRow, config);
+      } else {
+        await axios.put(`${API_URL}/${newOrUpdatedRow.id}`, newOrUpdatedRow, config);
+      }
+      setIsEditing(false);
+      fetchData(); // Re-fetch data to update table
+    } catch (err) {
+      console.error("Save error:", err);
+      setError("Failed to save the contract.");
     }
-    return sortableItems;
-  }, [currentData, sortConfig]);
+  };
 
-  const dataForExport = useMemo(() => {
-    return sortedData.map((row, index) => ({
-      ...row,
-      'SL No': index + 1
-    }));
-  }, [sortedData]);
+  const handleDeleteRow = async (rowId) => {
+    try {
+      await axios.delete(`${API_URL}/${rowId}`);
+      setIsEditing(false);
+      fetchData(); // Re-fetch data, which will handle page adjustment if needed
+    } catch (err) {
+      console.error("Delete error:", err);
+      setError("Failed to delete the contract.");
+    }
+  };
 
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * rowsPerPage;
-    return sortedData.slice(start, start + rowsPerPage);
-  }, [sortedData, currentPage, rowsPerPage]);
+  const handleEditClick = useCallback((row, sl) => {
+    setIsNewRow(false);
+    setEditingRow(row);
+    setEditingDisplaySlNo(sl);
+    setIsEditing(true);
+  }, []);
 
-  const totalPages = useMemo(() => {
-    return Math.ceil(sortedData.length / rowsPerPage);
-  }, [sortedData, rowsPerPage]);
-
-  if (loading) return <div className="loader">Loading...</div>;
-  if (error) return <div className="error-message">{error}</div>;
-
-  if (isEditing) {
-    return (
-      <EditPage 
-        rowData={editingRow}
-        onSave={handleSave}
-        onCancel={handleCancelEdit}
-        onDelete={handleDeleteRow}
-        headers={headers}
-        isNew={isNewRow}
-      />
-    );
-  }
+  const handleAddClick = () => {
+    setIsNewRow(true);
+    // Use dynamicHeaders to create a new empty row object based on current schema
+    const newRowObject = dynamicHeaders.reduce((acc, header) => ({ ...acc, [header]: '' }), {});
+    setEditingRow(newRowObject);
+    setEditingDisplaySlNo(null);
+    setIsEditing(true);
+  };
 
   return (
     <div className="leaderboard-container">
       <div className="leaderboard-header">
         <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
-      </div>
-
-      <div style={{ marginBottom: "10px" }}>
-        <FilterPanel
-          headers={headers}
-          fieldTypes={fieldTypes}
-          filterField={filterField}
-          setFilterField={setFilterField}
-          filterValue={filterValue}
-          setFilterValue={setFilterValue}
-          rangeValues={rangeValues}
-          setRangeValues={setRangeValues}
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          onApply={handleFilterApply}
-          onClear={handleClearFilters}
-          resetSort={resetSort}
-        />
-      </div>
-
-      <div className="export-fields-container" style={{ marginBottom: "24px" }}>
-       <ExportButtons
-          data={dataForExport}
-          headers={headers}
-          selectedFields={selectedFields}
-          setSelectedFields={setSelectedFields}
-        />
-      </div>
-
-      {!paginatedData.length && (
-        <div className="no-results">No matching records found.</div>
-      )}
-
-      {!!paginatedData.length && (
-        <>
-          <DataTable
-            data={paginatedData}
-            headers={headers}
-            selectedFields={selectedFields}
-            sortConfig={sortConfig}
-            setSortConfig={setSortConfig}
-            onEdit={handleEditClick}
-            currentPage={currentPage}
-            rowsPerPage={rowsPerPage}
-          />
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            setPage={setCurrentPage}
-          />
-        </>
-      )}
-
-      <div className="logout-container">
-        <button onClick={handleAddClick} className="add-new-button">
-          + Add New
-        </button>
         <button onClick={onLogout} className="logout-button">Logout</button>
-    
       </div>
+
+      <CombinedPanel
+        headers={dynamicHeaders}
+        fieldTypes={dynamicFieldTypes}
+        filterField={filterField}
+        setFilterField={setFilterField}
+        filterValue={filterValue}
+        setFilterValue={setFilterValue}
+        rangeValues={rangeValues}
+        setRangeValues={setRangeValues}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        onApply={handleFilterApply}
+        onClear={handleClearFilters}
+        selectedFields={selectedFields}
+        setSelectedFields={setSelectedFields}
+        activeFilters={activeFilters}
+        sortConfig={sortConfig}
+        resetSort={handleResetSort}
+      />
+
+      <div className="data-section">
+        {loading && <div className="loading-overlay">Loading...</div>}
+        {error && <div className="error-message">{error}</div>}
+
+        {!loading && !error && (
+          !currentData.length && dynamicHeaders.length === 0 ? (
+            <div className="no-results">No data or headers found. Please upload an Excel file.</div>
+          ) : !currentData.length ? (
+            <div className="no-results">No records found for the current filter.</div>
+          ) : (
+            <DataTable
+              data={currentData}
+              headers={dynamicHeaders}
+              selectedFields={selectedFields}
+              sortConfig={sortConfig}
+              setSortConfig={setSortConfig}
+              onEdit={handleEditClick}
+              currentPage={currentPage}
+              rowsPerPage={10}
+              fieldTypes={dynamicFieldTypes}
+            />
+          )
+        )}
+      </div>
+
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setPage={setCurrentPage}
+      />
+
+      <div className="bottom-action-buttons-container">
+        <button onClick={handleAddClick} className="add-new-button">+ New</button>
+        <button onClick={() => setShowUploadModal(true)} className="upload-page-button">Upload</button>
+      </div>
+
+      {isEditing && (
+        <div className="modal-overlay">
+          <div className="modal-content modal-edit-page">
+            <EditPage
+              rowData={editingRow}
+              onSave={handleSave}
+              onCancel={() => setIsEditing(false)}
+              onDelete={() => handleDeleteRow(editingRow.id)}
+              headers={dynamicHeaders}
+              isNew={isNewRow}
+              displaySlNo={editingDisplaySlNo}
+            />
+          </div>
+        </div>
+      )}
+
+      {showUploadModal && (
+        <div className="modal-overlay">
+          <div className="modal-content modal-upload-page">
+            <UploadPage
+              onCancel={() => setShowUploadModal(false)}
+              onUploadSuccess={() => {
+                setShowUploadModal(false);
+                setCurrentPage(1); // Reset to first page after successful upload
+                fetchData(true); // Force re-fetch and reset selectedFields
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

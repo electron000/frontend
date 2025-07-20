@@ -1,0 +1,118 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
+  gap: 8px; /* Increased gap slightly for better spacing on all screens */
+  flex-wrap: wrap; /* Allows buttons to wrap to the next line on smaller screens */
+}
+
+.pagination button {
+  border-radius: var(--radius-sm);
+  padding: 8px 12px; /* Adjusted padding for better touch targets and visual balance */
+  font-size: 14px; /* Slightly increased font size for better readability */
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 3px var(--ongc-shadow);
+  min-width: 36px; /* Increased min-width for better touch target */
+  min-height: 36px; /* Increased min-height for better touch target */
+  height: 36px; /* Increased height */
+  display: flex; /* Use flex to center content inside buttons */
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button:disabled {
+  background: var(--ongc-medium-gray);
+  color: var(--ongc-white);
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pagination button:active {
+  transform: translateY(0) scale(0.95);
+  transition-duration: 0.1s;
+}
+
+.PButtons {
+  background: linear-gradient(135deg, var(--ongc-light-gray), var(--ongc-white));
+  color: var(--ongc-dark-gray);
+  border-color: var(--ongc-border);
+}
+
+.PButtons:hover {
+  background: linear-gradient(135deg, var(--ongc-hover-bg), var(--ongc-light-gray));
+  border-color: var(--ongc-green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--ongc-shadow-hover);
+}
+
+.PNpage,
+.active-page {
+  background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust));
+  color: var(--ongc-white);
+  font-weight: 700;
+}
+
+.PNpage:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--ongc-shadow-hover);
+}
+
+.active-page {
+  box-shadow: 0 0 0 3px var(--ongc-yellow);
+  transform: scale(1.05);
+}
+
+.ellipsis {
+  padding: 4px 6px; /* Adjusted padding to align with other buttons */
+  font-size: 14px; /* Adjusted font size to match other buttons */
+  font-weight: 600;
+  color: var(--ongc-medium-gray);
+  line-height: 1;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .pagination {
+    margin: 12px 0;
+    gap: 6px; /* Slightly reduced gap for tablets */
+  }
+
+  .pagination button {
+    padding: 6px 10px; /* Reduced padding for tablets */
+    font-size: 13px; /* Slightly reduced font size */
+    min-width: 32px;
+    min-height: 32px;
+    height: 32px;
+  }
+
+  .ellipsis {
+    padding: 3px 5px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    margin: 10px 0;
+    gap: 4px; /* Further reduced gap for mobile phones */
+  }
+
+  .pagination button {
+    padding: 5px 8px; /* Further reduced padding for mobile phones */
+    font-size: 12px; /* Smallest font size for mobile */
+    min-width: 28px;
+    min-height: 28px;
+    height: 28px;
+  }
+
+  .ellipsis {
+    padding: 2px 4px;
+    font-size: 12px;
+  }
+}

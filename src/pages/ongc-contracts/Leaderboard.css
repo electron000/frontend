@@ -1,494 +1,210 @@
-/* Enhanced ONGC Professional CSS - Final Optimized Version */
-
-/* CSS Variables - Enhanced ONGC Color Palette */
+/* ==========================================================================
+   Global Styles & Variables
+   ========================================================================== */
 :root {
   --ongc-maroon: #9B1C1C;
   --ongc-green: #2D6A4F;
-  --ongc-yellow: #FFD43B;
-  --ongc-white: #F9F9F6;
-  --ongc-black: #1A1A1A;
-  --ongc-muted: #B5A27D;
   --ongc-green-dark: #22543D;
   --ongc-orange-rust: #B54828;
-  --ongc-soft-bg: #F3EFEA;
-  --ongc-hover-bg: #E9F2EF;
-  
-  /* Enhanced Professional Colors */
-  --ongc-success: #16A34A;
-  --ongc-warning: #F59E0B;
-  --ongc-error: #DC2626;
-  --ongc-info: #3B82F6;
+  --ongc-white: #F9F9F6;
+  --ongc-black: #1A1A1A;
   --ongc-light-gray: #F8FAFC;
   --ongc-medium-gray: #64748B;
   --ongc-dark-gray: #334155;
   --ongc-border: #E2E8F0;
+  --ongc-hover-bg: #E9F2EF;
+  --ongc-yellow: #FFD43B;
+  --ongc-info: #3B82F6;
   --ongc-shadow: rgba(0, 0, 0, 0.1);
   --ongc-shadow-hover: rgba(0, 0, 0, 0.15);
-  
-  /* Typography Scale */
-  --font-xs: 0.75rem;
-  --font-sm: 0.875rem;
-  --font-base: 1rem;
-  --font-lg: 1.125rem;
-  --font-xl: 1.25rem;
-  --font-2xl: 1.5rem;
-  
-  /* Spacing Scale */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  
-  /* Border Radius */
-  --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-}
-
-/* Enhanced Global Reset + Base */
-*, *::before, *::after {
-  box-sizing: border-box;
+  --radius-sm: 0.375rem;
 }
 
 body {
-  font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(135deg, var(--ongc-light-gray) 0%, var(--ongc-white) 100%);
-  color: var(--ongc-black);
+  font-family: 'Segoe UI', 'Inter', sans-serif;
+  background: var(--ongc-light-gray);
   margin: 0;
-  padding: var(--space-md);
-  font-size: var(--font-base);
-  line-height: 1.6;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 1rem;
 }
 
-/* Main Layout & Header */
-.leaderboard-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.leaderboard-header {
-  display: flex;
-  justify-content: center; /* Center the logo */
-  margin-bottom: 2rem;
-}
+/* ==========================================================================
+   Leaderboard Page Layout
+   ========================================================================== */
 
 .ongc-logo {
-  width: 200px;
-  max-width: 90%;
-  filter: drop-shadow(0 2px 4px var(--ongc-shadow));
-  transition: transform 0.3s ease;
+  width: 150px; /* Default size for desktop */
 }
 
-.ongc-logo:hover {
-  transform: scale(1.02);
-}
-
-/* Enhanced Cursor Controls */
-input, select, textarea { cursor: text; }
-button, .filter-btn, .export-btn, .toggle-select-btn, .select-toggle-btn, .field-checkbox, th[class*="cursor-pointer"] { cursor: pointer; }
-td { cursor: default; }
-
-/* Compact Table Styling */
-.table-wrapper {
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  background: var(--ongc-white);
-  border-radius: var(--radius-md);
-  box-shadow: 0 2px 8px var(--ongc-shadow);
-  margin: 16px 0;
-}
-
-.table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: var(--radius-md);
-  background-color: var(--ongc-white);
-  text-align: center;
-  min-width: 500px;
-  overflow: hidden;
-}
-
-th, td {
-  border: 1px solid var(--ongc-border);
-  white-space: nowrap;
-  padding: 8px 12px; /* Adjusted padding for better spacing */
-  text-align: center;
-  vertical-align: middle;
-  transition: background-color 0.2s ease;
-}
-
-th {
-  background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
-  color: var(--ongc-white);
+.logout-button {
   font-weight: 600;
-  text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-td {
-  color: var(--ongc-black);
-  font-size: 13px;
-}
-
-tbody tr {
-  background-color: var(--ongc-light-gray); 
-}
-
-tr:hover {
-  background-color: var(--ongc-hover-bg);
-}
-
-/* Remarks column */
-.remarks-column {
-  max-width: 250px;
-  width: 250px;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  font-size: 12px;
-  text-align: left;
-  vertical-align: top;
-}
-
-/* Compact Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.pagination button {
-  border-radius: var(--radius-sm);
   padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  border: 1px solid transparent;
-  outline: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 3px var(--ongc-shadow);
-  min-width: 36px;
-  min-height: 36px;
-}
-
-.PButtons {
-  background: linear-gradient(135deg, var(--ongc-light-gray), var(--ongc-white));
-  color: var(--ongc-dark-gray);
-  border-color: var(--ongc-border);
-}
-
-.PButtons:hover {
-  background: linear-gradient(135deg, var(--ongc-hover-bg), var(--ongc-light-gray));
-  border-color: var(--ongc-green);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--ongc-shadow-hover);
-}
-
-.PNpage, .active-page {
-  background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust));
-  color: var(--ongc-white);
-  font-weight: 700;
-}
-
-.active-page {
-  box-shadow: 0 0 0 3px var(--ongc-yellow);
-  transform: scale(1.05);
-}
-
-.pagination button:disabled {
-  background: var(--ongc-medium-gray);
-  color: var(--ongc-white);
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.ellipsis {
-  padding: var(--space-md);
-  font-weight: 600;
-  color: var(--ongc-medium-gray);
-}
-
-/* Filter + Export Panel */
-.filter-panel-row,
-.export-panel-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 12px 20px;
-  margin-bottom: 16px;
-}
-
-.filter-input-group,
-.export-btn-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-}
-
-.filter-input,
-.filename-input,
-select {
-  padding: 10px 16px;
-  border: 1.5px solid var(--ongc-border);
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  min-width: 140px;
-  min-height: 40px;
-  background: var(--ongc-white);
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 2px var(--ongc-shadow);
-  line-height: 1.4;
-}
-
-.filter-input:focus,
-.filename-input:focus,
-select:focus {
-  outline: none;
-  border-color: var(--ongc-green);
-  background-color: #E9F2EF;
-  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.1);
-}
-
-/* Unified Buttons */
-.filter-btn,
-.export-btn,
-.toggle-select-btn,
-.logout-button,
-.edit-button,
-.select-toggle-btn {
-  font-weight: 600 !important;
-  padding: 10px 20px;
   border-radius: var(--radius-sm);
   border: none;
   color: var(--ongc-white);
-  text-align: center;
   font-size: 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px var(--ongc-shadow);
+  cursor: pointer;
+  box-shadow: 0 3px 6px var(--ongc-shadow);
+  min-width: 100px;
+  height: 38px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #B54828, #9B1C1C);
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  z-index: 1000;
+  transition: all 0.3s ease; /* Added transition for smooth changes */
 }
 
-.filter-btn:hover,
-.export-btn:hover,
-.toggle-select-btn:hover,
-.logout-button:hover,
-.edit-button:hover,
-.select-toggle-btn:hover {
+.logout-button:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px var(--ongc-shadow-hover);
 }
 
-/* Button Colors */
-.filter-btn.apply { background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark)); }
-.filter-btn.clear { background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust)); }
-.export-btn.csv { background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark)); }
-.export-btn.excel { background: linear-gradient(135deg, var(--ongc-success), #16A34A); }
-.export-btn.pdf { background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust)); }
-.export-btn.word { background: linear-gradient(135deg, var(--ongc-info), #1E40AF); }
-.export-btn.all { background: linear-gradient(135deg, var(--ongc-black), var(--ongc-dark-gray)); }
-.export-btn.preview { background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-warning)); }
-
-/* Edit & Logout Buttons */
-.edit-button {
-  padding: 5px 14px;
-  font-size: 13px;
-  background-color: var(--ongc-green);
+.logout-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 4px var(--ongc-shadow);
 }
-.logout-container {
+
+
+/* ==========================================================================
+   Bottom Action Buttons
+   ========================================================================== */
+
+.bottom-action-buttons-container {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 1rem; /* This adds a 1rem space between the buttons */
+  flex-wrap: wrap; /* Allows buttons to wrap to the next line */
+  gap: 15px; /* Space between buttons */
   width: 100%;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
 }
 
-/* 2. Define the look for the new 'Add New' button */
-/* It inherits the base styles from .logout-button, but gets a new color */
-.add-new-button {
-  /* Use the theme's green color for a positive action */
-  background: linear-gradient(135deg, var(--ongc-green, #2D6A4F), var(--ongc-green-dark, #22543D));
+.add-new-button,
+.upload-page-button {
   font-weight: 600;
-  padding: 10px 20px;
-  border-radius: var(--radius-sm, 0.375rem);
-  border: none;
-  color: var(--ongc-white, #fff);
-  text-align: center;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px var(--ongc-shadow, rgba(0, 0, 0, 0.1));
-}
-
-.add-new-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
-}
-
-
-/* 3. Ensure the logout button has its specific style (already in your code) */
-.logout-button {
-  background: linear-gradient(135deg, var(--ongc-maroon, #9B1C1C), var(--ongc-orange-rust, #B54828));
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: var(--radius-sm, 0.375rem);
-  border: none;
-  color: var(--ongc-white, #fff);
-  text-align: center;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px var(--ongc-shadow, rgba(0, 0, 0, 0.1));
-}
-
-.logout-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
-}
-
-/* Field Selection & Messages */
-.exporting-message, .error-message, .no-results, .loader {
-  text-align: center;
-  padding: var(--space-lg);
-  margin: var(--space-md) 0;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-}
-.exporting-message { color: var(--ongc-info); background-color: rgba(59, 130, 246, 0.1); }
-.error-message { color: var(--ongc-error); background-color: rgba(220, 38, 38, 0.1); }
-.no-results, .loader { color: var(--ongc-medium-gray); background-color: var(--ongc-light-gray); }
-
-
-.field-selection-table {
-  width: auto;
-  margin: 0 auto;
-  border-collapse: separate;
-  border-spacing: 8px;
-}
-.field-selection-table-container {
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-
-  border-radius: var(--radius-md);
-
-  margin: 16px 0;
-}
-
-.field-selection-table td {
-  padding: 0;
-}
-
-.field-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  background: var(--ongc-light-gray);
-  padding: 6px 10px;
-  border: 1px solid var(--ongc-border);
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
-  color: var(--ongc-black);
+  border: none;
+  color: var(--ongc-white);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 3px 6px var(--ongc-shadow);
+  min-width: 100px;
+  height: 38px;
   white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 2px var(--ongc-shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease; /* Added transition for smooth changes */
 }
 
-.field-checkbox:hover {
-  background: var(--ongc-hover-bg);
-  border-color: var(--ongc-green);
-  box-shadow: 0 2px 4px var(--ongc-shadow-hover);
-}
-
-.field-checkbox input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--ongc-green);
-  cursor: pointer;
-}
-
-.field-checkbox input[type="checkbox"]:checked {
-  accent-color: var(--ongc-success);
-}
-.export-heading {
-  text-align: center;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 1.2rem;
-  color: var(--ongc-green);
-  margin-bottom: 1rem;
-}
-.select-button-container {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-/* TO THIS (in the artifact): */
-.select-toggle-btn.select-state { 
+.add-new-button {
   background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
-  color: var(--ongc-white); /* Ensures white text on green */
-}
-.select-toggle-btn.deselect-state { 
-  background: linear-gradient(135deg, var(--ongc-dark-gray), var(--ongc-black));
-  color: var(--ongc-white); /* Ensures white text on black */
 }
 
+.upload-page-button {
+  background: linear-gradient(135deg, var(--ongc-info), #2a6cb5);
+}
+
+.add-new-button:hover,
+.upload-page-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px var(--ongc-shadow-hover);
+}
+
+.add-new-button:active,
+.upload-page-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 4px var(--ongc-shadow);
+}
 
 /* ==========================================================================
    Fully Responsive Design
    ========================================================================== */
 
-/* Medium devices (tablets, 768px and down) */
+/* Tablet adjustments (keeping original tablet styles as they were not explicitly removed) */
 @media (max-width: 768px) {
   body { padding: 0.5rem; }
   .leaderboard-container { padding: 1rem; }
-  .filter-panel-row, .export-panel-row { flex-direction: column; gap: 1rem; }
-  .filter-input-group, .export-btn-group, .filename-group { width: 100%; max-width: 450px; }
-  .filter-input, .filename-input, select { width: 100%; min-width: auto; }
-  .export-btn-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-  .table th, .table td { padding: 6px 8px; font-size: 12px; }
-  /* MODIFICATION: Made pagination buttons smaller */
+
+  .panel-row {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--ongc-white);
+    border: 1px solid var(--ongc-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .filter-controls-group, .export-controls-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .input-group, .button-group, .filename-group, .field-selector, .format-selector {
+    width: 100%;
+  }
+
+  .filter-panel .input-group {
+      width: 100%;
+  }
+
+  .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .custom-table th, .custom-table td { padding: 6px 8px; font-size: 12px; }
+
   .pagination button { padding: 5px 9px; font-size: 10px; min-width: 30px; min-height: 30px; }
 }
 
-/* Small devices (large phones, 640px and down) */
-@media (max-width: 640px) {
-  .leaderboard-header { margin-bottom: 1.5rem; }
-  .ongc-logo { width: 180px; }
-  .export-btn-group { grid-template-columns: 1fr 1fr 1fr; } /* 3 columns for a cleaner look */
-}
-
-/* Extra small devices (phones, 480px and down) */
+/* Mobile phones only */
 @media (max-width: 480px) {
   .leaderboard-container { padding: 0.5rem; }
-  .ongc-logo { width: 160px; }
-  .table th, .table td { padding: 4px 6px; font-size: 11px; }
-  .export-btn-group { grid-template-columns: 1fr 1fr; } /* Back to 2 columns */
-  .filter-btn, .export-btn, .select-toggle-btn, .logout-button { font-size: 13px; height: 40px; padding: 8px 16px; }
+
+  /* ONGC Logo size reduction */
+  .ongc-logo {
+    width: 120px; /* Reduced logo size for mobiles */
+  }
+
+  /* Logout button adjustments */
+  .logout-button {
+    font-size: 11px; /* Smaller font size */
+    height: 32px; /* Reduced height */
+    padding: 6px 10px; /* Reduced padding */
+    min-width: 70px; /* Reduced min-width */
+    top: 10px; /* Adjusted position */
+    right: 10px; /* Adjusted position */
+  }
+
+  /* Add New and Upload buttons adjustments */
+  .add-new-button,
+  .upload-page-button {
+    font-size: 12px; /* Smaller font size */
+    height: 36px; /* Reduced height */
+    padding: 6px 12px; /* Reduced padding */
+    min-width: auto; /* Allow width to be flexible */
+    flex-basis: calc(50% - 10px); /* Distribute space for side-by-side (adjust gap if needed) */
+    max-width: calc(50% - 10px); /* Ensure they don't grow too large */
+    gap: 10px; /* Adjusted gap for mobile buttons */
+  }
+
+  /* Ensure bottom action buttons container allows side-by-side */
+  .bottom-action-buttons-container {
+    gap: 8px; /* Reduced gap between buttons on mobile */
+    justify-content: center; /* Keep them centered */
+  }
+
+  /* General table and pagination adjustments (from previous requests) */
+  .custom-table th, .custom-table td { padding: 4px 6px; font-size: 11px; }
+  .filter-btn { font-size: 13px; height: 40px; } /* Reverted filter-btn to original 480px size */
   .edit-button { padding: 4px 12px; font-size: 12px; }
-  /* MODIFICATION: Made pagination buttons even smaller */
   .pagination button { padding: 4px 8px; font-size: 9px; min-width: 28px; min-height: 28px; }
 }
-
-
-

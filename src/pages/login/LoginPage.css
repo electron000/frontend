@@ -9,7 +9,6 @@
   justify-content: center;
   min-height: 100vh;
   background: linear-gradient(135deg, var(--ongc-light-gray, #F8FAFC) 0%, var(--ongc-white, #F9F9F6) 100%);
-  font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 1rem;
 }
 
@@ -59,23 +58,26 @@
   margin-bottom: 2rem;
 }
 
-.input-group {
+/* MODIFIED: Scoped to .login-card to prevent conflicts */
+.login-card .input-group {
   position: relative;
   margin-bottom: 1.5rem;
 }
 
-.input-icon {
+/* MODIFIED: Scoped to .login-card */
+.login-card .input-icon {
   position: absolute;
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--ongc-medium-gray, #64748B);
-  pointer-events: none; /* Allows clicking through the icon */
+  pointer-events: none;
 }
 
-.input-group input {
+/* MODIFIED: Scoped to .login-card to fix the core issue */
+.login-card .input-group input {
   width: 100%;
-  padding: 12px 16px 12px 50px; /* Increased left padding for icon */
+  padding: 12px 16px 12px 50px; /* This padding now ONLY applies to login inputs */
   border: 1.5px solid var(--ongc-border, #E2E8F0);
   border-radius: var(--radius-md, 0.5rem);
   font-size: var(--font-base, 1rem);
@@ -83,16 +85,18 @@
   transition: all 0.3s ease;
   color: var(--ongc-dark-gray, #334155);
 }
-.input-group input::placeholder {
+
+.login-card .input-group input::placeholder {
   color: var(--ongc-medium-gray, #64748B);
 }
 
-.input-group input:focus {
+.login-card .input-group input:focus {
   outline: none;
   border-color: var(--ongc-green, #2D6A4F);
   box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
 }
-.input-group input:focus + .input-icon {
+
+.login-card .input-group input:focus + .input-icon {
   color: var(--ongc-green, #2D6A4F);
 }
 

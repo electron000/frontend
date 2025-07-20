@@ -1,0 +1,172 @@
+/* === Data Table Wrapper === */
+.data-table-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 1rem auto 2rem auto;
+  background: var(--ongc-light-gray);
+  border-radius: 12px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+  overflow-x: auto; /* Ensures horizontal scrolling if content overflows */
+  box-sizing: border-box;
+}
+
+/* Optional inner scroll container */
+.data-table-wrapper .table-scroll {
+  overflow-x: auto;
+}
+
+/* === Table (Scoped) === */
+.data-table-wrapper .custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px; /* Minimum width for desktop */
+  font-size: 12.5px;
+}
+
+/* === Table Header (Scoped) === */
+.data-table-wrapper th {
+  padding: 8px 10px;
+  background: var(--ongc-green);
+  color: var(--ongc-white);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  border-bottom: 2px solid var(--ongc-green);
+  border-right: 1px solid var(--ongc-medium-gray);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-align: left;
+  cursor: pointer;
+}
+
+.data-table-wrapper th .sort-indicator {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--ongc-yellow);
+}
+
+/* === Table Body Rows (Scoped) === */
+.data-table-wrapper tbody tr {
+  background-color: var(--ongc-light-gray);
+  transition: background-color 0.2s ease;
+}
+
+.data-table-wrapper tbody tr:hover {
+  background-color: var(--ongc-hover-bg);
+}
+
+/* === Table Cells (Scoped) === */
+.data-table-wrapper td {
+  padding: 6px 10px;
+  color: var(--ongc-black);
+  font-size: 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--ongc-medium-gray);
+  border-right: 1px solid var(--ongc-medium-gray);
+  white-space: nowrap;
+}
+
+.data-table-wrapper td.text-right {
+  text-align: right;
+}
+
+.data-table-wrapper td.text-left {
+  text-align: left;
+}
+
+/* === Remarks Column (Scoped) === */
+.data-table-wrapper .remarks-column {
+  max-width: 260px;
+  width: 260px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-size: 11px;
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 10px;
+  background-color: var(--ongc-light-gray);
+  color: var(--ongc-black);
+  border-bottom: 1px solid var(--ongc-medium-gray);
+  border-right: 1px solid var(--ongc-medium-gray);
+}
+
+/* === Edit Button (Scoped) === */
+.data-table-wrapper .edit-button {
+  background-color: var(--ongc-green);
+  color: var(--ongc-white);
+  border: none;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.data-table-wrapper .edit-button:hover {
+  background-color: var(--ongc-green-dark);
+}
+
+/* === Empty State Message (Scoped) === */
+.data-table-wrapper .no-data {
+  text-align: center;
+  font-style: italic;
+  color: var(--ongc-dark-gray);
+  padding: 18px;
+  font-size: 12.5px;
+}
+
+/* ==========================================================================
+   Responsive Design for Data Table (Mobile Phones Only)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .data-table-wrapper {
+    margin: 0.5rem auto 1rem auto; /* Slightly reduced margin */
+    border-radius: 8px; /* Slightly smaller border-radius */
+  }
+
+  .data-table-wrapper .custom-table {
+    min-width: auto; /* Allow table to shrink more on mobile */
+    font-size: 10px; /* Reduced base font size for table content */
+  }
+
+  .data-table-wrapper th {
+    padding: 6px 8px; /* Reduced padding for headers */
+    font-size: 11px; /* Reduced font size for headers */
+    letter-spacing: 0.2px; /* Slightly reduced letter spacing */
+  }
+
+  .data-table-wrapper th .sort-indicator {
+    font-size: 8px; /* Reduced font size for sort indicator */
+  }
+
+  .data-table-wrapper td {
+    padding: 4px 8px; /* Reduced padding for cells */
+    font-size: 10px; /* Reduced font size for cells */
+  }
+
+  .data-table-wrapper .remarks-column {
+    max-width: 180px; /* Reduced max-width for remarks column */
+    width: 180px; /* Reduced width for remarks column */
+    font-size: 9px; /* Reduced font size for remarks */
+    padding: 6px 8px; /* Reduced padding for remarks */
+  }
+
+  .data-table-wrapper .edit-button {
+    padding: 4px 8px; /* Reduced padding for edit button */
+    font-size: 10px; /* Reduced font size for edit button */
+  }
+
+  .data-table-wrapper .no-data {
+    padding: 12px; /* Reduced padding for no data message */
+    font-size: 11px; /* Reduced font size for no data message */
+  }
+}

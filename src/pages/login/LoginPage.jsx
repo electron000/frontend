@@ -15,28 +15,43 @@ const LoginPage = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  /**
-   * Handles the form submission process.
+/**
+   * Handles the form submission by calling the backend API.
    * @param {React.FormEvent} e - The form event.
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    // Simulate a network request for authentication.
-    setTimeout(() => {
-      // --- IMPORTANT ---
-      // Replace this hard-coded check with a real API call to your authentication backend.
-      if (username === 'admin' && password === 'password') {
-        onLogin(); // Trigger the callback passed from the parent component.
-      } else {
-        setError('Invalid username or password. Please try again.');
-      }
-      // -----------------
+    try {
+      // Call your Python backend API endpoint
+      const response = await fetch('http://localhost:5001/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }), // Send username and password
+      });
 
-      setIsLoading(false); // Reset loading state after the check is complete.
-    }, 1000);
+      const data = await response.json();
+
+      if (response.ok) {
+        // If login is successful (status 200)
+        console.log('Login successful:', data.message);
+        onLogin(); // Trigger the callback passed from the parent component
+      } else {
+        // If login fails (e.g., status 401), show the error from the backend
+        setError(data.error || 'Invalid username or password.');
+      }
+    } catch (networkError) {
+      // Handle network errors (e.g., server is down)
+      console.error('Login API call failed:', networkError);
+      setError('Could not connect to the server. Please try again later.');
+    } finally {
+      // This will run after the try/catch block, regardless of the outcome
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,7 +64,7 @@ const LoginPage = ({ onLogin }) => {
           onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/150x50/ffffff/000000?text=ONGC'; }}
         />
         <h2 className="login-title">CONTRACTS MANAGEMENT SYSTEM</h2>
-        <p className="login-subtitle">Please sign in to continue</p>
+        <p className="login-subtitle">Please login to continue</p>
         
         <form onSubmit={handleSubmit} noValidate>
           <div className="input-group">
@@ -87,7 +102,7 @@ const LoginPage = ({ onLogin }) => {
           {error && <p id="error-message" className="login-error-message">{error}</p>}
           
           <button type="submit" className="login-button" disabled={isLoading}>
-            {isLoading ? 'Signing In...' : 'Sign In'}
+            {isLoading ? 'Logging In...' : 'Log In'}
           </button>
         </form>
       </div>

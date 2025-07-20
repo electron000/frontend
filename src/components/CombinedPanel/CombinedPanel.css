@@ -1,0 +1,347 @@
+/* Container for the Filter/Export Panels */
+.panel-container {
+  max-width: 1400px; /* Increased max-width for larger containers */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Made panels transparent to blend with the page background */
+.panel-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  background-color: transparent;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  box-shadow: none;
+}
+
+/* Wrapper for control groups to keep them together */
+.filter-controls-group,
+.export-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+/* === Inputs, Labels & Selectors === */
+.filter-input,
+.filter-btn,
+.input-label {
+  height: 40px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.filter-input {
+  padding: 8px 12px;
+  border: 1.5px solid #dde2e7;
+  background: var(--ongc-white, #fff);
+  transition: all 0.2s ease;
+}
+
+.filter-input:hover {
+  background-color: #f0f6f2;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--ongc-green, #2D6A4F);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+}
+
+.input-label {
+  font-weight: 500;
+  color: var(--ongc-dark-gray);
+  white-space: nowrap;
+}
+
+select.filter-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232D6A4F'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 30px;
+  appearance: none;
+}
+
+/* === MODIFIED: Layout & Sizing Logic === */
+
+.input-placeholder {
+  display: none;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* This block ensures all dynamic inputs have a consistent width */
+.filter-controls-group > .input-group,
+.filter-controls-group > .text-search,
+.filter-controls-group > select.filter-input:not(.field-selector) {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.filename-group {
+  display: flex;
+  align-items: center;
+  width: 320px;
+}
+
+.field-selector { width: 300px; }
+.format-selector { width: 160px; }
+
+.input-group .filter-input {
+  width: 100%;
+}
+
+/* === Buttons === */
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap; /* Allow buttons to wrap to the next line if needed */
+  justify-content: center; /* Center buttons if they wrap */
+}
+
+.filter-btn {
+  font-weight: 600;
+  padding: 0 18px;
+  border: none;
+  color: var(--ongc-white);
+  cursor: pointer;
+  box-shadow: 0 2px 5px var(--ongc-shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
+}
+
+.filter-btn:active {
+  transform: scale(0.98);
+  filter: brightness(90%);
+}
+
+
+.filter-btn.apply,
+.filter-btn.export {
+  background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
+}
+
+.filter-btn.clear {
+  background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-maroon));
+}
+
+.filter-btn.columns {
+  background: transparent;
+  color: var(--ongc-green-dark);
+  border: 2px solid var(--ongc-green);
+}
+
+/* === Field Selection Area Style === */
+.field-selection-container {
+  max-width: 1400px; /* Increased max-width to match panel-container */
+  margin: 1rem auto;
+  background-color: transparent;
+  padding: 0 1rem;
+  border: none;
+  box-shadow: none;
+}
+
+.field-selection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ongc-border);
+}
+
+.field-selection-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ongc-dark-gray);
+}
+
+.select-toggle-btn {
+  padding: 8px 16px;
+  border: none;
+  background-color: var(--ongc-green);
+  color: var(--ongc-white);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.select-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.15));
+}
+
+.select-toggle-btn:active {
+  transform: scale(0.98);
+  filter: brightness(90%);
+}
+
+.field-selection-table-container {
+  overflow-x: auto; /* Allow scrollbar on desktop if content overflows */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  margin: 16px 0;
+  display: block;
+}
+
+.field-selection-table {
+  border-collapse: separate;
+  border-spacing: 8px;
+  display: table;
+  margin: 0 auto; /* Center the table horizontally */
+  width: fit-content; /* Allow table to be as wide as its content */
+  min-width: 100%; /* Ensure it takes at least 100% of container when content is small */
+}
+
+.field-selection-table td {
+  padding: 0;
+}
+
+.field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  background: var(--ongc-light-gray);
+  /* Reduced horizontal padding to make columns narrower */
+  padding: 6px 8px; /* Changed from 6px 10px */
+  border: 1px solid var(--ongc-border);
+  border-radius: var(--radius-sm);
+  color: var(--ongc-black);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 1px 2px var(--ongc-shadow);
+  transition: all 0.2s ease;
+}
+
+.field-checkbox:hover {
+  background-color: #e2e8f0;
+  box-shadow: 0 2px 4px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.1));
+}
+
+.field-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--ongc-green);
+}
+
+/* ==========================================================================
+   Responsive Design for CombinedPanel (Mobile Phones Only)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .panel-row {
+    padding: 0.5rem;
+    gap: 0.5rem; /* Further reduced gap */
+    align-items: flex-start; /* Align items to start when wrapped */
+  }
+
+  .filter-controls-group,
+  .export-controls-group {
+    align-items: flex-start; /* Align controls to start when wrapped */
+    gap: 0.5rem; /* Further reduced gap */
+  }
+
+  .filter-input,
+  .filter-btn,
+  .input-label {
+    height: 32px; /* Smallest height for mobile */
+    font-size: 12px; /* Smallest font size for mobile */
+  }
+
+  .filter-input {
+    padding: 4px 8px; /* Smallest padding for mobile */
+  }
+
+  select.filter-input {
+    background-position: right 6px center; /* Adjust dropdown arrow position */
+    padding-right: 20px;
+  }
+
+  /* Adjust width for inputs and selectors on mobile */
+  .filter-controls-group > .input-group,
+  .filter-controls-group > .text-search,
+  .filter-controls-group > select.filter-input:not(.field-selector),
+  .filename-group,
+  .field-selector,
+  .format-selector {
+ width: 262px;
+  }
+
+  .input-group {
+    gap: 0.25rem; /* Reduced gap between inputs in a group */
+  }
+
+  .button-group {
+    gap: 0.25rem; /* Reduced gap between buttons */
+    justify-content: center; /* Center buttons if they wrap */
+  }
+
+  .filter-btn {
+    padding: 0 8px; /* Further reduced padding for smaller buttons */
+    height: 32px;
+    flex-shrink: 1; /* Allow buttons to shrink */
+    min-width: 60px; /* Minimum width for buttons to prevent them from becoming too small */
+  }
+
+  .field-selection-container {
+    margin: 0.5rem auto;
+    padding: 0 0.5rem;
+  }
+
+  .field-selection-header {
+    flex-direction: column; /* Stack header items */
+    align-items: center; /* Center items when stacked */
+    gap: 0.5rem;
+  }
+
+  .field-selection-title {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .select-toggle-btn {
+    width: auto; /* Allow width to shrink */
+    max-width: 120px; /* Set a maximum width */
+    height: 36px; /* Increased height */
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+  .field-selection-table {
+    border-spacing: 4px; /* Reduced spacing */
+  }
+
+  .field-checkbox {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  .field-checkbox input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+  }
+}
