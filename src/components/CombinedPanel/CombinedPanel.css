@@ -324,9 +324,9 @@ select.filter-input {
   }
 
   .select-toggle-btn {
-    width: auto; /* Allow width to shrink */
+    width: 32px; /* Allow width to shrink */
     max-width: 120px; /* Set a maximum width */
-    height: 36px; /* Increased height */
+    height: 34px; /* Increased height */
     padding: 5px 10px;
     font-size: 11px;
   }
@@ -345,59 +345,89 @@ select.filter-input {
     height: 12px;
   }
 }
-
 @media (max-width: 740px) {
 .panel-row {
-flex-direction: column;
-align-items: stretch;
-gap: 0.75rem;
 padding: 0.75rem;
- }
-
- .filter-controls-group,
- .export-controls-group {
- flex-direction: column;
- align-items: stretch;
- gap: 0.75rem;
-  width: 100%;
- }
-
- /* Make all inputs and selectors take full width */
- .filter-controls-group > .input-group, .filter-controls-group > .text-search,
- .filter-controls-group > select.filter-input,
- .filename-group,
- .field-selector,
- .format-selector {
- width: 100%;
- }
-
- .input-group {
- gap: 0.75rem;
- }
-
- /* This makes the button layout similar to the 480px version */
- .button-group {
- flex-direction: row;
- justify-content: space-between;
- width: 100%;
 gap: 0.75rem;
- }
-
- /* This makes the buttons grow to fill space, like the 480px version */
- .filter-btn {
- padding: 0 12px;
- flex-grow: 1;
+align-items: flex-start;
 }
-
- .field-selection-table {
-    display: grid;
- grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
- gap: 8px;
-  width: 100%;
- }
-  .field-selection-table tbody,
+.filter-controls-group,
+.export-controls-group {
+align-items: flex-start;
+gap: 0.75rem;
+}
+.filter-input,
+.filter-btn,
+.input-label {
+height: 36px; /* Similar to mobile */
+font-size: 13px; /* Similar to mobile */
+}
+.filter-input {
+padding: 6px 10px; /* Similar to mobile */
+}
+select.filter-input {
+background-position: right 8px center;
+padding-right: 24px;
+}
+.filter-controls-group > .input-group,
+.filter-controls-group > .text-search,
+.filter-controls-group > select.filter-input:not(.field-selector),
+.filename-group,
+.field-selector,
+.format-selector {
+width: 280px; /* A bit wider than mobile */
+}
+.input-group {
+gap: 0.5rem;
+}
+.button-group {
+gap: 0.5rem;
+justify-content: center;
+}
+.filter-btn {
+padding: 0 10px;
+height: 36px;
+flex-shrink: 1;
+min-width: 70px;
+}
+.field-selection-container {
+margin: 0.75rem auto;
+padding: 0 0.75rem;
+}
+.field-selection-header {
+flex-direction: column;
+align-items: center;
+gap: 0.75rem;
+}
+.field-selection-title {
+font-size: 1rem;
+text-align: center;
+}
+.select-toggle-btn {
+max-width: 140px;
+height: 36px;
+padding: 6px 12px;
+font-size: 12px;
+}
+.field-selection-table {
+border-spacing: 6px;
+}
+.field-selection-table {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+gap: 6px;
+}
+.field-selection-table tbody,
 .field-selection-table tr,
 .field-selection-table td {
 display: contents;
- }
+}
+.field-checkbox {
+padding: 5px 7px;
+font-size: 11px;
+}
+.field-checkbox input[type="checkbox"] {
+width: 14px;
+height: 14px;
+}
 }
