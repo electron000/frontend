@@ -45,7 +45,7 @@
 }
 
 .PButtons:hover {
-  background: linear-gradient(135deg, var(--ongc-hover-bg), var(--ongc-light-gray));
+  background: linear-gradient(135deg, #E9F2EF, var(--ongc-light-gray));
   border-color: var(--ongc-green);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--ongc-shadow-hover);
