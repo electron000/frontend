@@ -125,7 +125,7 @@
 }
 
 .form-input:hover {
-  background-color: var(--ongc-hover-bg);
+  background-color: #E9F2EF;
 }
 
 textarea.form-input {
