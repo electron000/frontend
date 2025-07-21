@@ -29,7 +29,7 @@
 /* === Table Header (Scoped) === */
 .data-table-wrapper th {
   padding: 8px 10px;
-  background: var(--ongc-green);
+  background: var(--ongc-error-color);
   color: var(--ongc-white);
   font-weight: 600;
   text-transform: uppercase;
@@ -48,7 +48,7 @@
 .data-table-wrapper th .sort-indicator {
   margin-left: 4px;
   font-size: 10px;
-  color: var(--ongc-yellow);
+  color: var(--ongc-white);
 }
 
 /* === Table Body Rows (Scoped) === */
@@ -100,7 +100,7 @@
 
 /* === Edit Button (Scoped) === */
 .data-table-wrapper .edit-button {
-  background-color: var(--ongc-green);
+  background-color: var(--ongc-error-color);
   color: var(--ongc-white);
   border: none;
   padding: 5px 10px;

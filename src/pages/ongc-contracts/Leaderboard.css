@@ -79,7 +79,7 @@
 
 /* Color modifier for red/danger buttons */
 .btn--danger {
-    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-maroon));
+    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-error-color));
 }
 
 
