@@ -66,8 +66,8 @@ const LoginPage = ({ onLogin }) => {
           className="ongc-login-logo"
           onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/150x50/ffffff/000000?text=ONGC'; }}
         />
-        <h1 className="ongc-login-main-heading">Welcome to the Employee Portal</h1>
-        <p className="ongc-login-description">Your central hub for managing contracts and resources efficiently.</p>
+        <h1 className="ongc-login-main-heading">Contracts Management System</h1>
+        <p className="ongc-login-description">ONGC's Central Hub for Managing all the Contracts' Detail</p>
       </div>
 
       {/* Right Panel: Login Form */}
