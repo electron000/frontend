@@ -134,7 +134,7 @@
     align-items: center;
     gap: 4px;
     font-size: 12px;
-    background: var(--ongc-light-gray);
+    background: #ffffff;
     padding: 6px 8px;
     border: 1px solid var(--ongc-border);
     border-radius: var(--radius-sm);
