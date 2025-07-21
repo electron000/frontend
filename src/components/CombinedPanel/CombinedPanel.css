@@ -34,12 +34,12 @@
 }
 
 .filter-input:hover {
-    background-color: var(--ongc-hover-bg);
+    background-color: #E9F2EF;
 }
 
 .filter-input:focus {
     outline: none;
-    border-color: var(--ongc-hover-bg);
+    border-color: #E9F2EF;
     box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
@@ -146,14 +146,14 @@
 }
 
 .field-checkbox:hover {
-    background-color: var(--ongc-hover-bg);
+    background-color: #E9F2EF;
     box-shadow: 0 2px 4px var(--ongc-shadow-hover, rgba(0, 0, 0, 0.1));
 }
 
 .field-checkbox input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--ongc-error-color);
+    accent-color: var(--ongc-green);
 }
 
 /* ==========================================================================
