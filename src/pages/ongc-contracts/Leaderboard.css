@@ -69,7 +69,7 @@
 
 /* Color modifier for green buttons */
 .btn--green {
-    background: linear-gradient(135deg, var(--ongc-error-color), var(--ongc-orange-rust));
+    background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
 }
 
 /* Color modifier for blue buttons */
@@ -79,7 +79,7 @@
 
 /* Color modifier for red/danger buttons */
 .btn--danger {
-    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-error-color));
+    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-maroon));
 }
 
 

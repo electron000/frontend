@@ -25,7 +25,7 @@
   --ongc-light-bg: #FDFDF5; /* Light background for inputs in LoginPage */
 
   /* Hover & Shadow Colors */
-  --ongc-hover-bg: #E9F2EF;
+  --ongc-hover-bg: #F2E9E9; /* Changed to a light, desaturated maroon/red shade */
   --ongc-shadow: rgba(0, 0, 0, 0.1);
   --ongc-shadow-hover: rgba(0, 0, 0, 0.15);
 
