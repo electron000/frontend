@@ -39,7 +39,7 @@
 
 .filter-input:focus {
     outline: none;
-    border-color: var(--ongc-green, #2D6A4F);
+    border-color: var(--ongc-hover-bg);
     box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
@@ -81,7 +81,7 @@
 .btn--outline {
     background: transparent;
     color: var(--ongc-green-dark);
-    border: 2px solid var(--ongc-green);
+    border: 2px solid var(--ongc-error-color);
 }
 
 
@@ -153,7 +153,7 @@
 .field-checkbox input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--ongc-green);
+    accent-color: var(--ongc-error-color);
 }
 
 /* ==========================================================================
