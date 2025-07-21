@@ -247,7 +247,7 @@ const CombinedPanel = ({
             <button className="btn btn--blue" onClick={handleExport} disabled={isExporting}>
               {isExporting ? "Exporting..." : "Export"}
             </button>
-            <button className={`btn ${showFieldSelection ? "btn--maroon" : "btn--outline"}`}
+            <button className={`btn ${showFieldSelection ? "btn--danger" : "btn--outline"}`}
         onClick={() => setShowFieldSelection(!showFieldSelection)}>{showFieldSelection ? "Hide" : "Columns"}
       </button>
           </div>
@@ -261,7 +261,7 @@ const CombinedPanel = ({
           <h3 className="field-selection-title">Select Columns</h3>
           {/* MODIFIED: Using generic button classes */}
           <button
-        className={`btn ${selectedFields.length === headers.length ? "btn--maroon" : "btn--green"}`}onClick={toggleAllFields}>
+        className={`btn ${selectedFields.length === headers.length ? "btn--danger" : "btn--green"}`}onClick={toggleAllFields}>
         {selectedFields.length === headers.length ? "Deselect" : "Select"}
       </button>
         </div>
