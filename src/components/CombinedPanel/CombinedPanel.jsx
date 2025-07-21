@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+// Assuming 'CombinedPanel.css' no longer contains button styles
 import './CombinedPanel.css';
 
 const CombinedPanel = ({
@@ -30,7 +31,7 @@ const CombinedPanel = ({
   const [isExporting, setIsExporting] = useState(false);
   const [showFieldSelection, setShowFieldSelection] = useState(false);
   const [exportFormat, setExportFormat] = useState('xlsx');
-  const [message, setMessage] = useState(''); // State for message box, used for custom alerts
+  const [message, setMessage] = useState('');
 
   // Focus input on filter field change
   useEffect(() => {
@@ -49,7 +50,6 @@ const CombinedPanel = ({
     return 'text';
   };
 
-  // Refactored helper function to get clean filters and avoid repeating code
   const getCleanFilters = () => {
     const cleanFilters = {};
     for (const key in activeFilters) {
@@ -60,13 +60,11 @@ const CombinedPanel = ({
     return cleanFilters;
   };
 
-  // Custom message box function to replace alert()
   const showMessage = (msg) => {
     setMessage(msg);
-    setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
+    setTimeout(() => setMessage(''), 3000);
   };
 
-  // Server-side export for Excel/CSV
   const handleServerExport = async (format) => {
     setIsExporting(true);
     try {
@@ -81,17 +79,15 @@ const CombinedPanel = ({
       saveAs(response.data, `${fileName}.${format}`);
     } catch (error) {
       console.error("Export error:", error);
-      showMessage("Export failed. Please check the console for more details."); // Using custom message box
+      showMessage("Export failed. Please check the console for more details.");
     } finally {
       setIsExporting(false);
     }
   };
 
-  // Client-side PDF generation
-  const exportToPDF = async () => { // Made async to fetch data
+  const exportToPDF = async () => {
     setIsExporting(true);
     try {
-      // Fetch data from API first
       const params = new URLSearchParams({
         sortField: sortConfig?.field || '',
         sortDirection: sortConfig?.direction || '',
@@ -99,13 +95,13 @@ const CombinedPanel = ({
         ...getCleanFilters()
       });
       const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
-      const allData = response.data.data || response.data; // Get the actual data array
+      const allData = response.data.data || response.data;
 
       const numCols = selectedFields.length;
       let format = 'a4';
       if (numCols > 10) format = 'a3';
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
-
+      
       const scale = Math.max(0.45, 1 - (numCols / 30));
       const fontSize = 10 * scale;
       const titleSize = 16 * scale;
@@ -118,7 +114,7 @@ const CombinedPanel = ({
       autoTable(doc, {
         startY: 22,
         head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
-        body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")), // Use fetched allData
+        body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")),
         theme: 'grid',
         tableWidth: 'auto',
         margin: { top: 30, left: 10, right: 10 },
@@ -136,16 +132,15 @@ const CombinedPanel = ({
       doc.save(`${fileName}.pdf`);
     } catch (error) {
       console.error("PDF Export Error:", error);
-      showMessage("Export failed. Try reducing the number of selected fields."); // Using custom message box
+      showMessage("Export failed. Try reducing the number of selected fields.");
     } finally {
       setIsExporting(false);
     }
   };
 
-  // Main export handler that routes based on the dropdown
   const handleExport = () => {
     if (selectedFields.length === 0) {
-      showMessage("Please select at least one column to export."); // Using custom message box
+      showMessage("Please select at least one column to export.");
       return;
     }
     if (exportFormat === 'pdf') {
@@ -155,7 +150,6 @@ const CombinedPanel = ({
     }
   };
 
-  // Dynamically renders the correct input based on filter field type
   const renderInput = () => {
     if (!filterField) return <div className="input-placeholder"></div>;
     const fieldType = getFieldType(filterField);
@@ -191,7 +185,6 @@ const CombinedPanel = ({
     }
   };
 
-  // Event handlers for UI actions
   const handleFilterFieldChange = (e) => {
     setFilterField(e.target.value);
     setFilterValue("");
@@ -221,86 +214,84 @@ const CombinedPanel = ({
     <div className="panel-container">
       {/* Panel 1: Filtering */}
       <div className="panel-row filter-panel">
-        
-        {/* ✅ ADD THIS WRAPPER DIV */}
-        <div className="filter-controls-group"> 
-
+        <div className="filter-controls-group">
           <select value={filterField} onChange={handleFilterFieldChange} className="filter-input field-selector">
-            <option value="">Select Field</option>
+            <option value="">Select Filter</option>
             {headers.map((h) => (<option key={h} value={h}>{h}</option>))}
           </select>
 
           {renderInput()}
 
           <div className="button-group">
-            <button className="filter-btn apply" onClick={onApply} disabled={!filterField}>Apply</button>
-            <button className="filter-btn clear" onClick={handleClear}>Clear</button>
-          </div>
-
-        </div> {/* ✅ END OF WRAPPER DIV */}
-      </div>
-
-        {/* Panel 2: Export */}
-        <div className="panel-row export-panel">
-          {/* NEW: Wrapper div to group all export controls */}
-          <div className="export-controls-group">
-            <div className="input-group filename-group">
-              <label htmlFor="filename" className="input-label">File Name:</label>
-              <input id="filename" value={fileName} onChange={(e) => setFileName(e.target.value)} className="filter-input"/>
-            </div>
-            <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)} className="filter-input format-selector">
-              <option value="xlsx">Excel (.xlsx)</option>
-              <option value="csv">CSV (.csv)</option>
-              <option value="pdf">PDF (.pdf)</option>
-            </select>
-            <div className="button-group">
-              <button className="filter-btn export" onClick={handleExport} disabled={isExporting}>
-                {isExporting ? "Exporting..." : "Export"}
-              </button>
-              <button className="filter-btn columns" onClick={() => setShowFieldSelection(!showFieldSelection)}>
-                Columns
-              </button>
-            </div>
+            {/* MODIFIED: Using generic button classes */}
+            <button className="btn btn--green" onClick={onApply} disabled={!filterField}>Apply</button>
+            <button className="btn btn--danger" onClick={handleClear}>Clear</button>
           </div>
         </div>
       </div>
 
-      {/* Field selection area is now OUTSIDE the panel-container */}
-      {showFieldSelection && (
-         <div className="field-selection-container">
-            <div className="field-selection-header">
-              <h3 className="field-selection-title">Select Columns</h3>
-              <button className="select-toggle-btn" onClick={toggleAllFields}>
-                {selectedFields.length === headers.length ? "Deselect All" : "Select All"}
-              </button>
-            </div>
-            <div className="field-selection-table-container">
-              <table className="field-selection-table">
-                <tbody>
-                  {Array.from({ length: Math.ceil(headers.length / 5) }).map((_, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {headers.slice(rowIndex * 5, rowIndex * 5 + 5).map(field => (
-                        <td key={field}>
-                          <label className="field-checkbox">
-                            <input type="checkbox" checked={selectedFields.includes(field)} onChange={() => handleExportFieldChange(field)}/>
-                            {field}
-                          </label>
-                        </td>
-                      ))}
-                    </tr>
+      {/* Panel 2: Export */}
+      <div className="panel-row export-panel">
+        <div className="export-controls-group">
+          <div className="input-group filename-group">
+            <label htmlFor="filename" className="input-label">File Name:</label>
+            <input id="filename" value={fileName} onChange={(e) => setFileName(e.target.value)} className="filter-input"/>
+          </div>
+          <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)} className="filter-input format-selector">
+            <option value="xlsx">Excel</option>
+            <option value="csv">CSV</option>
+            <option value="pdf">PDF</option>
+          </select>
+          <div className="button-group">
+            {/* MODIFIED: Using generic button classes */}
+            <button className="btn btn--blue" onClick={handleExport} disabled={isExporting}>
+              {isExporting ? "Exporting..." : "Export"}
+            </button>
+            {/* MODIFIED: This button can be a different style, e.g., outline */}
+            <button className="btn btn--outline" onClick={() => setShowFieldSelection(!showFieldSelection)}>
+              Columns
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {showFieldSelection && (
+      <div className="field-selection-container">
+        <div className="field-selection-header">
+          <h3 className="field-selection-title">Select Columns</h3>
+          {/* MODIFIED: Using generic button classes */}
+          <button className="btn btn--green" onClick={toggleAllFields}>
+            {selectedFields.length === headers.length ? "Deselect" : "Select"}
+          </button>
+        </div>
+        <div className="field-selection-table-container">
+          <table className="field-selection-table">
+            <tbody>
+              {Array.from({ length: Math.ceil(headers.length / 5) }).map((_, rowIndex) => (
+                <tr key={rowIndex}>
+                  {headers.slice(rowIndex * 5, rowIndex * 5 + 5).map(field => (
+                    <td key={field}>
+                      <label className="field-checkbox">
+                        <input type="checkbox" checked={selectedFields.includes(field)} onChange={() => handleExportFieldChange(field)}/>
+                        {field}
+                      </label>
+                    </td>
                   ))}
-                </tbody>
-              </table>
-            </div>
-         </div>
-      )}
-      {message && (
-        <div className="fixed bottom-4 right-4 p-3 bg-red-100 text-red-700 rounded-md shadow-lg z-50">
-          {message}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
-    </>
-  );
+      </div>
+    )}
+    {message && (
+      <div className="fixed bottom-4 right-4 p-3 bg-red-100 text-red-700 rounded-md shadow-lg z-50">
+        {message}
+      </div>
+    )}
+  </>
+ );
 };
 
 export default CombinedPanel;

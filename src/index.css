@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Global Styles & Variables
+   ========================================================================== */
+:root {
+  /* ONGC Brand Colors */
+  --ongc-maroon: #9B1C1C;
+  --ongc-primary-brand: #7F2A2A; /* Used in LoginPage.css */
+  --ongc-primary-brand-dark: #632121; /* Used in LoginPage.css */
+  --ongc-error-color: #9B1C1C; /* Alias for --ongc-maroon, used in LoginPage.css */
+  --ongc-green: #2D6A4F;
+  --ongc-green-dark: #22543D;
+  --ongc-orange-rust: #B54828;
+  --ongc-yellow: #FFD43B;
+  --ongc-info: #3B82F6; /* Blue for info/links */
+
+  /* Neutral Colors */
+  --ongc-white: #F9F9F6; /* Slightly off-white */
+  --ongc-white-login: #F0F0E0; /* Warmer off-white specific to LoginPage */
+  --ongc-black: #1A1A1A;
+  --ongc-light-gray: #F8FAFC;
+  --ongc-medium-gray: #64748B;
+  --ongc-dark-gray: #334155;
+  --ongc-border: #E2E8F0; /* Default border color */
+  --ongc-border-login: #d0d5db; /* Border color specific to LoginPage */
+  --ongc-light-bg: #FDFDF5; /* Light background for inputs in LoginPage */
+
+  /* Hover & Shadow Colors */
+  --ongc-hover-bg: #E9F2EF;
+  --ongc-shadow: rgba(0, 0, 0, 0.1);
+  --ongc-shadow-hover: rgba(0, 0, 0, 0.15);
+
+  /* Semantic Colors (for alerts/status messages) */
+  --status-success-bg: #d1fae5; /* Background for success messages */
+  --status-success-text: #065f46; /* Text color for success messages */
+  --status-success-border: #6ee7b7; /* Border for success messages */
+  --status-error-bg: #fee2e2; /* Background for error messages */
+  --status-error-text: #991b1b; /* Text color for error messages */
+  --status-error-border: #fca5a5; /* Border for error messages */
+
+  /* General Radii (already present, but consolidating) */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-lg-login: 12px; /* Specific larger radius in LoginPage.css */
+  --radius-md-login: 8px; /* Specific medium radius in LoginPage.css */
+  --radius-sm-login: 5px; /* Specific small radius in LoginPage.css */
+
+  /* Spacing (already present, but consolidating) */
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 2rem; /* Used in EditPage, equivalent to space-lg in others */
+
+  /* Font Families (already present, but consolidating) */
+  --font-primary: 'Segoe UI', 'Inter', sans-serif;
+
+  /* Font Sizes (from EditPage for consistency, consider if needed globally) */
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+}
+
+body {
+    font-family: 'Segoe UI', 'Inter', sans-serif;
+    background: var(--ongc-light-gray);
+    margin: 0;
+}
+
+/* ==========================================================================
+   Reusable Utility Classes (e.g., Buttons)
+   ========================================================================== */
+
+/* Base class for all action buttons */
+.btn {
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    color: var(--ongc-white);
+    font-size: 13px;
+    cursor: pointer;
+    /* ... all other common button styles ... */
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Color modifier for green buttons */
+.btn--green {
+    background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
+}
+
+/* Color modifier for blue buttons */
+.btn--blue {
+    background: linear-gradient(135deg, var(--ongc-info), #2a6cb5);
+}
+
+/* Color modifier for red/danger buttons */
+.btn--danger {
+    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-maroon));
+}

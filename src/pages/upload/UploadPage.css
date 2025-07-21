@@ -1,263 +1,233 @@
 /* === Modal Overlay (for UploadPage) === */
 .upload-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent backdrop */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1050; /* Ensure it's on top of other content */
-  padding: 20px; /* Padding for the overlay itself */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 /* === Upload Modal Container === */
 .upload-page-container {
-  font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  max-width: 600px;
-  padding: 40px;
-  border: 1px solid var(--ongc-border);
-  border-radius: var(--radius-lg);
-  background-color: var(--ongc-white);
-  box-shadow: 0 10px 30px var(--ongc-shadow);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+    font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+    border: 1px solid var(--ongc-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--ongc-white);
+    box-shadow: 0 10px 30px var(--ongc-shadow);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 
-/* === Close Button === */
+/* === Close Button (Unique style, so it remains here) === */
 .upload-page-close-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 2em;
-  line-height: 1;
-  cursor: pointer;
-  color: var(--ongc-medium-gray);
-  z-index: 10;
-  transition: color 0.2s ease, transform 0.2s ease;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--ongc-medium-gray);
+    z-index: 10;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .upload-page-close-button:hover {
-  color: var(--ongc-error);
-  transform: rotate(90deg);
+    color: var(--ongc-error);
+    transform: rotate(90deg);
 }
 
 
 /* === Title === */
 .upload-page-title {
-  color: var(--ongc-dark-gray);
-  margin-bottom: 30px;
-  font-size: var(--font-2xl);
-  font-weight: 700;
+    color: var(--ongc-dark-gray);
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: var(--font-2xl, 1.5rem);
+    font-weight: 700;
 }
 
 
 /* === Drag & Drop Zone === */
 .drop-zone {
-  margin-bottom: 30px;
-  padding: 40px 20px;
-  border: 2px dashed var(--ongc-border);
-  border-radius: var(--radius-md);
-  background-color: var(--ongc-light-gray);
-  transition: all 0.3s ease;
-  cursor: pointer;
+    margin-bottom: 30px;
+    padding: 40px 20px;
+    border: 2px dashed var(--ongc-border);
+    border-radius: var(--radius-md);
+    background-color: var(--ongc-light-gray);
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .drop-zone:hover {
-  border-color: var(--ongc-info);
-  background-color: #f0f6ff;
+    border-color: var(--ongc-info);
+    background-color: #f0f6ff;
 }
 
 .drop-zone.dragging {
-  border-style: solid;
-  border-color: var(--ongc-info);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-  background-color: #e6efff;
+    border-style: solid;
+    border-color: var(--ongc-info);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background-color: #e6efff;
 }
 
 
 /* === Hidden File Input === */
 .upload-page-input-file {
-  display: none;
+    display: none;
 }
 
 
 /* === Label Inside Drop Zone === */
 .drop-zone-label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  color: var(--ongc-medium-gray);
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--ongc-medium-gray);
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
 }
 
 .drop-zone-label .upload-icon {
-  color: var(--ongc-info);
-  transition: transform 0.3s ease;
+    color: var(--ongc-info);
+    font-size: 3em;
+    transition: transform 0.3s ease;
 }
 
 .drop-zone:hover .upload-icon {
-  transform: scale(1.1) translateY(-5px);
+    transform: scale(1.1) translateY(-5px);
 }
 
 .drop-zone-label strong {
-  color: var(--ongc-info);
-  font-weight: 600;
+    color: var(--ongc-info);
+    font-weight: 600;
 }
-
-
-/* === MODIFIED: Upload Button (Scoped to this component) === */
-.upload-page-container .upload-page-button {
-  background: linear-gradient(135deg, var(--ongc-info), #2a6cb5);
-  color: var(--ongc-white);
-  font-weight: 600;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 12px 24px;
-  font-size: var(--font-base);
-  cursor: pointer;
-  box-shadow: 0 4px 8px var(--ongc-shadow);
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.upload-page-container .upload-page-button:hover {
-  background: linear-gradient(135deg, #2a6cb5, var(--ongc-info));
-  transform: translateY(-2px);
-}
-
-.upload-page-container .upload-page-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
 
 /* === Status Messages === */
 .upload-page-status-success,
 .upload-page-status-error {
-  margin-top: 25px;
-  padding: 15px;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  font-size: var(--font-sm);
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-sm, 0.875rem);
 }
 
 .upload-page-status-success {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
 }
 
 .upload-page-status-error {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
 }
 
 
 /* === Upload Info Note === */
 .upload-page-note {
-  margin-top: 40px;
-  font-size: var(--font-sm);
-  color: var(--ongc-medium-gray);
-  line-height: 1.4;
+    margin-top: 40px;
+    font-size: var(--font-sm, 0.875rem);
+    color: var(--ongc-medium-gray);
+    line-height: 1.4;
 }
 
 
-/* === Responsive === */
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
 @media (max-width: 768px) {
-  .upload-page-container {
-    padding: 20px;
-    width: 90%;
-  }
-
-  .drop-zone {
-    padding: 30px 15px;
-  }
-
-  .upload-page-title {
-    font-size: 1.25rem;
-  }
-
-  .drop-zone-label {
-    font-size: 0.95rem;
-  }
-
-  .upload-page-note {
-    font-size: 0.8rem;
-  }
-
-  .upload-page-close-button {
-    font-size: 1.5rem;
-    top: 10px;
-    right: 10px;
-  }
+    .upload-page-container {
+        padding: 25px;
+        max-width: 90%;
+    }
+    .drop-zone {
+        padding: 30px 15px;
+        margin-bottom: 25px;
+    }
+    .upload-page-title {
+        font-size: 1.25rem;
+        margin-bottom: 25px;
+    }
+    .drop-zone-label {
+        font-size: 0.95rem;
+    }
+    .upload-page-note {
+        font-size: 0.8rem;
+        margin-top: 30px;
+    }
+    .upload-page-close-button {
+        font-size: 1.5rem;
+        top: 10px;
+        right: 10px;
+    }
 }
 
 @media (max-width: 480px) {
-  .upload-modal-overlay {
-    padding: 0; /* Remove padding from overlay, let the flexbox handle it */
-  }
-
-  .upload-page-container {
-    padding: 15px; /* Adjusted padding for content inside the modal */
-    width: 90%; /* Set a percentage width */
-    max-width: none; /* Remove max-width to allow it to fill available space */
-    border-radius: 0.5rem; /* Slightly smaller border-radius */
-    /* Removed margin: 0 auto; as parent flexbox will center it */
-  }
-
-  .upload-page-close-button {
-    font-size: 1.2em; /* Smaller close button icon */
-    top: 10px;
-    right: 10px;
-  }
-
-  .upload-page-title {
-    font-size: 1.1rem; /* Smaller title font size */
-    margin-bottom: 20px; /* Reduced margin */
-  }
-
-  .drop-zone {
-    padding: 25px 15px; /* Reduced padding for drop zone */
-    margin-bottom: 20px; /* Reduced margin */
-  }
-
-  .drop-zone-label {
-    font-size: 0.85rem; /* Smaller label font size */
-    gap: 0.75rem; /* Reduced gap */
-  }
-
-  .drop-zone-label .upload-icon {
-    font-size: 2.5em; /* Make icon slightly smaller if it's an SVG/font icon */
-  }
-
-  .upload-page-container .upload-page-button {
-    padding: 10px 20px; /* Reduced padding for button */
-    font-size: 0.9rem; /* Smaller font size for button */
-    height: 38px; /* Reduced height for button */
-  }
-
-  .upload-page-status-success,
-  .upload-page-status-error {
-    margin-top: 20px; /* Reduced margin */
-    padding: 10px; /* Reduced padding */
-    font-size: 0.8rem; /* Smaller font size */
-  }
-
-  .upload-page-note {
-    margin-top: 25px; /* Reduced margin */
-    font-size: 0.75rem; /* Smaller font size */
-  }
+    .upload-modal-overlay {
+        padding: 15px;
+        align-items: center;
+    }
+    .upload-page-container {
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        border-radius: var(--radius-md);
+    }
+    .upload-page-close-button {
+        font-size: 1.4em;
+        top: 12px;
+        right: 12px;
+    }
+    .upload-page-title {
+        font-size: 1.15rem;
+        margin-bottom: 20px;
+    }
+    .drop-zone {
+        padding: 25px 10px;
+        margin-bottom: 20px;
+    }
+    .drop-zone-label {
+        font-size: 0.9rem;
+        gap: 0.75rem;
+    }
+    .drop-zone-label .upload-icon {
+        font-size: 2.5em;
+    }
+    /* MODIFIED: Target the generic .btn class for mobile responsiveness */
+    .upload-page-container .btn {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        width: 100%;
+    }
+    .upload-page-status-success,
+    .upload-page-status-error {
+        margin-top: 20px;
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+    .upload-page-note {
+        margin-top: 20px;
+        font-size: 0.8rem;
+    }
 }

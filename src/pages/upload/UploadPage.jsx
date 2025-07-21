@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// Assuming 'UploadPage.css' will be modified to remove button styles
 import './UploadPage.css';
 
 function UploadPage({ onCancel, onUploadSuccess }) {
@@ -107,10 +108,11 @@ function UploadPage({ onCancel, onUploadSuccess }) {
           </label>
         </div>
 
+        {/* MODIFIED: Using generic button classes */}
         <button
           onClick={handleUpload}
           disabled={!selectedFile || loading}
-          className="upload-page-button"
+          className="btn btn--blue"
         >
           {loading ? 'Uploading...' : 'Upload'}
         </button>

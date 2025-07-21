@@ -1,210 +1,205 @@
 /* ==========================================================================
-   Global Styles & Variables
-   ========================================================================== */
-:root {
-  --ongc-maroon: #9B1C1C;
-  --ongc-green: #2D6A4F;
-  --ongc-green-dark: #22543D;
-  --ongc-orange-rust: #B54828;
-  --ongc-white: #F9F9F6;
-  --ongc-black: #1A1A1A;
-  --ongc-light-gray: #F8FAFC;
-  --ongc-medium-gray: #64748B;
-  --ongc-dark-gray: #334155;
-  --ongc-border: #E2E8F0;
-  --ongc-hover-bg: #E9F2EF;
-  --ongc-yellow: #FFD43B;
-  --ongc-info: #3B82F6;
-  --ongc-shadow: rgba(0, 0, 0, 0.1);
-  --ongc-shadow-hover: rgba(0, 0, 0, 0.15);
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-sm: 0.375rem;
-}
-
-body {
-  font-family: 'Segoe UI', 'Inter', sans-serif;
-  background: var(--ongc-light-gray);
-  margin: 0;
-  padding: 1rem;
-}
-
-/* ==========================================================================
    Leaderboard Page Layout
    ========================================================================== */
+  
+.leaderboard-header {
+    /* Styles for the header containing the logo and logout button */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0rem; /* Add some padding */
+    position: relative; /* Needed for absolute positioning of logout button */
+    height: 50px; /* Example height */
+}
 
 .ongc-logo {
-  width: 150px; /* Default size for desktop */
+   position: absolute;
+    width: 150px; /* Default size for desktop */
+    top: 20%;
+    left: 0.5rem;
 }
 
+/* The logout button uses the generic .btn class and this for positioning */
 .logout-button {
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  border: none;
-  color: var(--ongc-white);
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 3px 6px var(--ongc-shadow);
-  min-width: 100px;
-  height: 38px;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #B54828, #9B1C1C);
-  position: absolute;
-  top: 16px;
-  right: 24px;
-  z-index: 1000;
-  transition: all 0.3s ease; /* Added transition for smooth changes */
-}
-
-.logout-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px var(--ongc-shadow-hover);
-}
-
-.logout-button:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 4px var(--ongc-shadow);
+    position: absolute;
+    top: 25%;
+    right: 1rem;
 }
 
 
 /* ==========================================================================
-   Bottom Action Buttons
+   Consolidated Button Styles
    ========================================================================== */
 
+/* Base class for all action buttons */
+.btn {
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    color: var(--ongc-white);
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px var(--ongc-shadow);
+    min-width: 100px;
+    height: 38px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--ongc-shadow-hover);
+}
+
+.btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 4px var(--ongc-shadow);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Color modifier for green buttons */
+.btn--green {
+    background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
+}
+
+/* Color modifier for blue buttons */
+.btn--blue {
+    background: linear-gradient(135deg, var(--ongc-info), #2a6cb5);
+}
+
+/* Color modifier for red/danger buttons */
+.btn--danger {
+    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-maroon));
+}
+
+
+/* Container for the bottom buttons */
 .bottom-action-buttons-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap; /* Allows buttons to wrap to the next line */
-  gap: 15px; /* Space between buttons */
-  width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
 }
 
-.add-new-button,
-.upload-page-button {
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  border: none;
-  color: var(--ongc-white);
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 3px 6px var(--ongc-shadow);
-  min-width: 100px;
-  height: 38px;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease; /* Added transition for smooth changes */
+
+/* ==========================================================================
+   Other Component-Specific Styles
+   ========================================================================== */
+
+.data-section {
+    position: relative; /* For loading overlay positioning */
+    min-height: 200px; /* Prevent layout collapse while loading */
 }
 
-.add-new-button {
-  background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--ongc-dark-gray);
+    z-index: 100;
 }
 
-.upload-page-button {
-  background: linear-gradient(135deg, var(--ongc-info), #2a6cb5);
+.error-message,
+.no-results {
+    text-align: center;
+    padding: 2rem;
+    font-weight: 500;
+    color: var(--ongc-medium-gray);
+    background-color: var(--ongc-white);
+    border: 1px solid var(--ongc-border);
+    border-radius: var(--radius-md);
 }
 
-.add-new-button:hover,
-.upload-page-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px var(--ongc-shadow-hover);
+.error-message {
+    color: var(--ongc-maroon);
+    background-color: #fee2e2;
+    border-color: #fca5a5;
 }
 
-.add-new-button:active,
-.upload-page-button:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 4px var(--ongc-shadow);
-}
 
 /* ==========================================================================
    Fully Responsive Design
    ========================================================================== */
 
-/* Tablet adjustments (keeping original tablet styles as they were not explicitly removed) */
+/* Tablet adjustments */
 @media (max-width: 768px) {
-  body { padding: 0.5rem; }
-  .leaderboard-container { padding: 1rem; }
+    body { 
+        padding: 1rem; 
+    }
 
-  .panel-row {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: var(--ongc-white);
-    border: 1px solid var(--ongc-border);
-    border-radius: var(--radius-lg);
-  }
+    .leaderboard-header {
+        height: 55px;
+        margin-bottom: 1rem;
+    }
 
-  .filter-controls-group, .export-controls-group {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-  }
+    .ongc-logo {
+        width: 135px;
+    }
 
-  .input-group, .button-group, .filename-group, .field-selector, .format-selector {
-    width: 100%;
-  }
+    .logout-button {
+        height: 36px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
 
-  .filter-panel .input-group {
-      width: 100%;
-  }
-
-  .button-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .custom-table th, .custom-table td { padding: 6px 8px; font-size: 12px; }
-
-  .pagination button { padding: 5px 9px; font-size: 10px; min-width: 30px; min-height: 30px; }
+    .bottom-action-buttons-container {
+        gap: 12px;
+    }
 }
 
 /* Mobile phones only */
 @media (max-width: 480px) {
-  .leaderboard-container { padding: 0.5rem; }
+    body {
+        padding: 0.5rem;
+    }
 
-  /* ONGC Logo size reduction */
-  .ongc-logo {
-    width: 120px; /* Reduced logo size for mobiles */
-  }
+    .leaderboard-header {
+        padding: 0 0.5rem;
+        height: 50px;
+    }
 
-  /* Logout button adjustments */
-  .logout-button {
-    font-size: 11px; /* Smaller font size */
-    height: 32px; /* Reduced height */
-    padding: 6px 10px; /* Reduced padding */
-    min-width: 70px; /* Reduced min-width */
-    top: 10px; /* Adjusted position */
-    right: 10px; /* Adjusted position */
-  }
+    .ongc-logo {
+        width: 110px;
+    }
 
-  /* Add New and Upload buttons adjustments */
-  .add-new-button,
-  .upload-page-button {
-    font-size: 12px; /* Smaller font size */
-    height: 36px; /* Reduced height */
-    padding: 6px 12px; /* Reduced padding */
-    min-width: auto; /* Allow width to be flexible */
-    flex-basis: calc(50% - 10px); /* Distribute space for side-by-side (adjust gap if needed) */
-    max-width: calc(50% - 10px); /* Ensure they don't grow too large */
-    gap: 10px; /* Adjusted gap for mobile buttons */
-  }
+    .logout-button {
+        font-size: 12px;
+        height: 32px;
+        padding: 6px 10px;
+        min-width: 70px;
+        right: 0.5rem;
+    }
 
-  /* Ensure bottom action buttons container allows side-by-side */
-  .bottom-action-buttons-container {
-    gap: 8px; /* Reduced gap between buttons on mobile */
-    justify-content: center; /* Keep them centered */
-  }
+    .bottom-action-buttons-container {
+        gap: 10px;
+        padding: 0 1rem;
+        box-sizing: border-box;
+    }
 
-  /* General table and pagination adjustments (from previous requests) */
-  .custom-table th, .custom-table td { padding: 4px 6px; font-size: 11px; }
-  .filter-btn { font-size: 13px; height: 40px; } /* Reverted filter-btn to original 480px size */
-  .edit-button { padding: 4px 12px; font-size: 12px; }
-  .pagination button { padding: 4px 8px; font-size: 9px; min-width: 28px; min-height: 28px; }
+    /* MODIFIED: Make buttons smaller on mobile, similar to logout button */
+    .bottom-action-buttons-container .btn {
+        height: 34px;
+        font-size: 12px;
+        padding: 6px 12px;
+        /* flex-grow and max-width are removed to allow natural sizing */
+    }
 }

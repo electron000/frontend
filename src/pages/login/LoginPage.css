@@ -1,152 +1,384 @@
-/*
- * Enhanced Styles for the LoginPage component.
- * Assumes the root CSS variables (e.g., --ongc-maroon) are defined globally.
- */
-
-.login-page-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--ongc-light-gray, #F8FAFC) 0%, var(--ongc-white, #F9F9F6) 100%);
-  padding: 1rem;
-}
-
-.login-card {
-  background: var(--ongc-white, #FFFFFF);
-  padding: 2.5rem;
-  border-radius: var(--radius-lg, 0.75rem);
-  border: 1px solid var(--ongc-border, #E2E8F0);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+/* === Global Reset & Base Styles === */
+ #root {
+  height: 100%;
   width: 100%;
-  max-width: 420px;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
+  box-sizing: border-box; /* Global border-box for consistent sizing */
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* === ONGC Login Container (Main Wrapper) === */
+.ongc-login-container {
+  display: flex;
+  min-height: 100vh; /* Ensures it takes full viewport height */
+  width: 100%;
+  background-color: var(--ongc-white); /* White background for the main content area */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for the whole page if needed */
+}
+
+/* === ONGC Login Left Panel (Branding/Info) === */
+.ongc-login-left-panel {
+  flex: 1; /* Takes up available space */
+  background: linear-gradient(160deg, var(--ongc-primary-brand-dark), var(--ongc-error-color)); /* Now uses maroon gradient */
+  color: var(--ongc-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
+  align-items: center; /* Horizontally center content */
+  padding: 3rem 2rem; /* Ample padding */
   text-align: center;
-  animation: fadeInUp 0.6s ease-out;
+  gap: 1.5rem; /* Space between elements */
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.ongc-login-logo {
+  height: 100px; /* Larger logo for the left panel */
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* White logo */
+  margin-bottom: 1rem; /* Space below logo */
 }
 
-.login-logo {
-  width: 180px;
-  margin-bottom: 1rem;
-  transition: transform 0.3s ease;
-}
-.login-logo:hover {
-  transform: scale(1.05);
+.ongc-login-main-heading {
+  font-size: 2.5rem; /* Large heading */
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
 }
 
-.login-title {
-  color: var(--ongc-black, #1A1A1A);
-  margin-bottom: 0.5rem;
-  font-size: var(--font-xl, 1.25rem);
+.ongc-login-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 400px; /* Constrain text width */
+}
+
+/* === ONGC Login Right Form Panel === */
+.ongc-login-right-form {
+  flex: 1; /* Takes up available space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
+  align-items: center; /* Horizontally center content */
+  padding: 3rem 2rem; /* Ample padding */
+  background-color: var(--ongc-white); /* White background */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for separation */
+}
+
+.ongc-login-sub-heading {
+  font-size: 2rem; /* Main title for the form */
   font-weight: 700;
-  letter-spacing: 0.5px;
+  color: var(--ongc-error-color); /* Now uses dark maroon */
+  margin-bottom: 0.5rem;
 }
 
-.login-subtitle {
-  color: var(--ongc-medium-gray, #64748B);
-  margin-top: 0;
+.ongc-login-sub-description {
+  font-size: 1rem;
+  color: var(--ongc-medium-gray);
   margin-bottom: 2rem;
 }
 
-/* MODIFIED: Scoped to .login-card to prevent conflicts */
-.login-card .input-group {
+.ongc-login-form {
+  width: 100%;
+  max-width: 380px; /* Max width for the form itself */
+}
+
+/* === ONGC Input Group === */
+.ongc-input-group {
   position: relative;
   margin-bottom: 1.5rem;
 }
 
-/* MODIFIED: Scoped to .login-card */
-.login-card .input-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--ongc-medium-gray, #64748B);
-  pointer-events: none;
-}
-
-/* MODIFIED: Scoped to .login-card to fix the core issue */
-.login-card .input-group input {
+.ongc-input-group input {
   width: 100%;
-  padding: 12px 16px 12px 50px; /* This padding now ONLY applies to login inputs */
-  border: 1.5px solid var(--ongc-border, #E2E8F0);
-  border-radius: var(--radius-md, 0.5rem);
-  font-size: var(--font-base, 1rem);
-  background: var(--ongc-white, #FFFFFF);
-  transition: all 0.3s ease;
-  color: var(--ongc-dark-gray, #334155);
+  height: 55px; /* Consistent height for inputs */
+  padding: 0 1rem 0 3.5rem; /* Padding for text, space for icon */
+  border: 1.5px solid var(--ongc-border);
+  border-radius: var(--radius-md);
+  font-size: 1.1rem;
+  background: var(--ongc-light-bg); /* Light background for input fields */
+  color: var(--ongc-dark-gray);
+  transition: all 0.2s ease;
 }
 
-.login-card .input-group input::placeholder {
-  color: var(--ongc-medium-gray, #64748B);
-}
-
-.login-card .input-group input:focus {
+.ongc-input-group input:focus {
   outline: none;
-  border-color: var(--ongc-green, #2D6A4F);
-  box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
+  border-color: var(--ongc-primary-brand); /* Now uses maroon */
+  background-color: var(--ongc-white);
+  box-shadow: 0 0 0 3px rgba(127, 42, 42, 0.15); /* Adjusted shadow color to maroon */
 }
 
-.login-card .input-group input:focus + .input-icon {
-  color: var(--ongc-green, #2D6A4F);
+.ongc-input-group input::placeholder {
+  color: var(--ongc-medium-gray);
+  opacity: 0.8;
 }
 
+.ongc-input-icon {
+  position: absolute;
+  top: 50%;
+  left: 1.2rem;
+  transform: translateY(-50%);
+  color: var(--ongc-medium-gray);
+  pointer-events: none;
+  font-size: 1.2rem;
+}
 
-.login-button {
+/* === ONGC Login Button === */
+.ongc-login-submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 14px 20px;
+  padding: 1rem;
+  background-color: var(--ongc-error-color); /* Now uses maroon */
+  color: var(--ongc-white);
   border: none;
-  border-radius: var(--radius-md, 0.5rem);
-  color: var(--ongc-white, #FFFFFF);
-  font-size: var(--font-lg, 1.125rem);
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1.1rem;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--ongc-maroon, #9B1C1C), var(--ongc-orange-rust, #B54828));
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px -5px rgba(155, 28, 28, 0.4);
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-button:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 7px 20px -5px rgba(155, 28, 28, 0.6);
+.ongc-login-submit-button:hover {
+  background-color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-.login-button:active:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px -5px rgba(155, 28, 28, 0.4);
-}
-
-.login-button:disabled {
-  background: var(--ongc-medium-gray, #64748B);
-  cursor: not-allowed;
+.ongc-login-submit-button:disabled {
   opacity: 0.7;
+  cursor: not-allowed;
+  background-color: var(--ongc-primary-brand); /* Keep original color but lower opacity */
   box-shadow: none;
 }
 
-.login-error-message {
-  color: var(--ongc-error, #DC2626);
-  background-color: rgba(220, 38, 38, 0.08);
-  border-radius: var(--radius-sm, 0.375rem);
-  padding: 0.75rem 1rem;
+/* === ONGC Error Message === */
+.ongc-login-error-message {
+  color: var(--ongc-error-color); /* Error message uses specific error color */
+  font-size: 0.95rem;
+  margin-top: -1rem; /* Adjust margin to pull it closer to inputs */
   margin-bottom: 1.5rem;
   text-align: center;
-  font-weight: 500;
-  border: 1px solid rgba(220, 38, 38, 0.1);
-  animation: shake 0.5s;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
+/* === ONGC Spinner === */
+.ongc-login-spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   Responsive Design for ONGC Login Page
+   ========================================================================== */
+
+/* Adjustments for screens smaller than 1024px (e.g., larger tablets) */
+@media (max-width: 1024px) {
+  .ongc-login-container {
+    flex-direction: column; /* Stack panels vertically */
+    min-height: 100vh; /* Ensure full height even when stacked */
+  }
+
+  .ongc-login-left-panel {
+    padding: 2rem 1.5rem;
+    height: auto; /* Allow height to adjust to content */
+    flex: none; /* Do not grow */
+  }
+
+  .ongc-login-logo {
+    height: 80px; /* Adjust logo size */
+    margin-bottom: 0.5rem;
+  }
+
+  .ongc-login-main-heading {
+    font-size: 2rem; /* Adjust heading size */
+  }
+
+  .ongc-login-description {
+    font-size: 1rem;
+    max-width: 80%; /* Allow description to take more width */
+  }
+
+  .ongc-login-right-form {
+    padding: 2.5rem 1.5rem;
+    flex: 1; /* Allow form panel to grow and take remaining space */
+    box-shadow: none; /* Remove shadow for stacked layout */
+  }
+
+  .ongc-login-sub-heading {
+    font-size: 1.8rem;
+    color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+  }
+
+  .ongc-login-sub-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ongc-login-form {
+    max-width: 350px; /* Adjust max-width for form */
+  }
+
+  .ongc-input-group input {
+    height: 50px;
+    font-size: 1rem;
+    padding: 0 1rem 0 3rem;
+  }
+
+  .ongc-input-icon {
+    left: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .ongc-login-submit-button {
+    padding: 0.9rem;
+    font-size: 1rem;
+  }
+}
+
+/* Adjustments for screens smaller than 768px (most mobile phones) */
+@media (max-width: 768px) {
+  .ongc-login-left-panel {
+    height: auto; /* Allow height to adjust to content */
+    padding: 1.5rem 1rem;
+  }
+
+  .ongc-login-logo {
+    height: 60px;
+    margin-bottom: 0.2rem;
+  }
+
+  .ongc-login-main-heading {
+    font-size: 1.8rem;
+  }
+
+  .ongc-login-description {
+    font-size: 0.9rem;
+    max-width: 90%;
+  }
+
+  .ongc-login-right-form {
+    padding: 2rem 1rem;
+  }
+
+  .ongc-login-sub-heading {
+    font-size: 1.6rem;
+    color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+  }
+
+  .ongc-login-sub-description {
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .ongc-login-form {
+    max-width: 300px;
+  }
+
+  .ongc-input-group {
+    margin-bottom: 1rem;
+  }
+
+  .ongc-input-group input {
+    height: 45px;
+    font-size: 0.95rem;
+    padding: 0 0.8rem 0 2.5rem;
+  }
+
+  .ongc-input-icon {
+    left: 0.8rem;
+    font-size: 1rem;
+  }
+
+  .ongc-login-submit-button {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .ongc-login-error-message {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Adjustments for extra small phones (e.g., iPhone SE, older Androids) */
+@media (max-width: 480px) {
+  .ongc-login-left-panel {
+    height: auto; /* Allow height to adjust to content */
+    padding: 1rem 0.8rem;
+  }
+
+  .ongc-login-logo {
+    height: 50px;
+  }
+
+  .ongc-login-main-heading {
+    font-size: 1.5rem;
+  }
+
+  .ongc-login-description {
+    font-size: 0.8rem;
+    max-width: 95%;
+  }
+
+  .ongc-login-right-form {
+    padding: 1.5rem 0.8rem;
+  }
+
+  .ongc-login-sub-heading {
+    font-size: 1.4rem;
+    color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+  }
+
+  .ongc-login-sub-description {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .ongc-login-form {
+    max-width: 280px;
+  }
+
+  .ongc-input-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .ongc-input-group input {
+    height: 40px;
+    font-size: 0.9rem;
+    padding: 0 0.6rem 0 2.2rem;
+  }
+
+  .ongc-input-icon {
+    left: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .ongc-login-submit-button {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .ongc-login-error-message {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
 }

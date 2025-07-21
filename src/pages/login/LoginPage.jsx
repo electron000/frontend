@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; // Make sure to create and link this CSS file
-
-// It's better to import the logo, but a URL is used here for simplicity.
-const ONGC_LOGO_URL = 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/ONGC_Logo.svg/1200px-ONGC_Logo.svg.png';
+import './LoginPage.css'; // This will now link to the newly created CSS file
+import ongcLogo from '../../assets/ongc-logo.png'; // Using the imported logo as per your JSX
 
 /**
- * A reusable login page component with an enhanced design.
+ * A reusable login page component with an ONGC-themed two-column design.
+ * Features responsive layout and unique class names to prevent CSS conflicts.
  * @param {object} props - The component props.
  * @param {function} props.onLogin - A callback function that is executed on successful login.
  */
@@ -15,7 +14,7 @@ const LoginPage = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-/**
+  /**
    * Handles the form submission by calling the backend API.
    * @param {React.FormEvent} e - The form event.
    */
@@ -25,6 +24,9 @@ const LoginPage = ({ onLogin }) => {
     setIsLoading(true);
 
     try {
+      // Simulate API call delay (remove in production)
+      // await new Promise(resolve => setTimeout(resolve, 1000));
+
       // Call your Python backend API endpoint
       const response = await fetch('https://backend-2m6l.onrender.com/api/login', {
         method: 'POST',
@@ -55,20 +57,27 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div className="login-page-container">
-      <div className="login-card">
-        <img 
-          src={ONGC_LOGO_URL} 
-          alt="ONGC Logo" 
-          className="login-logo" 
+    <div className="ongc-login-container">
+      {/* Left Panel: Branding and Information */}
+      <div className="ongc-login-left-panel">
+        <img
+          src={ongcLogo}
+          alt="ONGC Logo"
+          className="ongc-login-logo"
           onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/150x50/ffffff/000000?text=ONGC'; }}
         />
-        <h2 className="login-title">CONTRACTS MANAGEMENT SYSTEM</h2>
-        <p className="login-subtitle">Please login to continue</p>
-        
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="input-group">
-            <span className="input-icon">
+        <h1 className="ongc-login-main-heading">Welcome to the Employee Portal</h1>
+        <p className="ongc-login-description">Your central hub for managing contracts and resources efficiently.</p>
+      </div>
+
+      {/* Right Panel: Login Form */}
+      <div className="ongc-login-right-form">
+        <h2 className="ongc-login-sub-heading">User Login</h2>
+        <p className="ongc-login-sub-description">Please enter your credentials to continue</p>
+
+        <form onSubmit={handleSubmit} className="ongc-login-form">
+          <div className="ongc-input-group">
+            <span className="ongc-input-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </span>
             <input
@@ -82,9 +91,9 @@ const LoginPage = ({ onLogin }) => {
               aria-describedby={error ? "error-message" : undefined}
             />
           </div>
-          
-          <div className="input-group">
-            <span className="input-icon">
+
+          <div className="ongc-input-group">
+            <span className="ongc-input-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </span>
             <input
@@ -98,11 +107,11 @@ const LoginPage = ({ onLogin }) => {
               aria-describedby={error ? "error-message" : undefined}
             />
           </div>
-          
-          {error && <p id="error-message" className="login-error-message">{error}</p>}
-          
-          <button type="submit" className="login-button" disabled={isLoading}>
-            {isLoading ? 'Logging In...' : 'Log In'}
+
+          {error && <p id="error-message" className="ongc-login-error-message">{error}</p>}
+
+          <button type="submit" className="ongc-login-submit-button" disabled={isLoading}>
+            {isLoading ? <span className="ongc-login-spinner"></span> : 'Log In'}
           </button>
         </form>
       </div>

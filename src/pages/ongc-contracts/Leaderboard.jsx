@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+// Assuming 'Leaderboard.css' will be modified to remove button styles
 import './Leaderboard.css';
 import ongcLogo from '../../assets/ongc-logo.png';
 import EditPage from '../edit/EditPage';
@@ -24,15 +25,11 @@ const Leaderboard = ({ onLogout }) => {
   const [editingRow, setEditingRow] = useState(null);
   const [isNewRow, setIsNewRow] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
-
-  // State for dynamically fetched headers and fieldTypes
   const [dynamicHeaders, setDynamicHeaders] = useState([]);
   const [dynamicFieldTypes, setDynamicFieldTypes] = useState({});
   const [selectedFields, setSelectedFields] = useState([]); 
-
   const [editingDisplaySlNo, setEditingDisplaySlNo] = useState(null);
 
-  // Helper to compare arrays
   const arraysAreEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
@@ -67,7 +64,6 @@ const Leaderboard = ({ onLogout }) => {
         const newHeaders = response.data.headers;
         const newFieldTypes = response.data.fieldTypes;
 
-        // Use functional updates to prevent dependency loops
         setDynamicHeaders(prevHeaders => 
           arraysAreEqual(prevHeaders, newHeaders) ? prevHeaders : newHeaders
         );
@@ -102,17 +98,16 @@ const Leaderboard = ({ onLogout }) => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, sortConfig, activeFilters]); // Optimized dependency array
+  }, [currentPage, sortConfig, activeFilters]);
 
   useEffect(() => {
-    fetchData(); // Initial data fetch on component mount
+    fetchData();
   }, [fetchData]);
 
   const handleFilterApply = () => {
     const newFilters = {};
     if (filterField) {
       newFilters.filterField = filterField;
-      // Use dynamicFieldTypes for filter logic
       if (dynamicFieldTypes.range?.includes(filterField) || dynamicFieldTypes.number?.includes(filterField) || dynamicFieldTypes.yearDropdown?.includes(filterField)) {
         newFilters.minRange = rangeValues[0];
         newFilters.maxRange = rangeValues[1];
@@ -124,7 +119,7 @@ const Leaderboard = ({ onLogout }) => {
       }
     }
     setActiveFilters(newFilters);
-    setCurrentPage(1); // Always go to first page on new filter
+    setCurrentPage(1);
   };
 
   const handleClearFilters = () => {
@@ -133,8 +128,8 @@ const Leaderboard = ({ onLogout }) => {
     setRangeValues(["", ""]);
     setDateRange({ from: "", to: "" });
     setActiveFilters({});
-    setCurrentPage(1); // Reset to first page
-    setSortConfig({ field: 'SL No', direction: 'asc' }); // Reset sort
+    setCurrentPage(1);
+    setSortConfig({ field: 'SL No', direction: 'asc' });
   };
 
   const handleResetSort = useCallback(() => {
@@ -150,7 +145,7 @@ const Leaderboard = ({ onLogout }) => {
         await axios.put(`${API_URL}/${newOrUpdatedRow.id}`, newOrUpdatedRow, config);
       }
       setIsEditing(false);
-      fetchData(); // Re-fetch data to update table
+      fetchData();
     } catch (err) {
       console.error("Save error:", err);
       setError("Failed to save the contract.");
@@ -161,7 +156,7 @@ const Leaderboard = ({ onLogout }) => {
     try {
       await axios.delete(`${API_URL}/${rowId}`);
       setIsEditing(false);
-      fetchData(); // Re-fetch data, which will handle page adjustment if needed
+      fetchData();
     } catch (err) {
       console.error("Delete error:", err);
       setError("Failed to delete the contract.");
@@ -177,7 +172,6 @@ const Leaderboard = ({ onLogout }) => {
 
   const handleAddClick = () => {
     setIsNewRow(true);
-    // Use dynamicHeaders to create a new empty row object based on current schema
     const newRowObject = dynamicHeaders.reduce((acc, header) => ({ ...acc, [header]: '' }), {});
     setEditingRow(newRowObject);
     setEditingDisplaySlNo(null);
@@ -188,7 +182,8 @@ const Leaderboard = ({ onLogout }) => {
     <div className="leaderboard-container">
       <div className="leaderboard-header">
         <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
-        <button onClick={onLogout} className="logout-button">Logout</button>
+        {/* MODIFIED: Using generic button classes */}
+        <button onClick={onLogout} className="btn btn--danger logout-button">Logout</button>
       </div>
 
       <CombinedPanel
@@ -243,39 +238,32 @@ const Leaderboard = ({ onLogout }) => {
       />
 
       <div className="bottom-action-buttons-container">
-        <button onClick={handleAddClick} className="add-new-button">+ New</button>
-        <button onClick={() => setShowUploadModal(true)} className="upload-page-button">Upload</button>
+        {/* MODIFIED: Using generic button classes */}
+        <button onClick={handleAddClick} className="btn btn--green">+ New</button>
+        <button onClick={() => setShowUploadModal(true)} className="btn btn--blue">Upload</button>
       </div>
 
       {isEditing && (
-        <div className="modal-overlay">
-          <div className="modal-content modal-edit-page">
-            <EditPage
-              rowData={editingRow}
-              onSave={handleSave}
-              onCancel={() => setIsEditing(false)}
-              onDelete={() => handleDeleteRow(editingRow.id)}
-              headers={dynamicHeaders}
-              isNew={isNewRow}
-              displaySlNo={editingDisplaySlNo}
-            />
-          </div>
-        </div>
+        <EditPage
+          rowData={editingRow}
+          onSave={handleSave}
+          onCancel={() => setIsEditing(false)}
+          onDelete={() => handleDeleteRow(editingRow.id)}
+          headers={dynamicHeaders}
+          isNew={isNewRow}
+          displaySlNo={editingDisplaySlNo}
+        />
       )}
 
       {showUploadModal && (
-        <div className="modal-overlay">
-          <div className="modal-content modal-upload-page">
-            <UploadPage
-              onCancel={() => setShowUploadModal(false)}
-              onUploadSuccess={() => {
-                setShowUploadModal(false);
-                setCurrentPage(1); // Reset to first page after successful upload
-                fetchData(true); // Force re-fetch and reset selectedFields
-              }}
-            />
-          </div>
-        </div>
+        <UploadPage
+          onCancel={() => setShowUploadModal(false)}
+          onUploadSuccess={() => {
+            setShowUploadModal(false);
+            setCurrentPage(1);
+            fetchData(true);
+          }}
+        />
       )}
     </div>
   );
