@@ -81,70 +81,70 @@
 //     }
 //   };
 
-//   const exportToPDF = async () => {
-//     setIsExporting(true);
-//     try {
-//       const params = new URLSearchParams({
-//         sortField: sortConfig?.field || '',
-//         sortDirection: sortConfig?.direction || '',
-//         selectedFields: selectedFields.join(','),
-//         ...getCleanFilters()
-//       });
-//       const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
-//       const allData = response.data.data || response.data;
+  // const exportToPDF = async () => {
+  //   setIsExporting(true);
+  //   try {
+  //     const params = new URLSearchParams({
+  //       sortField: sortConfig?.field || '',
+  //       sortDirection: sortConfig?.direction || '',
+  //       selectedFields: selectedFields.join(','),
+  //       ...getCleanFilters()
+  //     });
+  //     const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
+  //     const allData = response.data.data || response.data;
 
-//       const numCols = selectedFields.length;
-//       let format = 'a4';
-//       if (numCols > 10) format = 'a3';
-//       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
+  //     const numCols = selectedFields.length;
+  //     let format = 'a4';
+  //     if (numCols > 10) format = 'a3';
+  //     const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
       
-//       const scale = Math.max(0.45, 1 - (numCols / 30));
-//       const fontSize = 10 * scale;
-//       const titleSize = 16 * scale;
-//       const cellPadding = 2.5 * scale;
+  //     const scale = Math.max(0.45, 1 - (numCols / 30));
+  //     const fontSize = 10 * scale;
+  //     const titleSize = 16 * scale;
+  //     const cellPadding = 2.5 * scale;
 
-//       doc.setFont('helvetica', 'bold');
-//       doc.setFontSize(titleSize);
-//       doc.text(fileName.replace(/_/g, ' '), 14, 14);
+  //     doc.setFont('helvetica', 'bold');
+  //     doc.setFontSize(titleSize);
+  //     doc.text(fileName.replace(/_/g, ' '), 14, 14);
 
-//       autoTable(doc, {
-//         startY: 22,
-//         head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
-//         body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")),
-//         theme: 'grid',
-//         tableWidth: 'auto',
-//         margin: { top: 30, left: 10, right: 10 },
-//         styles: { fontSize, fontStyle: 'normal', font: 'helvetica', halign: 'center', valign: 'middle', textColor: [26, 26, 26], lineColor: [210, 210, 210], lineWidth: 0.3, fillColor: [249, 249, 246], cellPadding },
-//         headStyles: { fontSize: fontSize + 1.2, fontStyle: 'bold', textColor: [255, 255, 255], fillColor: [45, 106, 79], halign: 'center', valign: 'middle', cellPadding },
-//         alternateRowStyles: { fillColor: [233, 242, 239] },
-//         didDrawPage: (data) => {
-//           const pageCount = doc.internal.getNumberOfPages();
-//           doc.setFontSize(9);
-//           doc.setTextColor(120);
-//           doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
-//         }
-//       });
+  //     autoTable(doc, {
+  //       startY: 22,
+  //       head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
+  //       body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")),
+  //       theme: 'grid',
+  //       tableWidth: 'auto',
+  //       margin: { top: 30, left: 10, right: 10 },
+  //       styles: { fontSize, fontStyle: 'normal', font: 'helvetica', halign: 'center', valign: 'middle', textColor: [26, 26, 26], lineColor: [210, 210, 210], lineWidth: 0.3, fillColor: [249, 249, 246], cellPadding },
+  //       headStyles: { fontSize: fontSize + 1.2, fontStyle: 'bold', textColor: [255, 255, 255], fillColor: [45, 106, 79], halign: 'center', valign: 'middle', cellPadding },
+  //       alternateRowStyles: { fillColor: [233, 242, 239] },
+  //       didDrawPage: (data) => {
+  //         const pageCount = doc.internal.getNumberOfPages();
+  //         doc.setFontSize(9);
+  //         doc.setTextColor(120);
+  //         doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
+  //       }
+  //     });
 
-//       doc.save(`${fileName}.pdf`);
-//     } catch (error) {
-//       console.error("PDF Export Error:", error);
-//       showMessage("Export failed. Try reducing the number of selected fields.");
-//     } finally {
-//       setIsExporting(false);
-//     }
-//   };
+  //     doc.save(`${fileName}.pdf`);
+  //   } catch (error) {
+  //     console.error("PDF Export Error:", error);
+  //     showMessage("Export failed. Try reducing the number of selected fields.");
+  //   } finally {
+  //     setIsExporting(false);
+  //   }
+  // };
 
-//   const handleExport = () => {
-//     if (selectedFields.length === 0) {
-//       showMessage("Please select at least one column to export.");
-//       return;
-//     }
-//     if (exportFormat === 'pdf') {
-//       exportToPDF();
-//     } else {
-//       handleServerExport(exportFormat);
-//     }
-//   };
+  // const handleExport = () => {
+  //   if (selectedFields.length === 0) {
+  //     showMessage("Please select at least one column to export.");
+  //     return;
+  //   }
+  //   if (exportFormat === 'pdf') {
+  //     exportToPDF();
+  //   } else {
+  //     handleServerExport(exportFormat);
+  //   }
+  // };
 
 //   const renderInput = () => {
 //     if (!filterField) return <div className="input-placeholder"></div>;
@@ -362,9 +362,7 @@ const CombinedPanel = ({
     }
   };
 
-  const exportToPDF = async () => {
-    // PDF export logic remains client-side and is largely compatible.
-    // Ensure the API call here also points to your local backend.
+    const exportToPDF = async () => {
     setIsExporting(true);
     try {
       const params = new URLSearchParams({
@@ -373,17 +371,41 @@ const CombinedPanel = ({
         selectedFields: selectedFields.join(','),
         ...getCleanFilters()
       });
-      const response = await axios.get(`https://backend-2m6l.onrender.com/api/?${params}`);
+      const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
       const allData = response.data.data || response.data;
 
-      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const numCols = selectedFields.length;
+      let format = 'a4';
+      if (numCols > 10) format = 'a3';
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
+      
+      const scale = Math.max(0.45, 1 - (numCols / 30));
+      const fontSize = 10 * scale;
+      const titleSize = 16 * scale;
+      const cellPadding = 2.5 * scale;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(titleSize);
       doc.text(fileName.replace(/_/g, ' '), 14, 14);
+
       autoTable(doc, {
         startY: 22,
-        head: [selectedFields],
+        head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
         body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")),
         theme: 'grid',
+        tableWidth: 'auto',
+        margin: { top: 30, left: 10, right: 10 },
+        styles: { fontSize, fontStyle: 'normal', font: 'helvetica', halign: 'center', valign: 'middle', textColor: [26, 26, 26], lineColor: [210, 210, 210], lineWidth: 0.3, fillColor: [249, 249, 246], cellPadding },
+        headStyles: { fontSize: fontSize + 1.2, fontStyle: 'bold', textColor: [255, 255, 255], fillColor: [45, 106, 79], halign: 'center', valign: 'middle', cellPadding },
+        alternateRowStyles: { fillColor: [233, 242, 239] },
+        didDrawPage: (data) => {
+          const pageCount = doc.internal.getNumberOfPages();
+          doc.setFontSize(9);
+          doc.setTextColor(120);
+          doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
+        }
       });
+
       doc.save(`${fileName}.pdf`);
     } catch (error) {
       console.error("PDF Export Error:", error);
