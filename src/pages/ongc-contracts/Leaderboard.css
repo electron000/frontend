@@ -126,7 +126,7 @@
     }
 }
 
-/* --- NEW: Success Notification Modal Styles --- */
+/* --- Notification Modal Styles --- */
 
 .notification-overlay {
     position: fixed;
@@ -145,7 +145,6 @@
 }
 
 .notification-modal {
-    background: var(--ongc-green);
     color: var(--ongc-white);
     padding: 1rem 1.5rem;
     border-radius: var(--radius-md);
@@ -153,6 +152,18 @@
     text-align: center;
     animation: slideDown 0.4s ease-out;
     pointer-events: all;
+}
+
+.notification-modal--success {
+    background: var(--ongc-green);
+}
+
+.notification-modal--info {
+    background: var(--ongc-info);
+}
+
+.notification-modal--error {
+    background: var(--ongc-error-color);
 }
 
 .notification-modal p {
@@ -168,6 +179,15 @@
   }
   to {
     transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }

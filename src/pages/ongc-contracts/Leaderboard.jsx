@@ -28,7 +28,7 @@ const Leaderboard = ({ onLogout }) => {
   const [dynamicFieldTypes, setDynamicFieldTypes] = useState({});
   const [selectedFields, setSelectedFields] = useState([]); 
   const [editingDisplaySlNo, setEditingDisplaySlNo] = useState(null);
-  const [notification, setNotification] = useState({ show: false, message: '' }); // NEW: State for notification
+  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
 
   const arraysAreEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
@@ -135,24 +135,22 @@ const Leaderboard = ({ onLogout }) => {
   const handleResetSort = useCallback(() => {
     setSortConfig({ field: 'SL No', direction: 'asc' });
   }, []);
-
-  // MODIFIED: handleSave now shows a notification
+  
   const handleSave = async (newOrUpdatedRow) => {
     const config = { headers: { 'Content-Type': 'application/json' } };
-    const wasNewRow = isNewRow; // Capture if it was a new row before we reset it
+    const wasNewRow = isNewRow;
     try {
       if (wasNewRow) {
         await axios.post(API_URL, newOrUpdatedRow, config);
       } else {
         await axios.put(`${API_URL}/${newOrUpdatedRow.id}`, newOrUpdatedRow, config);
       }
-      setIsEditing(false); // Close the modal immediately
-      await fetchData(); // Refresh the data
+      setIsEditing(false);
+      await fetchData();
       
-      // Show notification on the main page
       const message = wasNewRow ? 'New Row Added' : 'Your Edits are Saved';
-      setNotification({ show: true, message });
-      setTimeout(() => setNotification({ show: false, message: '' }), 2000);
+      setNotification({ show: true, message, type: 'success' });
+      setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 2000);
 
     } catch (err) {
       console.error("Save error:", err);
@@ -163,7 +161,6 @@ const Leaderboard = ({ onLogout }) => {
   const handleDeleteRow = async (rowId) => {
     try {
       await axios.delete(`${API_URL}/${rowId}`);
-      setIsEditing(false); // This will be called from EditPage now, but good to have
       await fetchData();
     } catch (err) {
       console.error("Delete error:", err);
@@ -184,6 +181,13 @@ const Leaderboard = ({ onLogout }) => {
     setEditingRow(newRowObject);
     setEditingDisplaySlNo(null);
     setIsEditing(true);
+  };
+
+  const handleUploadError = () => {
+    setShowUploadModal(false); 
+    // MODIFIED: Updated error message
+    setNotification({ show: true, message: 'Database Update was Unsuccessful', type: 'error' });
+    setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 3000);
   };
 
   return (
@@ -268,14 +272,16 @@ const Leaderboard = ({ onLogout }) => {
             setShowUploadModal(false);
             setCurrentPage(1);
             fetchData(true);
+            setNotification({ show: true, message: 'Database Updated Successfully', type: 'info' });
+            setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 2000);
           }}
+          onUploadError={handleUploadError}
         />
       )}
-
-      {/* NEW: Notification Modal rendered here */}
+      
       {notification.show && (
         <div className="notification-overlay">
-          <div className="notification-modal">
+          <div className={`notification-modal notification-modal--${notification.type}`}>
             <p>{notification.message}</p>
           </div>
         </div>
