@@ -124,8 +124,8 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
             <h3>Are you sure?</h3>
             <p>This action cannot be undone.</p>
             <div className="confirmation-buttons">
-              <Button variant="outline" onClick={() => setIsConfirmingDelete(false)}>Cancel</Button>
               <Button variant="danger" onClick={handleConfirmDelete}>Yes, Delete</Button>
+              <Button variant="outline" onClick={() => setIsConfirmingDelete(false)}>Cancel</Button>
             </div>
           </div>
         </div>
