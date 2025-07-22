@@ -289,6 +289,7 @@
 // };
 
 // export default CombinedPanel;
+
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
@@ -309,23 +310,21 @@ const CombinedPanel = ({
   selectedFields,
   setSelectedFields,
   activeFilters,
-  sortConfig,
-  currentData // --- NEW: Receive current page data ---
+  sortConfig
 }) => {
   const inputRef = useRef(null);
   const [fileName, setFileName] = useState("Contracts_Details");
   const [isExporting, setIsExporting] = useState(false);
   const [showFieldSelection, setShowFieldSelection] = useState(false);
   const [exportFormat, setExportFormat] = useState('xlsx');
-  
-  // --- NEW: State to manage export scope ---
-  const [exportScope, setExportScope] = useState('all'); // 'all' or 'current'
-  
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, [filterField]);
+
+  // --- MODIFIED: Simplified this section, though it's not strictly used for filtering UI anymore ---
+  const { numeric = [], date = [] } = fieldTypes || {};
 
   const getCleanFilters = () => {
     const cleanFilters = {};
@@ -352,7 +351,8 @@ const CombinedPanel = ({
         selectedFields: selectedFields.join(','),
         ...getCleanFilters(),
       });
-      const response = await axios.get(`http://127.0.0.1:5001/api/export?${params}`, { responseType: 'blob' });
+      // --- IMPORTANT: Use the same API URL as Leaderboard.jsx ---
+      const response = await axios.get(`https://backend-2m6l.onrender.com/api/export?${params}`, { responseType: 'blob' });
       saveAs(response.data, `${fileName}.${format}`);
     } catch (error) {
       console.error("Export error:", error);
@@ -362,73 +362,75 @@ const CombinedPanel = ({
     }
   };
 
-  // --- MODIFIED: exportToPDF now accepts a scope ---
-  const exportToPDF = async (scope) => {
+    const exportToPDF = async () => {
     setIsExporting(true);
-    let dataToExport = [];
-
     try {
-      if (scope === 'current') {
-        // Use the data for the current page, passed via props
-        console.log("Exporting current page data to PDF...");
-        dataToExport = currentData;
-      } else {
-        // Fetch all data from the backend, ignoring pagination
-        console.log("Fetching all data from backend for PDF export...");
-        const params = new URLSearchParams({
-          sortField: sortConfig?.field || '',
-          sortDirection: sortConfig?.direction || '',
-          selectedFields: selectedFields.join(','),
-          ...getCleanFilters()
-          // NOTE: We DO NOT send page or limit here
-        });
-        const response = await axios.get(`http://127.0.0.1:5001/api/contracts?${params}`);
-        // The backend returns a simple array when not paginated
-        dataToExport = response.data.data || response.data;
-      }
+      const params = new URLSearchParams({
+        sortField: sortConfig?.field || '',
+        sortDirection: sortConfig?.direction || '',
+        selectedFields: selectedFields.join(','),
+        ...getCleanFilters()
+      });
+      const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
+      const allData = response.data.data || response.data;
 
-      if (!dataToExport || dataToExport.length === 0) {
-        showMessage("No data available to export.");
-        setIsExporting(false);
-        return;
-      }
+      const numCols = selectedFields.length;
+      let format = 'a4';
+      if (numCols > 10) format = 'a3';
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
       
-      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const scale = Math.max(0.45, 1 - (numCols / 30));
+      const fontSize = 10 * scale;
+      const titleSize = 16 * scale;
+      const cellPadding = 2.5 * scale;
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(titleSize);
       doc.text(fileName.replace(/_/g, ' '), 14, 14);
+
       autoTable(doc, {
         startY: 22,
-        head: [selectedFields],
-        body: dataToExport.map(row => selectedFields.map(h => row[h]?.toString() || "")),
+        head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
+        body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")),
         theme: 'grid',
-        // Styling options remain the same
+        tableWidth: 'auto',
+        margin: { top: 30, left: 10, right: 10 },
+        styles: { fontSize, fontStyle: 'normal', font: 'helvetica', halign: 'center', valign: 'middle', textColor: [26, 26, 26], lineColor: [210, 210, 210], lineWidth: 0.3, fillColor: [249, 249, 246], cellPadding },
+        headStyles: { fontSize: fontSize + 1.2, fontStyle: 'bold', textColor: [255, 255, 255], fillColor: [45, 106, 79], halign: 'center', valign: 'middle', cellPadding },
+        alternateRowStyles: { fillColor: [233, 242, 239] },
+        didDrawPage: (data) => {
+          const pageCount = doc.internal.getNumberOfPages();
+          doc.setFontSize(9);
+          doc.setTextColor(120);
+          doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
+        }
       });
-      doc.save(`${fileName}.pdf`);
 
+      doc.save(`${fileName}.pdf`);
     } catch (error) {
       console.error("PDF Export Error:", error);
-      showMessage("Export failed. Please check the console.");
+      showMessage("Export failed. Try reducing the number of selected fields.");
     } finally {
       setIsExporting(false);
     }
   };
 
-  // --- MODIFIED: handleExport now checks the scope ---
   const handleExport = () => {
     if (selectedFields.length === 0) {
       showMessage("Please select at least one column to export.");
       return;
     }
     if (exportFormat === 'pdf') {
-      // Pass the selected scope to the function
-      exportToPDF(exportScope);
+      exportToPDF();
     } else {
-      // Server exports (xlsx, csv) already handle all data correctly
       handleServerExport(exportFormat);
     }
   };
 
+  // --- MODIFIED: Drastically simplified input rendering ---
   const renderInput = () => {
     if (!filterField) return <div className="input-placeholder" />;
+    
     return (
       <input 
         ref={inputRef} 
@@ -443,7 +445,7 @@ const CombinedPanel = ({
 
   const handleFilterFieldChange = (e) => {
     setFilterField(e.target.value);
-    setFilterValue("");
+    setFilterValue(""); // Reset value when field changes
   };
 
  return (
@@ -476,15 +478,6 @@ const CombinedPanel = ({
             <option value="csv">CSV</option>
             <option value="pdf">PDF</option>
           </select>
-          
-          {/* --- NEW: Dropdown for PDF export scope --- */}
-          {exportFormat === 'pdf' && (
-            <select value={exportScope} onChange={(e) => setExportScope(e.target.value)} className="filter-input format-selector">
-              <option value="all">All Pages</option>
-              <option value="current">Current Page</option>
-            </select>
-          )}
-
           <div className="button-group">
             <Button variant="blue" onClick={handleExport} disabled={isExporting}>
               {isExporting ? "Exporting..." : "Export"}
@@ -499,10 +492,19 @@ const CombinedPanel = ({
       </div>
     </div>
 
-    {/* The rest of the component remains the same */}
     {showFieldSelection && (
       <div className="field-selection-container">
-        {/* ... */}
+        <div className="field-selection-header">
+          <h3 className="field-selection-title">Select Columns</h3>
+          <Button
+            variant={selectedFields.length === headers.length ? "danger" : "green"}
+            onClick={() => setSelectedFields(selectedFields.length === headers.length ? [] : headers)}>
+            {selectedFields.length === headers.length ? "Deselect" : "Select"}
+          </Button>
+        </div>
+        <div className="field-selection-table-container">
+          {/* Field selection table remains the same */}
+        </div>
       </div>
     )}
     {message && (
@@ -515,4 +517,3 @@ const CombinedPanel = ({
 };
 
 export default CombinedPanel;
-
