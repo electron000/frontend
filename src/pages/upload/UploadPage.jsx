@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import './UploadPage.css';
 import { Button, Modal } from '../../components';
 
-function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
+function UploadPage({ onCancel, onUploadSuccess, onUploadError }) { // MODIFIED: Accept onUploadError prop
   const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState({ message: '', type: '' });
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [internalError, setInternalError] = useState('');
 
   const validateAndSetFile = (file) => {
     if (file && file.name.endsWith('.xlsx')) {
       setSelectedFile(file);
-      setInternalError('');
+      setUploadStatus({ message: '', type: '' });
     } else {
       setSelectedFile(null);
-      setInternalError('Please select or drop a valid .xlsx file.');
+      setUploadStatus({ message: 'Please select or drop a valid .xlsx file.', type: 'error' });
     }
   };
 
@@ -46,12 +46,12 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      setInternalError('No file selected. Please choose an Excel file.');
+      setUploadStatus({ message: 'No file selected. Please choose an Excel file.', type: 'error' });
       return;
     }
 
     setLoading(true);
-    setInternalError('');
+    setUploadStatus({ message: 'Uploading file...', type: '' });
     const formData = new FormData();
     formData.append('file', selectedFile);
 
@@ -60,22 +60,25 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
         method: 'POST',
         body: formData,
       });
-
-      // MODIFIED: We must read the JSON response first to check for logical errors.
       const data = await response.json();
-
-      // This is the critical check:
-      // It ensures the network request was OK (status 200-299)
-      // AND that the server's response does NOT contain an 'error' field.
-      if (response.ok && !data.error) {
-        if (onUploadSuccess) onUploadSuccess();
+      if (response.ok) {
+        setUploadStatus({ message: data.message || 'File uploaded successfully!', type: 'success' });
+        setSelectedFile(null);
+        if (onUploadSuccess) {
+          onUploadSuccess(); // Report success to parent
+        }
       } else {
-        // This will now catch both network errors and logical errors from the server.
-        if (onUploadError) onUploadError();
+        setUploadStatus({ message: data.error || 'File upload failed.', type: 'error' });
+        if (onUploadError) {
+          onUploadError(); // MODIFIED: Report error to parent
+        }
       }
     } catch (error) {
       console.error('Error during file upload:', error);
-      if (onUploadError) onUploadError();
+      setUploadStatus({ message: 'Network error or server is unreachable.', type: 'error' });
+      if (onUploadError) {
+        onUploadError(); // MODIFIED: Report error to parent
+      }
     } finally {
       setLoading(false);
     }
@@ -116,8 +119,10 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
           {loading ? 'Uploading...' : 'Upload'}
         </Button>
 
-        {internalError && (
-          <p className="upload-page-status-error">{internalError}</p>
+        {uploadStatus.message && (
+          <p className={uploadStatus.type === 'success' ? 'upload-page-status-success' : 'upload-page-status-error'}>
+            {uploadStatus.message}
+          </p>
         )}
 
         <p className="upload-page-note">
