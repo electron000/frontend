@@ -6,7 +6,7 @@ import EditPage from '../edit/EditPage';
 import UploadPage from '../upload/UploadPage';
 import { Button, CombinedPanel, DataTable, Pagination } from '../../components';
 
-const API_URL = 'http://127.0.0.1:5001/api/contracts';
+const API_URL = 'https://backend-2m6l.onrender.com/api/contracts';
 
 const Leaderboard = ({ onLogout }) => {
   const [currentData, setCurrentData] = useState([]);
