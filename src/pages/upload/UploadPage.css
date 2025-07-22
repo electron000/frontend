@@ -58,8 +58,8 @@
 }
 
 .drop-zone {
-    width: 100%; /* Make drop-zone take full width */
-    padding: 50px 20px; /* Increased vertical padding for more height */
+    width: 100%; 
+    padding: 50px 20px; 
     border: 2px dashed var(--ongc-border);
     border-radius: var(--radius-md);
     background-color: var(--ongc-light-gray);
@@ -110,17 +110,15 @@
     font-weight: 600;
 }
 
-/* NEW: Container for button and messages */
 .upload-page-actions {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-top: 25px; /* Space between drop-zone and actions */
-    gap: 15px; /* Space between button, status, and note */
+    margin-top: 25px; 
+    gap: 15px; 
 }
 
-/* Specific styling for the Upload button */
 .upload-page-actions .btn {
     width: 50%;
     max-width: 200px;
@@ -128,8 +126,7 @@
     padding: 12px 0;
 }
 
-
-.upload-page-status-success,
+/* This rule is no longer needed but is kept for file validation messages */
 .upload-page-status-error {
     padding: 12px;
     border-radius: var(--radius-md);
@@ -138,15 +135,6 @@
     width: 100%;
     box-sizing: border-box;
     text-align: center;
-}
-
-.upload-page-status-success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #6ee7b7;
-}
-
-.upload-page-status-error {
     background-color: #fee2e2;
     color: #991b1b;
     border: 1px solid #fca5a5;

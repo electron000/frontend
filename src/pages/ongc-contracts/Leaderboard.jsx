@@ -183,11 +183,14 @@ const Leaderboard = ({ onLogout }) => {
     setIsEditing(true);
   };
 
-  const handleUploadError = () => {
+  const handleUploadError = (errorMessage) => {
     setShowUploadModal(false); 
-    setNotification({ show: true, message: 'Database Update was Unsuccessful', type: 'error' });
-    // MODIFIED: This now only hides the notification, without changing its type
-    setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 3000);
+    setNotification({ 
+      show: true, 
+      message: errorMessage || 'Database Update was Unsuccessful', 
+      type: 'error' 
+    });
+    setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 4000);
   };
 
   return (
@@ -273,7 +276,6 @@ const Leaderboard = ({ onLogout }) => {
             setCurrentPage(1);
             fetchData(true);
             setNotification({ show: true, message: 'Database Updated Successfully', type: 'info' });
-            // MODIFIED: This now only hides the notification, without changing its type
             setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
           }}
           onUploadError={handleUploadError}
