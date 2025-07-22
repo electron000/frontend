@@ -294,7 +294,6 @@
 // };
 
 // export default Leaderboard;
-
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './Leaderboard.css';
@@ -305,7 +304,7 @@ import { Button, CombinedPanel, DataTable, Pagination } from '../../components';
 
 // --- IMPORTANT ---
 // Change this URL to your local backend server for testing
-const API_URL = 'https://backend-2m6l.onrender.com/api/contracts';
+const API_URL = 'http://127.0.0.1:5001/api/contracts';
 
 const Leaderboard = ({ onLogout }) => {
   const [currentData, setCurrentData] = useState([]);
@@ -313,7 +312,6 @@ const Leaderboard = ({ onLogout }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortConfig, setSortConfig] = useState({ field: 'SL No', direction: 'asc' });
   
-  // --- MODIFIED: Simplified filter state ---
   const [filterField, setFilterField] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [activeFilters, setActiveFilters] = useState({});
@@ -326,7 +324,6 @@ const Leaderboard = ({ onLogout }) => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [dynamicHeaders, setDynamicHeaders] = useState([]);
   
-  // --- MODIFIED: Simplified fieldTypes state ---
   const [dynamicFieldTypes, setDynamicFieldTypes] = useState({ numeric: [], date: [], text: [] });
   
   const [selectedFields, setSelectedFields] = useState([]); 
@@ -379,7 +376,6 @@ const Leaderboard = ({ onLogout }) => {
     fetchData();
   }, [fetchData]);
 
-  // --- MODIFIED: Simplified filter apply logic ---
   const handleFilterApply = () => {
     const newFilters = {};
     if (filterField && filterValue) {
@@ -387,10 +383,9 @@ const Leaderboard = ({ onLogout }) => {
       newFilters.filterValue = filterValue;
     }
     setActiveFilters(newFilters);
-    setCurrentPage(1); // Reset to first page on new filter
+    setCurrentPage(1);
   };
 
-  // --- MODIFIED: Simplified filter clear logic ---
   const handleClearFilters = () => {
     setFilterField("");
     setFilterValue("");
@@ -404,7 +399,6 @@ const Leaderboard = ({ onLogout }) => {
     const wasNewRow = isNewRow;
     try {
       if (wasNewRow) {
-        // For new rows, we don't send an ID. The backend assigns it.
         await axios.post(API_URL, newOrUpdatedRow, config);
       } else {
         await axios.put(`${API_URL}/${newOrUpdatedRow.id}`, newOrUpdatedRow, config);
@@ -425,7 +419,7 @@ const Leaderboard = ({ onLogout }) => {
   const handleDeleteRow = async (rowId) => {
     try {
       await axios.delete(`${API_URL}/${rowId}`);
-      await fetchData(); // Refresh data to show deletion and re-indexing
+      await fetchData();
     } catch (err) {
       console.error("Delete error:", err);
       setError(err.response?.data?.error || "Failed to delete the contract.");
@@ -440,7 +434,6 @@ const Leaderboard = ({ onLogout }) => {
 
   const handleAddClick = () => {
     setIsNewRow(true);
-    // Create a blank object based on the current headers
     const newRowObject = dynamicHeaders.reduce((acc, header) => ({ ...acc, [header]: '' }), {});
     setEditingRow(newRowObject);
     setIsEditing(true);
@@ -463,6 +456,7 @@ const Leaderboard = ({ onLogout }) => {
         <Button variant="danger" onClick={onLogout} className="logout-button">Logout</Button>
       </div>
 
+      {/* --- MODIFIED: Pass currentData to CombinedPanel --- */}
       <CombinedPanel
         headers={dynamicHeaders}
         fieldTypes={dynamicFieldTypes}
@@ -476,6 +470,7 @@ const Leaderboard = ({ onLogout }) => {
         setSelectedFields={setSelectedFields}
         activeFilters={activeFilters}
         sortConfig={sortConfig}
+        currentData={currentData} 
       />
 
       <div className="data-section">
@@ -527,7 +522,7 @@ const Leaderboard = ({ onLogout }) => {
           onUploadSuccess={() => {
             setShowUploadModal(false);
             setCurrentPage(1);
-            fetchData(true); // `true` forces a refresh of selected fields
+            fetchData(true);
             setNotification({ show: true, message: 'Database Updated Successfully', type: 'info' });
             setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
           }}
@@ -547,3 +542,4 @@ const Leaderboard = ({ onLogout }) => {
 };
 
 export default Leaderboard;
+
