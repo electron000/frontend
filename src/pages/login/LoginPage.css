@@ -1,5 +1,4 @@
-/* === Global Reset & Base Styles === */
- #root {
+#root {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -7,47 +6,45 @@
   font-family: var(--font-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden; /* Prevent horizontal scrollbar */
-  box-sizing: border-box; /* Global border-box for consistent sizing */
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
 }
 
-/* === ONGC Login Container (Main Wrapper) === */
 .ongc-login-container {
   display: flex;
-  min-height: 100vh; /* Ensures it takes full viewport height */
+  min-height: 100vh;
   width: 100%;
-  background-color: var(--ongc-white); /* White background for the main content area */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for the whole page if needed */
+  background-color: var(--ongc-white);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* === ONGC Login Left Panel (Branding/Info) === */
 .ongc-login-left-panel {
-  flex: 1; /* Takes up available space */
-  background: linear-gradient(160deg, var(--ongc-primary-brand-dark), var(--ongc-error-color)); /* Now uses maroon gradient */
+  flex: 1;
+  background: linear-gradient(160deg, var(--ongc-primary-brand-dark), var(--ongc-error-color));
   color: var(--ongc-white);
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically center content */
-  align-items: center; /* Horizontally center content */
-  padding: 3rem 2rem; /* Ample padding */
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2rem;
   text-align: center;
-  gap: 1.5rem; /* Space between elements */
+  gap: 1.5rem;
 }
 
 .ongc-login-logo {
-  height: 100px; /* Larger logo for the left panel */
+  height: 100px;
   width: auto;
   object-fit: contain;
-  filter: brightness(0) invert(1); /* White logo */
-  margin-bottom: 1rem; /* Space below logo */
+  filter: brightness(0) invert(1);
+  margin-bottom: 1rem;
 }
 
 .ongc-login-main-heading {
-  font-size: 2.5rem; /* Large heading */
+  font-size: 2.5rem;
   font-weight: 800;
   margin: 0;
   line-height: 1.2;
@@ -57,25 +54,24 @@
   font-size: 1.1rem;
   line-height: 1.6;
   opacity: 0.9;
-  max-width: 400px; /* Constrain text width */
+  max-width: 400px;
 }
 
-/* === ONGC Login Right Form Panel === */
 .ongc-login-right-form {
-  flex: 1; /* Takes up available space */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically center content */
-  align-items: center; /* Horizontally center content */
-  padding: 3rem 2rem; /* Ample padding */
-  background-color: var(--ongc-white); /* White background */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* Subtle shadow for separation */
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 .ongc-login-sub-heading {
-  font-size: 2rem; /* Main title for the form */
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--ongc-error-color); /* Now uses dark maroon */
+  color: #B94A48; /* MODIFIED: Changed to a lighter maroon shade */
   margin-bottom: 0.5rem;
 }
 
@@ -87,10 +83,9 @@
 
 .ongc-login-form {
   width: 100%;
-  max-width: 380px; /* Max width for the form itself */
+  max-width: 380px;
 }
 
-/* === ONGC Input Group === */
 .ongc-input-group {
   position: relative;
   margin-bottom: 1.5rem;
@@ -98,21 +93,19 @@
 
 .ongc-input-group input {
   width: 100%;
-  height: 55px; /* Consistent height for inputs */
-  padding: 0 1rem 0 3.5rem; /* Padding for text, space for icon */
-  border: 1.5px solid var(--ongc-border);
+  height: 55px;
+  padding: 0 1rem 0 3.5rem;
+  border: 0.5px var(--ongc-border);
   border-radius: var(--radius-md);
   font-size: 1.1rem;
-  background: var(--ongc-light-bg); /* Light background for input fields */
+  background: var(--ongc-light-bg);
   color: var(--ongc-dark-gray);
   transition: all 0.2s ease;
 }
 
 .ongc-input-group input:focus {
   outline: none;
-  border-color: var(--ongc-primary-brand); /* Now uses maroon */
-  background-color: var(--ongc-white);
-  box-shadow: 0 0 0 3px rgba(127, 42, 42, 0.15); /* Adjusted shadow color to maroon */
+  background-color: var(--ongc-light-bg);
 }
 
 .ongc-input-group input::placeholder {
@@ -130,14 +123,13 @@
   font-size: 1.2rem;
 }
 
-/* === ONGC Login Button === */
 .ongc-login-submit-button {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   padding: 1rem;
-  background-color: var(--ongc-error-color); /* Now uses maroon */
+  background-color: var(--ongc-error-color);
   color: var(--ongc-white);
   border: none;
   border-radius: var(--radius-md);
@@ -149,27 +141,25 @@
 }
 
 .ongc-login-submit-button:hover {
-  background-color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+  background-color: var(--ongc-primary-brand-dark);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .ongc-login-submit-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-  background-color: var(--ongc-primary-brand); /* Keep original color but lower opacity */
+  background-color: var(--ongc-primary-brand);
   box-shadow: none;
 }
 
-/* === ONGC Error Message === */
 .ongc-login-error-message {
-  color: var(--ongc-error-color); /* Error message uses specific error color */
+  color: var(--ongc-error-color);
   font-size: 0.95rem;
-  margin-top: -1rem; /* Adjust margin to pull it closer to inputs */
+  margin-top: -1rem;
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
-/* === ONGC Spinner === */
 .ongc-login-spinner {
   display: inline-block;
   width: 24px;
@@ -186,46 +176,41 @@
   }
 }
 
-/* ==========================================================================
-   Responsive Design for ONGC Login Page
-   ========================================================================== */
-
-/* Adjustments for screens smaller than 1024px (e.g., larger tablets) */
 @media (max-width: 1024px) {
   .ongc-login-container {
-    flex-direction: column; /* Stack panels vertically */
-    min-height: 100vh; /* Ensure full height even when stacked */
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   .ongc-login-left-panel {
     padding: 2rem 1.5rem;
-    height: auto; /* Allow height to adjust to content */
-    flex: none; /* Do not grow */
+    height: auto;
+    flex: none;
   }
 
   .ongc-login-logo {
-    height: 80px; /* Adjust logo size */
+    height: 80px;
     margin-bottom: 0.5rem;
   }
 
   .ongc-login-main-heading {
-    font-size: 2rem; /* Adjust heading size */
+    font-size: 2rem;
   }
 
   .ongc-login-description {
     font-size: 1rem;
-    max-width: 80%; /* Allow description to take more width */
+    max-width: 80%;
   }
 
   .ongc-login-right-form {
     padding: 2.5rem 1.5rem;
-    flex: 1; /* Allow form panel to grow and take remaining space */
-    box-shadow: none; /* Remove shadow for stacked layout */
+    flex: 1;
+    box-shadow: none;
   }
 
   .ongc-login-sub-heading {
     font-size: 1.8rem;
-    color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+    color: #B94A48; /* MODIFIED: Changed to a lighter maroon shade */
   }
 
   .ongc-login-sub-description {
@@ -234,7 +219,7 @@
   }
 
   .ongc-login-form {
-    max-width: 350px; /* Adjust max-width for form */
+    max-width: 350px;
   }
 
   .ongc-input-group input {
@@ -254,16 +239,16 @@
   }
 }
 
-/* Adjustments for screens smaller than 768px (most mobile phones) */
 @media (max-width: 768px) {
   .ongc-login-left-panel {
-    height: auto; /* Allow height to adjust to content */
+    height: auto;
     padding: 1.5rem 1rem;
+    gap: 1rem;
   }
 
   .ongc-login-logo {
     height: 60px;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.5rem;
   }
 
   .ongc-login-main-heading {
@@ -276,12 +261,12 @@
   }
 
   .ongc-login-right-form {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
   .ongc-login-sub-heading {
     font-size: 1.6rem;
-    color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+    color: #B94A48; /* MODIFIED: Changed to a lighter maroon shade */
   }
 
   .ongc-login-sub-description {
@@ -319,10 +304,9 @@
   }
 }
 
-/* Adjustments for extra small phones (e.g., iPhone SE, older Androids) */
 @media (max-width: 480px) {
   .ongc-login-left-panel {
-    height: auto; /* Allow height to adjust to content */
+    height: auto;
     padding: 1rem 0.8rem;
   }
 
@@ -345,7 +329,7 @@
 
   .ongc-login-sub-heading {
     font-size: 1.4rem;
-    color: var(--ongc-primary-brand-dark); /* Now uses dark maroon */
+    color: #B94A48; /* MODIFIED: Changed to a lighter maroon shade */
   }
 
   .ongc-login-sub-description {

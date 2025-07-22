@@ -1,89 +1,25 @@
-/* ==========================================================================
-   Leaderboard Page Layout
-   ========================================================================== */
-  
 .leaderboard-header {
-    /* Styles for the header containing the logo and logout button */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0rem; /* Add some padding */
-    position: relative; /* Needed for absolute positioning of logout button */
-    height: 50px; /* Example height */
+    padding: 0rem;
+    position: relative;
+    height: 50px;
 }
 
 .ongc-logo {
    position: absolute;
-    width: 150px; /* Default size for desktop */
+    width: 150px;
     top: 20%;
     left: 0.5rem;
 }
 
-/* The logout button uses the generic .btn class and this for positioning */
 .logout-button {
     position: absolute;
     top: 25%;
     right: 1rem;
 }
 
-
-/* ==========================================================================
-   Consolidated Button Styles
-   ========================================================================== */
-
-/* Base class for all action buttons */
-.btn {
-    font-weight: 600;
-    padding: 8px 14px;
-    border-radius: var(--radius-sm);
-    border: none;
-    color: var(--ongc-white);
-    font-size: 13px;
-    cursor: pointer;
-    box-shadow: 0 3px 6px var(--ongc-shadow);
-    min-width: 100px;
-    height: 38px;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px var(--ongc-shadow-hover);
-}
-
-.btn:active {
-    transform: scale(0.97);
-    box-shadow: 0 2px 4px var(--ongc-shadow);
-}
-
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Color modifier for green buttons */
-.btn--green {
-    background: linear-gradient(135deg, var(--ongc-green), var(--ongc-green-dark));
-}
-
-/* Color modifier for blue buttons */
-.btn--blue {
-    background: linear-gradient(135deg, var(--ongc-info), #2a6cb5);
-}
-
-/* Color modifier for red/danger buttons */
-.btn--danger {
-    background: linear-gradient(135deg, var(--ongc-orange-rust), var(--ongc-maroon));
-}
-
-
-/* Container for the bottom buttons */
 .bottom-action-buttons-container {
     margin-top: 20px;
     display: flex;
@@ -93,14 +29,9 @@
     width: 100%;
 }
 
-
-/* ==========================================================================
-   Other Component-Specific Styles
-   ========================================================================== */
-
 .data-section {
-    position: relative; /* For loading overlay positioning */
-    min-height: 200px; /* Prevent layout collapse while loading */
+    position: relative;
+    min-height: 200px;
 }
 
 .loading-overlay {
@@ -135,15 +66,9 @@
     border-color: #fca5a5;
 }
 
-
-/* ==========================================================================
-   Fully Responsive Design
-   ========================================================================== */
-
-/* Tablet adjustments */
 @media (max-width: 768px) {
-    body { 
-        padding: 1rem; 
+    body {
+        padding: 1rem;
     }
 
     .leaderboard-header {
@@ -166,7 +91,6 @@
     }
 }
 
-/* Mobile phones only */
 @media (max-width: 480px) {
     body {
         padding: 0.5rem;
@@ -195,11 +119,55 @@
         box-sizing: border-box;
     }
 
-    /* MODIFIED: Make buttons smaller on mobile, similar to logout button */
     .bottom-action-buttons-container .btn {
         height: 34px;
         font-size: 12px;
         padding: 6px 12px;
-        /* flex-grow and max-width are removed to allow natural sizing */
     }
+}
+
+/* --- NEW: Success Notification Modal Styles --- */
+
+.notification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    z-index: 2100;
+    padding-top: 20px;
+    animation: fadeIn 0.3s ease;
+    pointer-events: none;
+}
+
+.notification-modal {
+    background: var(--ongc-green);
+    color: var(--ongc-white);
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    animation: slideDown 0.4s ease-out;
+    pointer-events: all;
+}
+
+.notification-modal p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

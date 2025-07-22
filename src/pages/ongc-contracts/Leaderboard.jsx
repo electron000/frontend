@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-// Assuming 'Leaderboard.css' will be modified to remove button styles
 import './Leaderboard.css';
 import ongcLogo from '../../assets/ongc-logo.png';
 import EditPage from '../edit/EditPage';
 import UploadPage from '../upload/UploadPage';
-import { DataTable, Pagination, CombinedPanel } from "../../components";
+import { Button, CombinedPanel, DataTable, Pagination } from '../../components';
 
-const API_URL = 'https://backend-2m6l.onrender.com/api/contracts';
+const API_URL = 'http://127.0.0.1:5001/api/contracts';
 
 const Leaderboard = ({ onLogout }) => {
   const [currentData, setCurrentData] = useState([]);
@@ -29,6 +28,7 @@ const Leaderboard = ({ onLogout }) => {
   const [dynamicFieldTypes, setDynamicFieldTypes] = useState({});
   const [selectedFields, setSelectedFields] = useState([]); 
   const [editingDisplaySlNo, setEditingDisplaySlNo] = useState(null);
+  const [notification, setNotification] = useState({ show: false, message: '' }); // NEW: State for notification
 
   const arraysAreEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
@@ -136,16 +136,24 @@ const Leaderboard = ({ onLogout }) => {
     setSortConfig({ field: 'SL No', direction: 'asc' });
   }, []);
 
+  // MODIFIED: handleSave now shows a notification
   const handleSave = async (newOrUpdatedRow) => {
     const config = { headers: { 'Content-Type': 'application/json' } };
+    const wasNewRow = isNewRow; // Capture if it was a new row before we reset it
     try {
-      if (isNewRow) {
+      if (wasNewRow) {
         await axios.post(API_URL, newOrUpdatedRow, config);
       } else {
         await axios.put(`${API_URL}/${newOrUpdatedRow.id}`, newOrUpdatedRow, config);
       }
-      setIsEditing(false);
-      fetchData();
+      setIsEditing(false); // Close the modal immediately
+      await fetchData(); // Refresh the data
+      
+      // Show notification on the main page
+      const message = wasNewRow ? 'New Row Added' : 'Your Edits are Saved';
+      setNotification({ show: true, message });
+      setTimeout(() => setNotification({ show: false, message: '' }), 2000);
+
     } catch (err) {
       console.error("Save error:", err);
       setError("Failed to save the contract.");
@@ -155,8 +163,8 @@ const Leaderboard = ({ onLogout }) => {
   const handleDeleteRow = async (rowId) => {
     try {
       await axios.delete(`${API_URL}/${rowId}`);
-      setIsEditing(false);
-      fetchData();
+      setIsEditing(false); // This will be called from EditPage now, but good to have
+      await fetchData();
     } catch (err) {
       console.error("Delete error:", err);
       setError("Failed to delete the contract.");
@@ -182,8 +190,7 @@ const Leaderboard = ({ onLogout }) => {
     <div className="leaderboard-container">
       <div className="leaderboard-header">
         <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
-        {/* MODIFIED: Using generic button classes */}
-        <button onClick={onLogout} className="btn btn--danger logout-button">Logout</button>
+        <Button variant="danger" onClick={onLogout} className="logout-button">Logout</Button>
       </div>
 
       <CombinedPanel
@@ -238,9 +245,8 @@ const Leaderboard = ({ onLogout }) => {
       />
 
       <div className="bottom-action-buttons-container">
-        {/* MODIFIED: Using generic button classes */}
-        <button onClick={handleAddClick} className="btn btn--green">+ New</button>
-        <button onClick={() => setShowUploadModal(true)} className="btn btn--blue">Upload</button>
+        <Button variant="green" onClick={handleAddClick}>+ New</Button>
+        <Button variant="blue" onClick={() => setShowUploadModal(true)}>Upload</Button>
       </div>
 
       {isEditing && (
@@ -248,7 +254,7 @@ const Leaderboard = ({ onLogout }) => {
           rowData={editingRow}
           onSave={handleSave}
           onCancel={() => setIsEditing(false)}
-          onDelete={() => handleDeleteRow(editingRow.id)}
+          onDelete={handleDeleteRow}
           headers={dynamicHeaders}
           isNew={isNewRow}
           displaySlNo={editingDisplaySlNo}
@@ -264,6 +270,15 @@ const Leaderboard = ({ onLogout }) => {
             fetchData(true);
           }}
         />
+      )}
+
+      {/* NEW: Notification Modal rendered here */}
+      {notification.show && (
+        <div className="notification-overlay">
+          <div className="notification-modal">
+            <p>{notification.message}</p>
+          </div>
+        </div>
       )}
     </div>
   );

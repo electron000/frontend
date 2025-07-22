@@ -1,4 +1,3 @@
-/* === Data Table Wrapper === */
 .data-table-wrapper {
   width: 100%;
   max-width: 1400px;
@@ -9,24 +8,21 @@
     0 2px 4px rgba(0, 0, 0, 0.04),
     0 4px 12px rgba(0, 0, 0, 0.08),
     0 8px 24px rgba(0, 0, 0, 0.06);
-  overflow-x: auto; /* Ensures horizontal scrolling if content overflows */
+  overflow-x: auto;
   box-sizing: border-box;
 }
 
-/* Optional inner scroll container */
 .data-table-wrapper .table-scroll {
   overflow-x: auto;
 }
 
-/* === Table (Scoped) === */
 .data-table-wrapper .custom-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 650px; /* Minimum width for desktop */
+  min-width: 650px;
   font-size: 12.5px;
 }
 
-/* === Table Header (Scoped) === */
 .data-table-wrapper th {
   padding: 8px 10px;
   background: var(--ongc-error-color);
@@ -51,9 +47,8 @@
   color: var(--ongc-white);
 }
 
-/* === Table Body Rows (Scoped) === */
 .data-table-wrapper tbody tr {
-  background-color: var(--ongc-light-gray);
+  background-color: #ffffff;
   transition: background-color 0.2s ease;
 }
 
@@ -61,7 +56,6 @@
   background-color: var(--ongc-hover-bg);
 }
 
-/* === Table Cells (Scoped) === */
 .data-table-wrapper td {
   padding: 6px 10px;
   color: var(--ongc-black);
@@ -81,7 +75,6 @@
   text-align: left;
 }
 
-/* === Remarks Column (Scoped) === */
 .data-table-wrapper .remarks-column {
   max-width: 260px;
   width: 260px;
@@ -92,13 +85,12 @@
   text-align: left;
   vertical-align: top;
   padding: 8px 10px;
-  background-color: var(--ongc-light-gray);
+  background-color: #ffffff;
   color: var(--ongc-black);
   border-bottom: 1px solid var(--ongc-medium-gray);
   border-right: 1px solid var(--ongc-medium-gray);
 }
 
-/* === Edit Button (Scoped) === */
 .data-table-wrapper .edit-button {
   background-color: var(--ongc-error-color);
   color: var(--ongc-white);
@@ -114,7 +106,6 @@
   background-color: var(--ongc-green-dark);
 }
 
-/* === Empty State Message (Scoped) === */
 .data-table-wrapper .no-data {
   text-align: center;
   font-style: italic;
@@ -123,50 +114,46 @@
   font-size: 12.5px;
 }
 
-/* ==========================================================================
-   Responsive Design for Data Table (Mobile Phones Only)
-   ========================================================================== */
-
 @media (max-width: 480px) {
   .data-table-wrapper {
-    margin: 0.5rem auto 1rem auto; /* Slightly reduced margin */
-    border-radius: 8px; /* Slightly smaller border-radius */
+    margin: 0.5rem auto 1rem auto;
+    border-radius: 8px;
   }
 
   .data-table-wrapper .custom-table {
-    min-width: auto; /* Allow table to shrink more on mobile */
-    font-size: 10px; /* Reduced base font size for table content */
+    min-width: auto;
+    font-size: 10px;
   }
 
   .data-table-wrapper th {
-    padding: 6px 8px; /* Reduced padding for headers */
-    font-size: 11px; /* Reduced font size for headers */
-    letter-spacing: 0.2px; /* Slightly reduced letter spacing */
+    padding: 6px 8px;
+    font-size: 11px;
+    letter-spacing: 0.2px;
   }
 
   .data-table-wrapper th .sort-indicator {
-    font-size: 8px; /* Reduced font size for sort indicator */
+    font-size: 8px;
   }
 
   .data-table-wrapper td {
-    padding: 4px 8px; /* Reduced padding for cells */
-    font-size: 10px; /* Reduced font size for cells */
+    padding: 4px 8px;
+    font-size: 10px;
   }
 
   .data-table-wrapper .remarks-column {
-    max-width: 180px; /* Reduced max-width for remarks column */
-    width: 180px; /* Reduced width for remarks column */
-    font-size: 9px; /* Reduced font size for remarks */
-    padding: 6px 8px; /* Reduced padding for remarks */
+    max-width: 180px;
+    width: 180px;
+    font-size: 9px;
+    padding: 6px 8px;
   }
 
   .data-table-wrapper .edit-button {
-    padding: 4px 8px; /* Reduced padding for edit button */
-    font-size: 10px; /* Reduced font size for edit button */
+    padding: 4px 8px;
+    font-size: 10px;
   }
 
   .data-table-wrapper .no-data {
-    padding: 12px; /* Reduced padding for no data message */
-    font-size: 11px; /* Reduced font size for no data message */
+    padding: 12px;
+    font-size: 11px;
   }
 }

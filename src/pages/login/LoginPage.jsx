@@ -1,64 +1,45 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; // This will now link to the newly created CSS file
-import ongcLogo from '../../assets/ongc-logo.png'; // Using the imported logo as per your JSX
+import './LoginPage.css';
+import ongcLogo from '../../assets/ongc-logo.png';
 
-/**
- * A reusable login page component with an ONGC-themed two-column design.
- * Features responsive layout and unique class names to prevent CSS conflicts.
- * @param {object} props - The component props.
- * @param {function} props.onLogin - A callback function that is executed on successful login.
- */
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  /**
-   * Handles the form submission by calling the backend API.
-   * @param {React.FormEvent} e - The form event.
-   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
-      // Simulate API call delay (remove in production)
-      // await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Call your Python backend API endpoint
-      const response = await fetch('https://backend-2m6l.onrender.com/api/login', {
+      const response = await fetch('http://127.0.0.1:5001/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }), // Send username and password
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // If login is successful (status 200)
         console.log('Login successful:', data.message);
-        onLogin(); // Trigger the callback passed from the parent component
+        onLogin();
       } else {
-        // If login fails (e.g., status 401), show the error from the backend
         setError(data.error || 'Invalid username or password.');
       }
     } catch (networkError) {
-      // Handle network errors (e.g., server is down)
       console.error('Login API call failed:', networkError);
       setError('Could not connect to the server. Please try again later.');
     } finally {
-      // This will run after the try/catch block, regardless of the outcome
       setIsLoading(false);
     }
   };
 
   return (
     <div className="ongc-login-container">
-      {/* Left Panel: Branding and Information */}
       <div className="ongc-login-left-panel">
         <img
           src={ongcLogo}
@@ -70,7 +51,6 @@ const LoginPage = ({ onLogin }) => {
         <p className="ongc-login-description">ONGC's Central Hub for Managing Contracts</p>
       </div>
 
-      {/* Right Panel: Login Form */}
       <div className="ongc-login-right-form">
         <h2 className="ongc-login-sub-heading">User Login</h2>
         <p className="ongc-login-sub-description">Please enter your credentials to continue</p>

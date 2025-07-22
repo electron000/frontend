@@ -3,24 +3,24 @@
   justify-content: center;
   align-items: center;
   margin: 16px 0;
-  gap: 8px; /* Increased gap slightly for better spacing on all screens */
-  flex-wrap: wrap; /* Allows buttons to wrap to the next line on smaller screens */
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .pagination button {
   border-radius: var(--radius-sm);
-  padding: 8px 12px; /* Adjusted padding for better touch targets and visual balance */
-  font-size: 14px; /* Slightly increased font size for better readability */
+  padding: 8px 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
   outline: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 1px 3px var(--ongc-shadow);
-  min-width: 36px; /* Increased min-width for better touch target */
-  min-height: 36px; /* Increased min-height for better touch target */
-  height: 36px; /* Increased height */
-  display: flex; /* Use flex to center content inside buttons */
+  min-width: 36px;
+  min-height: 36px;
+  height: 36px;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -45,7 +45,7 @@
 }
 
 .PButtons:hover {
-  background: linear-gradient(135deg, #E9F2EF, var(--ongc-light-gray));
+  background: linear-gradient(135deg,#E0F2F1, var(--ongc-light-gray));
   border-color: var(--ongc-green);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--ongc-shadow-hover);
@@ -69,23 +69,22 @@
 }
 
 .ellipsis {
-  padding: 4px 6px; /* Adjusted padding to align with other buttons */
-  font-size: 14px; /* Adjusted font size to match other buttons */
+  padding: 4px 6px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--ongc-medium-gray);
   line-height: 1;
 }
 
-/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .pagination {
     margin: 12px 0;
-    gap: 6px; /* Slightly reduced gap for tablets */
+    gap: 6px;
   }
 
   .pagination button {
-    padding: 6px 10px; /* Reduced padding for tablets */
-    font-size: 13px; /* Slightly reduced font size */
+    padding: 6px 10px;
+    font-size: 13px;
     min-width: 32px;
     min-height: 32px;
     height: 32px;
@@ -100,12 +99,12 @@
 @media (max-width: 480px) {
   .pagination {
     margin: 10px 0;
-    gap: 4px; /* Further reduced gap for mobile phones */
+    gap: 4px;
   }
 
   .pagination button {
-    padding: 5px 8px; /* Further reduced padding for mobile phones */
-    font-size: 12px; /* Smallest font size for mobile */
+    padding: 5px 8px;
+    font-size: 12px;
     min-width: 28px;
     min-height: 28px;
     height: 28px;

@@ -10,18 +10,12 @@ const DataTable = ({
   onEdit,
   currentPage = 1,
   rowsPerPage = 10,
-  fieldTypes = {} // Accept the new prop
+  fieldTypes = {}
 }) => {
 
-  /**
-   * Checks if a field is designated as sortable in the fieldTypes metadata.
-   * @param {string} field - The header name to check.
-   * @returns {boolean} - True if the field is sortable.
-   */
   const isSortable = (field) => {
     if (!fieldTypes || typeof fieldTypes !== 'object') return false;
     const sortableCategories = ['range', 'number', 'yearDropdown', 'date', 'yesNo'];
-    // Check if the field name exists in any of the sortable categories
     for (const category of sortableCategories) {
       if (fieldTypes[category]?.includes(field)) {
         return true;
@@ -30,12 +24,7 @@ const DataTable = ({
     return false;
   };
 
-  /**
-   * Calls setSortConfig only if the field is sortable.
-   * @param {string} field - The header name to sort by.
-   */
   const handleSort = (field) => {
-    // 🛑 Guard clause: Do nothing if the field is not sortable.
     if (!isSortable(field)) return;
 
     if (typeof setSortConfig === "function") {
@@ -44,7 +33,6 @@ const DataTable = ({
     }
   };
 
-  // Determines the sort indicator to display
   const getSortIndicator = (field) => {
     if (sortConfig?.field === field) {
       return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
@@ -52,16 +40,14 @@ const DataTable = ({
     return '';
   };
 
-  // Filter headers to only show selected fields
   const visibleHeaders = headers.filter(header => selectedFields.includes(header));
 
-  // A simple date formatter
   const formatDate = (date) => {
     if (!date || date === 'nan') return "-";
     try {
       const d = new Date(date);
       if (isNaN(d.getTime())) return "-";
-      return d.toLocaleDateString("en-GB"); // e.g., 20/07/2025
+      return d.toLocaleDateString("en-GB");
     } catch (e) {
       return "-";
     }
@@ -76,12 +62,10 @@ const DataTable = ({
               {visibleHeaders.map((header) => (
                 <th
                   key={header}
-                  // Add a class for styling and user feedback (e.g., cursor: pointer)
                   className={isSortable(header) ? 'sortable-header' : ''}
                   onClick={() => handleSort(header)}
                 >
                   {header}
-                  {/* Only show the sort indicator on sortable columns */}
                   {isSortable(header) && <span className="sort-indicator">{getSortIndicator(header)}</span>}
                 </th>
               ))}

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-// Assuming 'EditPage.css' will be modified to remove button styles
 import './EditPage.css';
+import { Button, Modal } from '../../components';
 
-/**
- * A form component to add or edit a row of data with intelligent input fields.
- */
-const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
+const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, displaySlNo }) => {
   const [formData, setFormData] = useState(rowData);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -22,18 +19,22 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
     setFormData(prev => ({ ...prev, [name]: finalValue }));
   };
 
+  // MODIFIED: handleSave is now simpler
   const handleSave = (e) => {
     e.preventDefault();
     onSave(formData);
+    // The notification and closing logic is now handled by the parent
   };
 
   const handleDeleteClick = () => {
     setIsConfirmingDelete(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (onDelete) {
-      onDelete(formData.id);
+      await onDelete(formData.id);
+      setIsConfirmingDelete(false);
+      onCancel();
     }
   };
 
@@ -52,21 +53,20 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
     if (header === "Quarterly AMC Payment Status" || header === "Post Contract Issues") {
       return (
         <div className="yes-no-toggle">
-          {/* MODIFIED: Using generic button classes for the toggle */}
-          <button
-            type="button"
-            className={`btn btn--toggle-yes ${value === 'Yes' ? 'active' : ''}`}
+          <Button
+            variant="toggle-yes"
+            isActive={value === 'Yes'}
             onClick={() => handleChange({ target: { name: header, value: 'Yes' } })}
           >
             Yes
-          </button>
-          <button
-            type="button"
-            className={`btn btn--toggle-no ${value === 'No' ? 'active' : ''}`}
+          </Button>
+          <Button
+            variant="toggle-no"
+            isActive={value === 'No'}
             onClick={() => handleChange({ target: { name: header, value: 'No' } })}
           >
             No
-          </button>
+          </Button>
         </div>
       );
     }
@@ -88,17 +88,9 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
   };
 
   return (
-    <div className="edit-page-overlay">
-      <div className="edit-page-container">
-        <button onClick={onCancel} className="close-button" aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
-        <h2>{isNew ? 'Add New Contract' : 'Edit Contract Details'}</h2>
-        {!isNew && <p>Serial Number: <strong>{rowData['SL No']}</strong></p>}
+    <>
+      <Modal title={isNew ? 'Add New Contract' : 'Edit Contract Details'} onCancel={onCancel}>
+        {!isNew && <p>Serial Number: <strong>{displaySlNo}</strong></p>}
         
         <form onSubmit={handleSave} className="edit-form">
           <div className="form-grid">
@@ -112,37 +104,35 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
 
           <div className="form-actions">
             {!isNew ? (
-              isConfirmingDelete ? (
-                <div className="confirmation-group">
-                  <span>Are you sure?</span>
-                  {/* MODIFIED: Using generic button classes */}
-                  <button type="button" onClick={handleConfirmDelete} className="btn btn--danger">
-                    Yes, Delete
-                  </button>
-                  <button type="button" onClick={() => setIsConfirmingDelete(false)} className="btn btn--outline">
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                // MODIFIED: Using generic button classes
-                <button type="button" onClick={handleDeleteClick} className="btn btn--danger">
-                  Delete Row
-                </button>
-              )
+                <Button variant="danger" onClick={handleDeleteClick}>Delete Row</Button>
             ) : (
-              <div></div> // Empty div to maintain layout
+              null
             )}
 
             <div className="main-actions">
-              {/* MODIFIED: Using generic button classes */}
-              <button type="submit" className="btn btn--green">
+              <Button type="submit" variant="green">
                 Save Changes
-              </button>
+              </Button>
             </div>
           </div>
         </form>
-      </div>
-    </div>
+      </Modal>
+
+      {isConfirmingDelete && (
+        <div className="confirmation-overlay">
+          <div className="confirmation-modal">
+            <h3>Are you sure?</h3>
+            <p>This action cannot be undone.</p>
+            <div className="confirmation-buttons">
+              <Button variant="outline" onClick={() => setIsConfirmingDelete(false)}>Cancel</Button>
+              <Button variant="danger" onClick={handleConfirmDelete}>Yes, Delete</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* REMOVED: The notification JSX is no longer here */}
+    </>
   );
 };
 

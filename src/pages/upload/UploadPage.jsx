@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-// Assuming 'UploadPage.css' will be modified to remove button styles
 import './UploadPage.css';
+import { Button, Modal } from '../../components';
 
 function UploadPage({ onCancel, onUploadSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -79,43 +79,39 @@ function UploadPage({ onCancel, onUploadSuccess }) {
   };
 
   return (
-    <div className="upload-modal-overlay" onClick={onCancel}>
-      <div className="upload-page-container" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onCancel} className="upload-page-close-button">&times;</button>
-        <h2 className="upload-page-title">Upload Contract Data</h2>
-        
-        <div 
-          className={`drop-zone ${isDragging ? 'dragging' : ''}`}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <input
-            type="file"
-            id="excel-upload"
-            accept=".xlsx"
-            onChange={handleFileChange}
-            className="upload-page-input-file"
-          />
-          <label htmlFor="excel-upload" className="drop-zone-label">
-            <svg className="upload-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            {selectedFile ? (
-              <span>Selected: <strong>{selectedFile.name}</strong></span>
-            ) : (
-              <span>Drag & Drop your .xlsx file here, or <strong>click to select</strong></span>
-            )}
-          </label>
-        </div>
+    <Modal title="Upload Contract Data" onCancel={onCancel}>
+      <div 
+        className={`drop-zone ${isDragging ? 'dragging' : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          id="excel-upload"
+          accept=".xlsx"
+          onChange={handleFileChange}
+          className="upload-page-input-file"
+        />
+        <label htmlFor="excel-upload" className="drop-zone-label">
+          <svg className="upload-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          {selectedFile ? (
+            <span>Selected: <strong>{selectedFile.name}</strong></span>
+          ) : (
+            <span>Drag & Drop your .xlsx file here, or <strong>click to select</strong></span>
+          )}
+        </label>
+      </div>
 
-        {/* MODIFIED: Using generic button classes */}
-        <button
+      <div className="upload-page-actions">
+        <Button
+          variant="blue"
           onClick={handleUpload}
           disabled={!selectedFile || loading}
-          className="btn btn--blue"
         >
           {loading ? 'Uploading...' : 'Upload'}
-        </button>
+        </Button>
 
         {uploadStatus.message && (
           <p className={uploadStatus.type === 'success' ? 'upload-page-status-success' : 'upload-page-status-error'}>
@@ -127,7 +123,7 @@ function UploadPage({ onCancel, onUploadSuccess }) {
           * Uploading a new file will replace all existing contract data.
         </p>
       </div>
-    </div>
+    </Modal>
   );
 }
 

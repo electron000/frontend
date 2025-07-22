@@ -3,8 +3,8 @@ import { saveAs } from 'file-saver';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-// Assuming 'CombinedPanel.css' no longer contains button styles
 import './CombinedPanel.css';
+import Button from '../Button/Button';
 
 const CombinedPanel = ({
   headers,
@@ -25,7 +25,6 @@ const CombinedPanel = ({
   sortConfig,
   resetSort
 }) => {
-  // State management
   const inputRef = useRef(null);
   const [fileName, setFileName] = useState("Contracts_Details");
   const [isExporting, setIsExporting] = useState(false);
@@ -33,15 +32,12 @@ const CombinedPanel = ({
   const [exportFormat, setExportFormat] = useState('xlsx');
   const [message, setMessage] = useState('');
 
-  // Focus input on filter field change
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, [filterField]);
 
-  // Destructure field types for easier access
   const { range = [], number = [], yearDropdown = [], date = [], yesNo = [] } = fieldTypes || {};
 
-  // Helper function to get the type of a given field
   const getFieldType = (field) => {
     if (!field) return null;
     if (range.includes(field) || number.includes(field) || yearDropdown.includes(field)) return 'range';
@@ -212,7 +208,6 @@ const CombinedPanel = ({
  return (
   <>
     <div className="panel-container">
-      {/* Panel 1: Filtering */}
       <div className="panel-row filter-panel">
         <div className="filter-controls-group">
           <select value={filterField} onChange={handleFilterFieldChange} className="filter-input field-selector">
@@ -223,14 +218,12 @@ const CombinedPanel = ({
           {renderInput()}
 
           <div className="button-group">
-            {/* MODIFIED: Using generic button classes */}
-            <button className="btn btn--green" onClick={onApply} disabled={!filterField}>Apply</button>
-            <button className="btn btn--danger" onClick={handleClear}>Clear</button>
+            <Button variant="green" onClick={onApply} disabled={!filterField}>Apply</Button>
+            <Button variant="danger" onClick={handleClear}>Clear</Button>
           </div>
         </div>
       </div>
 
-      {/* Panel 2: Export */}
       <div className="panel-row export-panel">
         <div className="export-controls-group">
           <div className="input-group filename-group">
@@ -243,13 +236,14 @@ const CombinedPanel = ({
             <option value="pdf">PDF</option>
           </select>
           <div className="button-group">
-            {/* MODIFIED: Using generic button classes */}
-            <button className="btn btn--blue" onClick={handleExport} disabled={isExporting}>
+            <Button variant="blue" onClick={handleExport} disabled={isExporting}>
               {isExporting ? "Exporting..." : "Export"}
-            </button>
-            <button className={`btn ${showFieldSelection ? "btn--danger" : "btn--outline"}`}
-        onClick={() => setShowFieldSelection(!showFieldSelection)}>{showFieldSelection ? "Hide" : "Columns"}
-      </button>
+            </Button>
+            <Button 
+              variant={showFieldSelection ? "danger" : "outline"}
+              onClick={() => setShowFieldSelection(!showFieldSelection)}>
+              {showFieldSelection ? "Hide" : "Columns"}
+            </Button>
           </div>
         </div>
       </div>
@@ -259,11 +253,11 @@ const CombinedPanel = ({
       <div className="field-selection-container">
         <div className="field-selection-header">
           <h3 className="field-selection-title">Select Columns</h3>
-          {/* MODIFIED: Using generic button classes */}
-          <button
-        className={`btn ${selectedFields.length === headers.length ? "btn--danger" : "btn--green"}`}onClick={toggleAllFields}>
-        {selectedFields.length === headers.length ? "Deselect" : "Select"}
-      </button>
+          <Button
+            variant={selectedFields.length === headers.length ? "danger" : "green"}
+            onClick={toggleAllFields}>
+            {selectedFields.length === headers.length ? "Deselect All" : "Select All"}
+          </Button>
         </div>
         <div className="field-selection-table-container">
           <table className="field-selection-table">

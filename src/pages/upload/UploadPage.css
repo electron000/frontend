@@ -1,4 +1,3 @@
-/* === Modal Overlay (for UploadPage) === */
 .upload-modal-overlay {
     position: fixed;
     top: 0;
@@ -14,32 +13,29 @@
     box-sizing: border-box;
 }
 
-/* === Upload Modal Container === */
 .upload-page-container {
     font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    max-width: 600px;
+    max-width: 520px;
     width: 100%;
     padding: 40px;
     border: 1px solid var(--ongc-border);
     border-radius: var(--radius-lg);
-    background-color: var(--ongc-white);
+    background-color: #ffffff;
     box-shadow: 0 10px 30px var(--ongc-shadow);
-    text-align: center;
     position: relative;
-    overflow: hidden;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }
 
-
-/* === Close Button (Unique style, so it remains here) === */
 .upload-page-close-button {
     position: absolute;
     top: 15px;
     right: 15px;
     background: none;
     border: none;
-    font-size: 2em;
-    line-height: 1;
+    font-size: 1.5rem;
     cursor: pointer;
     color: var(--ongc-medium-gray);
     z-index: 10;
@@ -51,21 +47,19 @@
     transform: rotate(90deg);
 }
 
-
-/* === Title === */
 .upload-page-title {
     color: var(--ongc-dark-gray);
     margin-top: 0;
-    margin-bottom: 30px;
-    font-size: var(--font-2xl, 1.5rem);
+    margin-bottom: 20px;
+    font-size: 1.25rem;
     font-weight: 700;
+    width: 100%;
+    text-align: center;
 }
 
-
-/* === Drag & Drop Zone === */
 .drop-zone {
-    margin-bottom: 30px;
-    padding: 40px 20px;
+    width: 100%; /* Make drop-zone take full width */
+    padding: 50px 20px; /* Increased vertical padding for more height */
     border: 2px dashed var(--ongc-border);
     border-radius: var(--radius-md);
     background-color: var(--ongc-light-gray);
@@ -85,14 +79,10 @@
     background-color: #e6efff;
 }
 
-
-/* === Hidden File Input === */
 .upload-page-input-file {
     display: none;
 }
 
-
-/* === Label Inside Drop Zone === */
 .drop-zone-label {
     display: flex;
     flex-direction: column;
@@ -107,7 +97,7 @@
 
 .drop-zone-label .upload-icon {
     color: var(--ongc-info);
-    font-size: 3em;
+    font-size: 2.5em;
     transition: transform 0.3s ease;
 }
 
@@ -120,14 +110,34 @@
     font-weight: 600;
 }
 
-/* === Status Messages === */
+/* NEW: Container for button and messages */
+.upload-page-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 25px; /* Space between drop-zone and actions */
+    gap: 15px; /* Space between button, status, and note */
+}
+
+/* Specific styling for the Upload button */
+.upload-page-actions .btn {
+    width: 50%;
+    max-width: 200px;
+    font-size: 1rem;
+    padding: 12px 0;
+}
+
+
 .upload-page-status-success,
 .upload-page-status-error {
-    margin-top: 25px;
-    padding: 15px;
+    padding: 12px;
     border-radius: var(--radius-md);
     font-weight: 600;
-    font-size: var(--font-sm, 0.875rem);
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .upload-page-status-success {
@@ -142,92 +152,9 @@
     border: 1px solid #fca5a5;
 }
 
-
-/* === Upload Info Note === */
 .upload-page-note {
-    margin-top: 40px;
     font-size: var(--font-sm, 0.875rem);
     color: var(--ongc-medium-gray);
     line-height: 1.4;
-}
-
-
-/* ==========================================================================
-   Responsive Styles
-   ========================================================================== */
-
-@media (max-width: 768px) {
-    .upload-page-container {
-        padding: 25px;
-        max-width: 90%;
-    }
-    .drop-zone {
-        padding: 30px 15px;
-        margin-bottom: 25px;
-    }
-    .upload-page-title {
-        font-size: 1.25rem;
-        margin-bottom: 25px;
-    }
-    .drop-zone-label {
-        font-size: 0.95rem;
-    }
-    .upload-page-note {
-        font-size: 0.8rem;
-        margin-top: 30px;
-    }
-    .upload-page-close-button {
-        font-size: 1.5rem;
-        top: 10px;
-        right: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .upload-modal-overlay {
-        padding: 15px;
-        align-items: center;
-    }
-    .upload-page-container {
-        padding: 20px;
-        width: 100%;
-        max-width: 100%;
-        border-radius: var(--radius-md);
-    }
-    .upload-page-close-button {
-        font-size: 1.4em;
-        top: 12px;
-        right: 12px;
-    }
-    .upload-page-title {
-        font-size: 1.15rem;
-        margin-bottom: 20px;
-    }
-    .drop-zone {
-        padding: 25px 10px;
-        margin-bottom: 20px;
-    }
-    .drop-zone-label {
-        font-size: 0.9rem;
-        gap: 0.75rem;
-    }
-    .drop-zone-label .upload-icon {
-        font-size: 2.5em;
-    }
-    /* MODIFIED: Target the generic .btn class for mobile responsiveness */
-    .upload-page-container .btn {
-        padding: 12px 20px;
-        font-size: 0.95rem;
-        width: 100%;
-    }
-    .upload-page-status-success,
-    .upload-page-status-error {
-        margin-top: 20px;
-        padding: 12px;
-        font-size: 0.85rem;
-    }
-    .upload-page-note {
-        margin-top: 20px;
-        font-size: 0.8rem;
-    }
+    text-align: center;
 }
