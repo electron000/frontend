@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-
-// Import your page components
 import LoginPage from './pages/login/LoginPage'; 
 import Leaderboard from './pages/ongc-contracts/Leaderboard';
 
@@ -12,13 +10,12 @@ const ProtectedRoute = ({ isAuthenticated, children }) => {
   return children;
 };
 
-// Inline wrapper to access useNavigate properly
 const LoginRoute = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
-    onLogin(); // Set auth state in the main App component
-    navigate('/ongc-contracts'); // Redirect to the leaderboard page
+    onLogin(); 
+    navigate('/ongc-contracts'); 
   };
 
   return <LoginPage onLogin={handleLoginSuccess} />;

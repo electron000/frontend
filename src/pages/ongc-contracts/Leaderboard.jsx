@@ -13,21 +13,24 @@ const Leaderboard = ({ onLogout }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortConfig, setSortConfig] = useState({ field: 'SL No', direction: 'asc' });
+  
   const [filterField, setFilterField] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [rangeValues, setRangeValues] = useState(["", ""]);
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [activeFilters, setActiveFilters] = useState({});
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
   const [isNewRow, setIsNewRow] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  
   const [dynamicHeaders, setDynamicHeaders] = useState([]);
-  const [dynamicFieldTypes, setDynamicFieldTypes] = useState({});
+  const [dynamicFieldTypes, setDynamicFieldTypes] = useState({ numeric: [], date: [], text: [] });
   const [selectedFields, setSelectedFields] = useState([]); 
-  const [editingDisplaySlNo, setEditingDisplaySlNo] = useState(null);
+
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
 
   const arraysAreEqual = (arr1, arr2) => {
@@ -50,51 +53,25 @@ const Leaderboard = ({ onLogout }) => {
     });
     try {
       const response = await axios.get(`${API_URL}?${params.toString()}`);
-      const fetchedData = response.data.data || [];
-      const fetchedTotalPages = response.data.totalPages || 0;
+      const { data, totalPages: fetchedTotalPages, headers, fieldTypes } = response.data;
 
-      setCurrentData(fetchedData);
-      setTotalPages(fetchedTotalPages);
+      setCurrentData(data || []);
+      setTotalPages(fetchedTotalPages || 0);
 
-      if (fetchedData.length === 0 && currentPage > 1 && currentPage > fetchedTotalPages) {
+      if ((data || []).length === 0 && currentPage > 1 && currentPage > fetchedTotalPages) {
         setCurrentPage(fetchedTotalPages > 0 ? fetchedTotalPages : 1);
       }
 
-      if (response.data.headers && response.data.fieldTypes) {
-        const newHeaders = response.data.headers;
-        const newFieldTypes = response.data.fieldTypes;
-
-        setDynamicHeaders(prevHeaders => 
-          arraysAreEqual(prevHeaders, newHeaders) ? prevHeaders : newHeaders
-        );
-        
-        setDynamicFieldTypes(newFieldTypes); 
-        
-        setSelectedFields(prevSelected => 
-          (resetSelectedFields || prevSelected.length === 0) ? newHeaders : prevSelected
-        );
-
+      if (headers && fieldTypes) {
+        setDynamicHeaders(prev => arraysAreEqual(prev, headers) ? prev : headers);
+        setDynamicFieldTypes(fieldTypes); 
+        setSelectedFields(prev => (resetSelectedFields || prev.length === 0) ? headers : prev);
       } else {
-        setDynamicHeaders([]);
-        setDynamicFieldTypes({});
-        setSelectedFields([]); 
-        setError("Backend did not provide headers or fieldTypes metadata.");
+        setError("Backend did not provide required metadata (headers, fieldTypes).");
       }
-
     } catch (err) {
       console.error("Fetch data error:", err);
-      if (err.response) {
-        setError(`Failed to fetch data: ${err.response.status} - ${err.response.data?.error || err.response.statusText}`);
-      } else if (err.request) {
-        setError("Failed to fetch data: No response from server. Check network connection or backend server status.");
-      } else {
-        setError(`Failed to fetch data: ${err.message}. Please ensure the backend server is running and provides headers/fieldTypes.`);
-      }
-      setCurrentData([]);
-      setTotalPages(0);
-      setDynamicHeaders([]);
-      setDynamicFieldTypes({});
-      setSelectedFields([]);
+      setError(err.response?.data?.error || "Failed to fetch data. Check backend server status.");
     } finally {
       setLoading(false);
     }
@@ -108,13 +85,13 @@ const Leaderboard = ({ onLogout }) => {
     const newFilters = {};
     if (filterField) {
       newFilters.filterField = filterField;
-      if (dynamicFieldTypes.range?.includes(filterField) || dynamicFieldTypes.number?.includes(filterField) || dynamicFieldTypes.yearDropdown?.includes(filterField)) {
+      if (dynamicFieldTypes.numeric?.includes(filterField)) {
         newFilters.minRange = rangeValues[0];
         newFilters.maxRange = rangeValues[1];
       } else if (dynamicFieldTypes.date?.includes(filterField)) {
         newFilters.fromDate = dateRange.from;
         newFilters.toDate = dateRange.to;
-      } else {
+      } else { 
         newFilters.filterValue = filterValue;
       }
     }
@@ -147,14 +124,12 @@ const Leaderboard = ({ onLogout }) => {
       }
       setIsEditing(false);
       await fetchData();
-      
-      const message = wasNewRow ? 'New Row Added' : 'Your Edits are Saved';
+      const message = wasNewRow ? 'New Contract Added Successfully' : 'Changes Have Been Saved';
       setNotification({ show: true, message, type: 'success' });
       setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
-
     } catch (err) {
       console.error("Save error:", err);
-      setError("Failed to save the contract.");
+      setError("Failed to save the contract");
     }
   };
 
@@ -164,14 +139,13 @@ const Leaderboard = ({ onLogout }) => {
       await fetchData();
     } catch (err) {
       console.error("Delete error:", err);
-      setError("Failed to delete the contract.");
+      setError("Failed to delete the contract");
     }
   };
 
-  const handleEditClick = useCallback((row, sl) => {
+  const handleEditClick = useCallback((row) => {
     setIsNewRow(false);
     setEditingRow(row);
-    setEditingDisplaySlNo(sl);
     setIsEditing(true);
   }, []);
 
@@ -179,7 +153,6 @@ const Leaderboard = ({ onLogout }) => {
     setIsNewRow(true);
     const newRowObject = dynamicHeaders.reduce((acc, header) => ({ ...acc, [header]: '' }), {});
     setEditingRow(newRowObject);
-    setEditingDisplaySlNo(null);
     setIsEditing(true);
   };
 
@@ -187,7 +160,7 @@ const Leaderboard = ({ onLogout }) => {
     setShowUploadModal(false); 
     setNotification({ 
       show: true, 
-      message: errorMessage || 'Database Update was Unsuccessful', 
+      message: errorMessage || 'Database update was Unsuccessful', 
       type: 'error' 
     });
     setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 4000);
@@ -218,6 +191,7 @@ const Leaderboard = ({ onLogout }) => {
         activeFilters={activeFilters}
         sortConfig={sortConfig}
         resetSort={handleResetSort}
+        setNotification={setNotification}
       />
 
       <div className="data-section">
@@ -226,7 +200,7 @@ const Leaderboard = ({ onLogout }) => {
 
         {!loading && !error && (
           !currentData.length && dynamicHeaders.length === 0 ? (
-            <div className="no-results">No data or headers found. Please upload an Excel file.</div>
+            <div className="no-results">No data found. Please upload an Excel file.</div>
           ) : !currentData.length ? (
             <div className="no-results">No records found for the current filter.</div>
           ) : (
@@ -237,8 +211,6 @@ const Leaderboard = ({ onLogout }) => {
               sortConfig={sortConfig}
               setSortConfig={setSortConfig}
               onEdit={handleEditClick}
-              currentPage={currentPage}
-              rowsPerPage={10}
               fieldTypes={dynamicFieldTypes}
             />
           )
@@ -252,8 +224,8 @@ const Leaderboard = ({ onLogout }) => {
       />
 
       <div className="bottom-action-buttons-container">
-        <Button variant="green" onClick={handleAddClick}>+ New</Button>
-        <Button variant="blue" onClick={() => setShowUploadModal(true)}>Upload</Button>
+        <Button variant="blue" onClick={() => setShowUploadModal(true)}>Update Database</Button>
+        <Button variant="green" onClick={handleAddClick}>Add Contract</Button>
       </div>
 
       {isEditing && (
@@ -261,10 +233,9 @@ const Leaderboard = ({ onLogout }) => {
           rowData={editingRow}
           onSave={handleSave}
           onCancel={() => setIsEditing(false)}
-          onDelete={handleDeleteRow}
+          onDelete={() => handleDeleteRow(editingRow.id)}
           headers={dynamicHeaders}
           isNew={isNewRow}
-          displaySlNo={editingDisplaySlNo}
         />
       )}
 

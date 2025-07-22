@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
 import axios from 'axios';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import './CombinedPanel.css';
 import Button from '../Button/Button';
 
@@ -23,47 +21,57 @@ const CombinedPanel = ({
   setSelectedFields,
   activeFilters,
   sortConfig,
-  resetSort
+  resetSort,
+  setNotification
 }) => {
   const inputRef = useRef(null);
-  const [fileName, setFileName] = useState("Contracts_Details");
+  const [fileName, setFileName] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const [showFieldSelection, setShowFieldSelection] = useState(false);
   const [exportFormat, setExportFormat] = useState('xlsx');
-  const [message, setMessage] = useState('');
+
+  const API_BASE_URL = 'https://backend-2m6l.onrender.com';
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
   }, [filterField]);
 
-  const { range = [], number = [], yearDropdown = [], date = [], yesNo = [] } = fieldTypes || {};
-
   const getFieldType = (field) => {
-    if (!field) return null;
-    if (range.includes(field) || number.includes(field) || yearDropdown.includes(field)) return 'range';
-    if (date.includes(field)) return 'date';
-    if (yesNo.includes(field)) return 'yesNo';
+    if (!field || !fieldTypes) return 'text';
+    if (fieldTypes.numeric?.includes(field)) return 'numeric';
+    if (fieldTypes.date?.includes(field)) return 'date';
     return 'text';
   };
 
   const getCleanFilters = () => {
     const cleanFilters = {};
     for (const key in activeFilters) {
-        if (activeFilters[key] !== "" && activeFilters[key] !== null) {
-            cleanFilters[key] = activeFilters[key];
-        }
+      if (activeFilters[key] !== "" && activeFilters[key] !== null) {
+        cleanFilters[key] = activeFilters[key];
+      }
     }
     return cleanFilters;
   };
 
-  const showMessage = (msg) => {
-    setMessage(msg);
-    setTimeout(() => setMessage(''), 3000);
-  };
-
   const handleServerExport = async (format) => {
     setIsExporting(true);
+    const hideNotification = () => {
+      setTimeout(() => {
+        setNotification(prev => ({ ...prev, show: false }));
+      }, 3000);
+    };
+
     try {
+      if (selectedFields.length === 0) {
+        setNotification({ show: true, message: 'Please select at least one column to export.', type: 'error' });
+        hideNotification();
+        setIsExporting(false);
+        return;
+      }
+
+      // Use a default name for saving the file locally.
+      const finalFileNameForSave = fileName || "Contracts_Details";
+
       const params = new URLSearchParams({
         format,
         sortField: sortConfig?.field || '',
@@ -71,79 +79,33 @@ const CombinedPanel = ({
         selectedFields: selectedFields.join(','),
         ...getCleanFilters(),
       });
-      const response = await axios.get(`https://backend-2m6l.onrender.com/api/export?${params}`, { responseType: 'blob' });
-      saveAs(response.data, `${fileName}.${format}`);
+
+      // Only add the 'fileName' parameter if the user has typed one.
+      if (fileName) {
+        params.append('fileName', fileName);
+      }
+
+      const response = await axios.get(`${API_BASE_URL}/api/export?${params}`, {
+        responseType: 'blob'
+      });
+
+      saveAs(response.data, `${finalFileNameForSave}.${format}`);
+
+      setNotification({ show: true, message: 'Export Successful!', type: 'info' });
+      hideNotification();
+
     } catch (error) {
       console.error("Export error:", error);
-      showMessage("Export failed. Please check the console for more details.");
+      setNotification({ show: true, message: 'Export Failed', type: 'error' });
+      hideNotification();
     } finally {
       setIsExporting(false);
     }
   };
 
-  const exportToPDF = async () => {
-    setIsExporting(true);
-    try {
-      const params = new URLSearchParams({
-        sortField: sortConfig?.field || '',
-        sortDirection: sortConfig?.direction || '',
-        selectedFields: selectedFields.join(','),
-        ...getCleanFilters()
-      });
-      const response = await axios.get(`https://backend-2m6l.onrender.com/api/contracts?${params}`);
-      const allData = response.data.data || response.data;
-
-      const numCols = selectedFields.length;
-      let format = 'a4';
-      if (numCols > 10) format = 'a3';
-      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format });
-      
-      const scale = Math.max(0.45, 1 - (numCols / 30));
-      const fontSize = 10 * scale;
-      const titleSize = 16 * scale;
-      const cellPadding = 2.5 * scale;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(titleSize);
-      doc.text(fileName.replace(/_/g, ' '), 14, 14);
-
-      autoTable(doc, {
-        startY: 22,
-        head: [selectedFields.map(h => h.replace(/\s*\(₹\)/, ' (INR)'))],
-        body: allData.map(row => selectedFields.map(h => row[h]?.toString() || "")),
-        theme: 'grid',
-        tableWidth: 'auto',
-        margin: { top: 30, left: 10, right: 10 },
-        styles: { fontSize, fontStyle: 'normal', font: 'helvetica', halign: 'center', valign: 'middle', textColor: [26, 26, 26], lineColor: [210, 210, 210], lineWidth: 0.3, fillColor: [249, 249, 246], cellPadding },
-        headStyles: { fontSize: fontSize + 1.2, fontStyle: 'bold', textColor: [255, 255, 255], fillColor: [45, 106, 79], halign: 'center', valign: 'middle', cellPadding },
-        alternateRowStyles: { fillColor: [233, 242, 239] },
-        didDrawPage: (data) => {
-          const pageCount = doc.internal.getNumberOfPages();
-          doc.setFontSize(9);
-          doc.setTextColor(120);
-          doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
-        }
-      });
-
-      doc.save(`${fileName}.pdf`);
-    } catch (error) {
-      console.error("PDF Export Error:", error);
-      showMessage("Export failed. Try reducing the number of selected fields.");
-    } finally {
-      setIsExporting(false);
-    }
-  };
 
   const handleExport = () => {
-    if (selectedFields.length === 0) {
-      showMessage("Please select at least one column to export.");
-      return;
-    }
-    if (exportFormat === 'pdf') {
-      exportToPDF();
-    } else {
-      handleServerExport(exportFormat);
-    }
+    handleServerExport(exportFormat);
   };
 
   const renderInput = () => {
@@ -151,9 +113,7 @@ const CombinedPanel = ({
     const fieldType = getFieldType(filterField);
 
     switch (fieldType) {
-      case 'range':
-      case 'number':
-      case 'yearDropdown':
+      case 'numeric':
         return (
           <div className="input-group">
             <input ref={inputRef} type="number" placeholder="From" value={rangeValues[0]} onChange={(e) => setRangeValues([e.target.value, rangeValues[1]])} className="filter-input"/>
@@ -167,17 +127,9 @@ const CombinedPanel = ({
             <input type="date" value={dateRange.to} onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })} className="filter-input"/>
           </div>
         );
-      case 'yesNo':
-        return (
-          <select ref={inputRef} value={filterValue} onChange={(e) => setFilterValue(e.target.value)} className="filter-input">
-            <option value="">Select</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        );
       case 'text':
       default:
-        return (<input ref={inputRef} type="text" value={filterValue} onChange={(e) => setFilterValue(e.target.value)} placeholder="Enter search text..." className="filter-input text-search"/>);
+        return (<input ref={inputRef} type="text" value={filterValue} onChange={(e) => setFilterValue(e.target.value)} placeholder={`Search in ${filterField}...`} className="filter-input text-search"/>);
     }
   };
 
@@ -228,18 +180,25 @@ const CombinedPanel = ({
         <div className="export-controls-group">
           <div className="input-group filename-group">
             <label htmlFor="filename" className="input-label">File Name:</label>
-            <input id="filename" value={fileName} onChange={(e) => setFileName(e.target.value)} className="filter-input"/>
+            <input
+              id="filename"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+              className="filter-input"
+              placeholder="File Name (optional)"
+            />
           </div>
           <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)} className="filter-input format-selector">
             <option value="xlsx">Excel</option>
             <option value="csv">CSV</option>
             <option value="pdf">PDF</option>
+            <option value="docx">Word</option>
           </select>
           <div className="button-group">
             <Button variant="blue" onClick={handleExport} disabled={isExporting}>
               {isExporting ? "Exporting..." : "Export"}
             </Button>
-            <Button 
+            <Button
               variant={showFieldSelection ? "danger" : "outline"}
               onClick={() => setShowFieldSelection(!showFieldSelection)}>
               {showFieldSelection ? "Hide" : "Columns"}
@@ -277,11 +236,6 @@ const CombinedPanel = ({
             </tbody>
           </table>
         </div>
-      </div>
-    )}
-    {message && (
-      <div className="fixed bottom-4 right-4 p-3 bg-red-100 text-red-700 rounded-md shadow-lg z-50">
-        {message}
       </div>
     )}
   </>

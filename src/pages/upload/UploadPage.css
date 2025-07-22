@@ -126,7 +126,6 @@
     padding: 12px 0;
 }
 
-/* This rule is no longer needed but is kept for file validation messages */
 .upload-page-status-error {
     padding: 12px;
     border-radius: var(--radius-md);

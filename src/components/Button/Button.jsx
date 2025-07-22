@@ -1,6 +1,5 @@
 import React from 'react';
 
-// A flexible, reusable button component
 const Button = ({ 
   children, 
   onClick, 
@@ -11,16 +10,12 @@ const Button = ({
   isActive,
   ...props 
 }) => {
-  // Base class is always 'btn'
   const baseClass = 'btn';
 
-  // Determine the variant class
   const variantClass = variant ? `btn--${variant}` : '';
   
-  // Determine if the 'active' class should be applied (for toggle buttons)
   const activeClass = isActive ? 'active' : '';
 
-  // Combine all classes
   const combinedClassName = `${baseClass} ${variantClass} ${activeClass} ${className}`.trim();
 
   return (

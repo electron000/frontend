@@ -14,7 +14,7 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
       setInternalError('');
     } else {
       setSelectedFile(null);
-      setInternalError('Please select or drop a valid .xlsx file.');
+      setInternalError('Please select or drop a valid .xlsx file');
     }
   };
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './EditPage.css';
 import { Button, Modal } from '../../components';
 
-const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, displaySlNo }) => {
+const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
   const [formData, setFormData] = useState(rowData);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -19,11 +19,9 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
     setFormData(prev => ({ ...prev, [name]: finalValue }));
   };
 
-  // MODIFIED: handleSave is now simpler
   const handleSave = (e) => {
     e.preventDefault();
     onSave(formData);
-    // The notification and closing logic is now handled by the parent
   };
 
   const handleDeleteClick = () => {
@@ -32,7 +30,7 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
 
   const handleConfirmDelete = async () => {
     if (onDelete) {
-      await onDelete(formData.id);
+      await onDelete(); 
       setIsConfirmingDelete(false);
       onCancel();
     }
@@ -76,8 +74,8 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
       return <input type="date" {...commonProps} value={dateValue} />;
     }
 
-    if (header.includes('(₹)') || header.toLowerCase().includes('amount') || header.toLowerCase().includes('(yr)')) {
-      return <input type="number" step="1" placeholder="0" {...commonProps} />;
+    if (header.includes('(₹)') || header.toLowerCase().includes('amount') || header.toLowerCase().includes('(yr)') || header.toLowerCase().includes('number') || header.toLowerCase().includes('no')) {
+      return <input type="number" step="any" placeholder="0" {...commonProps} />;
     }
 
     if (header.includes('Remarks')) {
@@ -90,7 +88,7 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
   return (
     <>
       <Modal title={isNew ? 'Add New Contract' : 'Edit Contract Details'} onCancel={onCancel}>
-        {!isNew && <p>Serial Number: <strong>{displaySlNo}</strong></p>}
+        {!isNew && <p>Serial Number: <strong>{rowData['SL No']}</strong></p>}
         
         <form onSubmit={handleSave} className="edit-form">
           <div className="form-grid">
@@ -103,15 +101,16 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
           </div>
 
           <div className="form-actions">
-            {!isNew ? (
-                <Button variant="danger" onClick={handleDeleteClick}>Delete Row</Button>
-            ) : (
-              null
+            {!isNew && (
+              <Button variant="danger" onClick={handleDeleteClick}>Delete Row</Button>
             )}
 
             <div className="main-actions">
               <Button type="submit" variant="green">
                 Save Changes
+              </Button>
+              <Button type="button" variant="outline" onClick={onCancel}>
+                Cancel
               </Button>
             </div>
           </div>
@@ -130,8 +129,6 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, display
           </div>
         </div>
       )}
-
-      {/* REMOVED: The notification JSX is no longer here */}
     </>
   );
 };

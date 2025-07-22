@@ -1,9 +1,6 @@
 import React from 'react';
 
-// A generic modal component with an overlay and close button.
-// NOTE: It uses the CSS classes from 'EditPage.css' for styling.
 const Modal = ({ children, onCancel, title }) => {
-  // Prevents the modal from closing when clicking inside the content area
   const handleContainerClick = (e) => e.stopPropagation();
 
   return (

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 16px 0;
+  margin: 10px 0;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -39,7 +39,7 @@
 }
 
 .PButtons {
-  background: linear-gradient(135deg, var(--ongc-light-gray), var(--ongc-white));
+  background: linear-gradient(135deg, #ffffff, var(--ongc-white));
   color: var(--ongc-dark-gray);
   border-color: var(--ongc-border);
 }

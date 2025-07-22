@@ -1,3 +1,10 @@
+.leaderboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; 
+  padding: 1rem;
+}
+
 .leaderboard-header {
     display: flex;
     justify-content: space-between;
@@ -21,7 +28,7 @@
 }
 
 .bottom-action-buttons-container {
-    margin-top: 20px;
+    margin-top: 15px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -125,8 +132,6 @@
         padding: 6px 12px;
     }
 }
-
-/* --- Notification Modal Styles --- */
 
 .notification-overlay {
     position: fixed;

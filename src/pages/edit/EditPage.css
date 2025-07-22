@@ -116,9 +116,9 @@
 }
 
 .form-input:focus {
-   outline: none; /* MODIFIED: Removes the default black border */
+   outline: none; 
    background-color: #ffffff;
-   border-color: var(--ongc-green, #2D6A4F); /* Sets border color to match the glow */
+   border-color: var(--ongc-green, #2D6A4F); 
    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
@@ -179,8 +179,6 @@ textarea.form-input {
     margin-left: auto;
 }
 
-/* --- Responsive Layouts --- */
-
 @media (max-width: 768px) {
     .edit-page-container {
         padding: 1.5rem;
@@ -234,8 +232,6 @@ textarea.form-input {
         width: 100%;
     }
 }
-
-/* --- MODIFIED: Confirmation Modal Only --- */
 
 .confirmation-overlay {
     position: fixed;

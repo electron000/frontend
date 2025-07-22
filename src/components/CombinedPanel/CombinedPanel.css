@@ -36,7 +36,7 @@
 }
 
 .filter-input:focus {
-    outline: none; /* MODIFIED: This removes the default black border on click */
+    outline: none; 
     background-color: #ffffff;
 }
 
@@ -73,9 +73,11 @@
 }
 
 .field-selection-container {
-    max-width: 1400px;
-    margin: 0.5rem auto;
-    padding: 0 1rem;
+  max-width: 1400px;
+  margin: 0.5rem auto;
+  padding: 0 1rem;
+  width: 100%; 
+  box-sizing: border-box; 
 }
 
 .field-selection-header {
