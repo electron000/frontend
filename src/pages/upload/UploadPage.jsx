@@ -6,15 +6,15 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [internalError, setInternalError] = useState(''); // For file type validation
+  const [internalError, setInternalError] = useState('');
 
   const validateAndSetFile = (file) => {
     if (file && file.name.endsWith('.xlsx')) {
       setSelectedFile(file);
-      setInternalError(''); // Clear error on valid file
+      setInternalError('');
     } else {
       setSelectedFile(null);
-      setInternalError('Please select or drop a valid .xlsx file.'); // Set internal error
+      setInternalError('Please select or drop a valid .xlsx file.');
     }
   };
 
@@ -51,7 +51,7 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
     }
 
     setLoading(true);
-    setInternalError(''); // Clear any previous errors
+    setInternalError('');
     const formData = new FormData();
     formData.append('file', selectedFile);
 
@@ -60,10 +60,15 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
         method: 'POST',
         body: formData,
       });
-      
-      if (response.ok) {
+
+      // MODIFIED: We must now read the JSON response to check for logical errors
+      const data = await response.json();
+
+      // Check for both network success AND no logical error in the response data
+      if (response.ok && !data.error) {
         if (onUploadSuccess) onUploadSuccess();
       } else {
+        // If response is not ok OR if there is an error message in the data
         if (onUploadError) onUploadError();
       }
     } catch (error) {
@@ -109,7 +114,6 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
           {loading ? 'Uploading...' : 'Upload'}
         </Button>
 
-        {/* The success/error messages are now only shown on the main page */}
         {internalError && (
           <p className="upload-page-status-error">{internalError}</p>
         )}

@@ -150,7 +150,7 @@ const Leaderboard = ({ onLogout }) => {
       
       const message = wasNewRow ? 'New Row Added' : 'Your Edits are Saved';
       setNotification({ show: true, message, type: 'success' });
-      setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 2000);
+      setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
 
     } catch (err) {
       console.error("Save error:", err);
@@ -185,9 +185,9 @@ const Leaderboard = ({ onLogout }) => {
 
   const handleUploadError = () => {
     setShowUploadModal(false); 
-    // MODIFIED: Updated error message
     setNotification({ show: true, message: 'Database Update was Unsuccessful', type: 'error' });
-    setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 3000);
+    // MODIFIED: This now only hides the notification, without changing its type
+    setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 3000);
   };
 
   return (
@@ -273,7 +273,8 @@ const Leaderboard = ({ onLogout }) => {
             setCurrentPage(1);
             fetchData(true);
             setNotification({ show: true, message: 'Database Updated Successfully', type: 'info' });
-            setTimeout(() => setNotification({ show: false, message: '', type: 'success' }), 2000);
+            // MODIFIED: This now only hides the notification, without changing its type
+            setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
           }}
           onUploadError={handleUploadError}
         />
