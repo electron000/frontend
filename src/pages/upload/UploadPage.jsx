@@ -61,14 +61,16 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
         body: formData,
       });
 
-      // MODIFIED: We must now read the JSON response to check for logical errors
+      // MODIFIED: We must read the JSON response first to check for logical errors.
       const data = await response.json();
 
-      // Check for both network success AND no logical error in the response data
+      // This is the critical check:
+      // It ensures the network request was OK (status 200-299)
+      // AND that the server's response does NOT contain an 'error' field.
       if (response.ok && !data.error) {
         if (onUploadSuccess) onUploadSuccess();
       } else {
-        // If response is not ok OR if there is an error message in the data
+        // This will now catch both network errors and logical errors from the server.
         if (onUploadError) onUploadError();
       }
     } catch (error) {
