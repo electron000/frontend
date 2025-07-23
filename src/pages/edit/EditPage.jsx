@@ -27,7 +27,7 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
   const handleDeleteClick = () => {
     setIsConfirmingDelete(true);
   };
-
+  
   const handleConfirmDelete = async () => {
     if (onDelete) {
       await onDelete(); 
@@ -100,18 +100,14 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew }) => {
             ))}
           </div>
 
+          {/* -- EDIT: Button structure and text changed for new layout -- */}
           <div className="form-actions">
             {!isNew && (
-              <Button variant="danger" onClick={handleDeleteClick}>Delete Row</Button>
+              <Button variant="danger" onClick={handleDeleteClick}>Delete Contract</Button>
             )}
-
             <div className="main-actions">
-              <Button type="submit" variant="green">
-                Save Changes
-              </Button>
-              <Button type="button" variant="outline" onClick={onCancel}>
-                Cancel
-              </Button>
+              <Button type="submit" variant="green">Save Changes</Button>
+              <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
             </div>
           </div>
         </form>

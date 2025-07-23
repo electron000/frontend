@@ -124,7 +124,7 @@ const Leaderboard = ({ onLogout }) => {
       }
       setIsEditing(false);
       await fetchData();
-      const message = wasNewRow ? 'New Contract Added Successfully' : 'Changes Have Been Saved';
+      const message = wasNewRow ? 'Contract added Successfully' : 'Changes have been Saved';
       setNotification({ show: true, message, type: 'success' });
       setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
     } catch (err) {
@@ -137,6 +137,8 @@ const Leaderboard = ({ onLogout }) => {
     try {
       await axios.delete(`${API_URL}/${rowId}`);
       await fetchData();
+      setNotification({ show: true, message: 'Contract Deleted', type: 'error' });
+      setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 2000);
     } catch (err) {
       console.error("Delete error:", err);
       setError("Failed to delete the contract");
@@ -160,7 +162,7 @@ const Leaderboard = ({ onLogout }) => {
     setShowUploadModal(false); 
     setNotification({ 
       show: true, 
-      message: errorMessage || 'Database update was Unsuccessful', 
+      message: errorMessage || 'Database Update Failed', 
       type: 'error' 
     });
     setTimeout(() => setNotification(prev => ({ ...prev, show: false })), 4000);

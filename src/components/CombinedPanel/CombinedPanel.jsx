@@ -69,7 +69,6 @@ const CombinedPanel = ({
         return;
       }
 
-      // Use a default name for saving the file locally.
       const finalFileNameForSave = fileName || "Contracts_Details";
 
       const params = new URLSearchParams({

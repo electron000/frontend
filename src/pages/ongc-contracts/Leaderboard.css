@@ -25,7 +25,18 @@
     position: absolute;
     top: 25%;
     right: 1rem;
+    /* -- EDIT: Added border and outline removal -- */
+    border: none;
+    outline: none;
 }
+
+/* -- EDIT: Added focus state to remove outline -- */
+.logout-button:focus,
+.logout-button:active {
+    outline: none;
+    box-shadow: none; /* Removes any potential focus shadow */
+}
+
 
 .bottom-action-buttons-container {
     margin-top: 15px;

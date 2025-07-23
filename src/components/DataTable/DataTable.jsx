@@ -8,7 +8,7 @@ const DataTable = ({
   sortConfig,
   setSortConfig,
   onEdit,
-  fieldTypes = { numeric: [], date: [], text: [] }
+  fieldTypes = { numeric: [], date: [], text: [] },
 }) => {
 
   const isSortable = (field) => {
@@ -71,13 +71,12 @@ const DataTable = ({
                 const rowKey = row.id || `row-${rowIndex}`;
                 
                 return (
-                  <tr key={rowKey} className={rowIndex % 2 === 0 ? 'even' : 'odd'}>
+                  <tr key={rowKey} className={`${rowIndex % 2 === 0 ? 'even' : 'odd'}`}>
                     {visibleHeaders.map((header) => (
                       <td
                         key={`${rowKey}-${header}`}
                         className={header.toLowerCase().includes("remark") ? "remarks-column" : ""}
                       >
-                        
                         {header.toLowerCase().includes("date")
                           ? formatDate(row[header])
                           : row[header] || "-"}
@@ -86,7 +85,6 @@ const DataTable = ({
                     <td>
                       <button
                         className="edit-button"
-                        
                         onClick={() => onEdit(row)}
                       >
                         Edit
