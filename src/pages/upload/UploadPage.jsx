@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './UploadPage.css';
 import { Button, Modal } from '../../components';
+import api from '../../utils/api.js'; 
 
 function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -56,22 +57,19 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('https://backend-2m6l.onrender.com/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
 
-      const data = await response.json();
-      console.log('Server Response:', data);
+      const response = await api.post('/upload', formData);
 
-      if (response.ok && !data.error) {
+      if (response.status === 200 && !response.data.error) {
         if (onUploadSuccess) onUploadSuccess();
       } else {
-        if (onUploadError) onUploadError(data.error); 
+        
+        if (onUploadError) onUploadError(response.data.error || 'An unknown error occurred.'); 
       }
     } catch (error) {
       console.error('Error during file upload:', error);
-      if (onUploadError) onUploadError('A network error occurred. Please try again.');
+      const errorMessage = error.response?.data?.error || 'A network error occurred. Please try again.';
+      if (onUploadError) onUploadError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -125,3 +123,4 @@ function UploadPage({ onCancel, onUploadSuccess, onUploadError }) {
 }
 
 export default UploadPage;
+

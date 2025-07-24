@@ -22,29 +22,17 @@
     border-radius: var(--radius-lg);
     background-color: #ffffff;
     box-shadow: 0 10px 30px var(--ongc-shadow);
-    position: relative;
+    position: relative; /* Crucial for absolute positioning of close button */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
 }
 
 .upload-page-close-button {
-    position: absolute;
+    position: absolute; /* Keep absolute positioning for UploadPage */
     top: 15px;
     right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--ongc-medium-gray);
-    z-index: 10;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.upload-page-close-button:hover {
-    color: var(--ongc-error);
-    transform: rotate(90deg);
 }
 
 .upload-page-title {
@@ -58,8 +46,8 @@
 }
 
 .drop-zone {
-    width: 100%; 
-    padding: 50px 20px; 
+    width: 100%;
+    padding: 50px 20px;
     border: 2px dashed var(--ongc-border);
     border-radius: var(--radius-md);
     background-color: var(--ongc-light-gray);
@@ -115,8 +103,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-top: 25px; 
-    gap: 15px; 
+    margin-top: 25px;
+    gap: 15px;
 }
 
 .upload-page-actions .btn {

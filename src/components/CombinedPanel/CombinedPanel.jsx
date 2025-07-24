@@ -1,8 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { saveAs } from 'file-saver';
-import axios from 'axios';
 import './CombinedPanel.css';
-import Button from '../Button/Button';
+import Button from '../Button';
+import api from '../../utils/api.js';
+
+// --- HELPER FUNCTION ---
+// This function takes a date string in dd-mm-yyyy format and returns yyyy-mm-dd
+// It returns an empty string if the input is invalid.
+const formatDateForAPI = (dateString) => {
+  if (!dateString || typeof dateString !== 'string') return '';
+  const parts = dateString.split(/[-/]/);
+  if (parts.length !== 3 || parts[2]?.length !== 4) return ''; // Basic validation
+  const [day, month, year] = parts;
+  return `${year}-${month}-${day}`;
+};
 
 const CombinedPanel = ({
   headers,
@@ -22,15 +33,14 @@ const CombinedPanel = ({
   activeFilters,
   sortConfig,
   resetSort,
-  setNotification
+  setNotification,
+  onLogout
 }) => {
   const inputRef = useRef(null);
   const [fileName, setFileName] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const [showFieldSelection, setShowFieldSelection] = useState(false);
   const [exportFormat, setExportFormat] = useState('xlsx');
-
-  const API_BASE_URL = 'https://backend-2m6l.onrender.com';
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -47,7 +57,16 @@ const CombinedPanel = ({
     const cleanFilters = {};
     for (const key in activeFilters) {
       if (activeFilters[key] !== "" && activeFilters[key] !== null) {
-        cleanFilters[key] = activeFilters[key];
+        // --- MODIFICATION FOR EXPORT ---
+        // Convert date formats before sending them in the export request
+        if (key === 'fromDate' || key === 'toDate') {
+          const formattedDate = formatDateForAPI(activeFilters[key]);
+          if (formattedDate) {
+            cleanFilters[key] = formattedDate;
+          }
+        } else {
+          cleanFilters[key] = activeFilters[key];
+        }
       }
     }
     return cleanFilters;
@@ -55,53 +74,51 @@ const CombinedPanel = ({
 
   const handleServerExport = async (format) => {
     setIsExporting(true);
-    const hideNotification = () => {
-      setTimeout(() => {
-        setNotification(prev => ({ ...prev, show: false }));
-      }, 3000);
-    };
-
     try {
       if (selectedFields.length === 0) {
-        setNotification({ show: true, message: 'Please select at least one column to export.', type: 'error' });
-        hideNotification();
+        setNotification('Please select at least one column to export.', 'error');
         setIsExporting(false);
         return;
       }
 
       const finalFileNameForSave = fileName || "Contracts_Details";
+      
+      const cleanFilters = getCleanFilters(); // Use the modified function
 
       const params = new URLSearchParams({
         format,
         sortField: sortConfig?.field || '',
         sortDirection: sortConfig?.direction || '',
         selectedFields: selectedFields.join(','),
-        ...getCleanFilters(),
+        ...cleanFilters, // Pass the cleaned and formatted filters
       });
 
-      // Only add the 'fileName' parameter if the user has typed one.
       if (fileName) {
         params.append('fileName', fileName);
       }
 
-      const response = await axios.get(`${API_BASE_URL}/api/export?${params}`, {
+      const response = await api.get(`/export?${params}`, {
         responseType: 'blob'
       });
 
       saveAs(response.data, `${finalFileNameForSave}.${format}`);
-
-      setNotification({ show: true, message: 'Export Successful!', type: 'info' });
-      hideNotification();
+      setNotification('Export Successful!', 'info');
 
     } catch (error) {
       console.error("Export error:", error);
-      setNotification({ show: true, message: 'Export Failed', type: 'error' });
-      hideNotification();
+      if (error.response?.status === 401) {
+        setNotification('Session expired. Please log in again.', 'error');
+        if (typeof onLogout === 'function') {
+          onLogout();
+        }
+      } else {
+        const errorMessage = error.response?.data?.error || 'Export Failed. Please check the console.';
+        setNotification(errorMessage, 'error');
+      }
     } finally {
       setIsExporting(false);
     }
   };
-
 
   const handleExport = () => {
     handleServerExport(exportFormat);
@@ -120,10 +137,11 @@ const CombinedPanel = ({
           </div>
         );
       case 'date':
+        // --- MODIFICATION FOR DATE INPUT ---
         return (
           <div className="input-group">
-            <input ref={inputRef} type="date" value={dateRange.from} onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })} className="filter-input"/>
-            <input type="date" value={dateRange.to} onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })} className="filter-input"/>
+            <input ref={inputRef} type="text" placeholder="dd-mm-yyyy" value={dateRange.from} onChange={(e) => setDateRange({ ...dateRange, from: e.target.value })} className="filter-input"/>
+            <input type="text" placeholder="dd-mm-yyyy" value={dateRange.to} onChange={(e) => setDateRange({ ...dateRange, to: e.target.value })} className="filter-input"/>
           </div>
         );
       case 'text':

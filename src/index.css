@@ -20,7 +20,7 @@
   --ongc-light-bg: #E8F0FE;
 
   --ongc-hover-bg: #F5EBEB;
-  --ongc-shadow: rgba(0, 0, 0, 0.1);
+  --ongc-shadow: rgba(0, 0, 0, 0.1)A;
   --ongc-shadow-hover: rgba(0, 0, 0, 0.15);
 
   --status-success-bg: #d1fae5;
@@ -56,7 +56,6 @@ body {
     margin: 0;
 }
 
-/* === UNIFIED BUTTON STYLES === */
 .btn {
     font-weight: 600;
     padding: 8px 14px;
@@ -108,4 +107,80 @@ body {
     background: transparent;
     color: var(--ongc-error-color);
     border: 2px solid var(--ongc-error-color);
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+      color: var(--ongc-medium-gray);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+      z-index: 10;
+}
+
+
+.close-button:hover {
+    background: var(--ongc-light-gray);
+    color: #991b1b;
+    transform: rotate(90deg) scale(1.1);
+}
+
+.close-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.action-buttons-group {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-md, 1rem);
+    margin-left: auto; 
+}
+
+.action-buttons-group > .btn--green {
+    flex: 2;
+    min-width: 0; 
+    box-sizing: border-box; 
+    font-size: 0.9rem; 
+    padding: 10px 8px; 
+    max-width: unset;
+}
+
+.action-buttons-group > .btn--outline {
+    flex: 1;
+    min-width: 0; 
+    box-sizing: border-box; 
+    font-size: 0.9rem; 
+    padding: 10px 8px; 
+    max-width: unset;
+}
+
+
+@media (max-width: 480px) {
+    .action-buttons-group {
+        width: 100%;
+        margin-left: 0;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+    }
+
+    .action-buttons-group > .btn--green,
+    .action-buttons-group > .btn--outline {
+        flex: 1 1 calc(50% - 0.25rem);
+        width: calc(50% - 0.25rem);
+        flex: none;
+        min-width: unset;
+        max-width: unset;
+        font-size: 0.8rem;
+        padding: 8px 6px;
+    }
 }

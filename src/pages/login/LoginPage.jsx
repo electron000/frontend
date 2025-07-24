@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 import ongcLogo from '../../assets/ongc-logo.png';
+import api from '../../utils/api.js';
 
 const LoginPage = ({ onLogin }) => {
+  const [loginMode, setLoginMode] = useState('user'); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (loginMode === 'admin') {
+      setUsername('Infocom-Admin');
+    } else {
+      setUsername('Infocom-User'); 
+    }
+    setError(''); 
+    setPassword(''); 
+  }, [loginMode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,25 +26,25 @@ const LoginPage = ({ onLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://backend-2m6l.onrender.com/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
+      const response = await api.post('/login', {
+        username,
+        password,
+        loginMode,
       });
 
-      const data = await response.json();
+      const { token } = response.data;
 
-      if (response.ok) {
-        console.log('Login successful:', data.message);
-        onLogin();
+      if (token) {
+        localStorage.setItem('authToken', token);
+        console.log('Login successful, token stored.');
+        onLogin(token); 
       } else {
-        setError(data.error || 'Invalid username or password.');
+        setError('Login failed: No token received.');
       }
     } catch (networkError) {
       console.error('Login API call failed:', networkError);
-      setError('Could not connect to the server. Please try again later.');
+      const errorMessage = networkError.response?.data?.error || 'Invalid username or password.';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +64,20 @@ const LoginPage = ({ onLogin }) => {
       </div>
 
       <div className="ongc-login-right-form">
-        <h2 className="ongc-login-sub-heading">User Login</h2>
+        <div className="ongc-login-mode-toggle">
+          <span className={loginMode === 'user' ? 'active' : ''}>User</span>
+          <label className="switch">
+            <input 
+              type="checkbox" 
+              checked={loginMode === 'admin'}
+              onChange={() => setLoginMode(prev => prev === 'user' ? 'admin' : 'user')}
+            />
+            <span className="slider round"></span>
+          </label>
+          <span className={loginMode === 'admin' ? 'active' : ''}>Admin</span>
+        </div>
+
+        <h2 className="ongc-login-sub-heading">{loginMode === 'user' ? 'User Login' : 'Admin Login'}</h2>
         <p className="ongc-login-sub-description">Please enter your credentials to continue</p>
 
         <form onSubmit={handleSubmit} className="ongc-login-form">

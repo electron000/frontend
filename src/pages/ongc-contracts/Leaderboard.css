@@ -3,7 +3,13 @@
   flex-direction: column;
   gap: 0.5rem; 
   padding: 1rem;
+  max-width: 1600px;
+  margin-left: auto;  
+  margin-right: auto; 
+  width: 100%;        
+  box-sizing: border-box;
 }
+
 
 .leaderboard-header {
     display: flex;
@@ -21,20 +27,25 @@
     left: 0.5rem;
 }
 
-.logout-button {
+.header-actions {
     position: absolute;
-    top: 25%;
+    top: 50%;
     right: 1rem;
-    /* -- EDIT: Added border and outline removal -- */
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logout-button {
     border: none;
     outline: none;
 }
 
-/* -- EDIT: Added focus state to remove outline -- */
 .logout-button:focus,
 .logout-button:active {
     outline: none;
-    box-shadow: none; /* Removes any potential focus shadow */
+    box-shadow: none; 
 }
 
 
@@ -85,7 +96,7 @@
 }
 
 @media (max-width: 768px) {
-    body {
+    .leaderboard-container {
         padding: 1rem;
     }
 
@@ -110,7 +121,7 @@
 }
 
 @media (max-width: 480px) {
-    body {
+    .leaderboard-container {
         padding: 0.5rem;
     }
 
@@ -122,13 +133,17 @@
     .ongc-logo {
         width: 110px;
     }
+    
+    .header-actions {
+        right: 0.5rem;
+        gap: 0.5rem;
+    }
 
     .logout-button {
         font-size: 12px;
         height: 32px;
         padding: 6px 10px;
-        min-width: 70px;
-        right: 0.5rem;
+        min-width: auto;
     }
 
     .bottom-action-buttons-container {
