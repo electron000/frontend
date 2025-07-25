@@ -28,8 +28,8 @@
 }
 
 .ongc-login-logo {
-  height: 100px;
-  width: auto;
+  height: 300px;
+  width: 300px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   margin-bottom: 1rem;
