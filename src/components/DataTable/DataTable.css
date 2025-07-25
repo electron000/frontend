@@ -16,14 +16,14 @@
 .data-table-wrapper .custom-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 650px;
-  font-size: 12.5px;
+  min-width: 600px;
+  font-size: 12px;
 }
 .data-table-wrapper th {
-  padding: 8px 10px;
+  padding: 6px 10px;
   background: var(--ongc-error-color);
   color: var(--ongc-white);
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   font-size: 13px;
   letter-spacing: 0.4px;
@@ -51,7 +51,7 @@
   background-color: var(--ongc-hover-bg);
 }
 .data-table-wrapper td {
-  padding: 6px 10px;
+  padding: 4px 10px;
   color: var(--ongc-black);
   font-size: 12px;
   text-align: left;

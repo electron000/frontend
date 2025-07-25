@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import api from '../../utils/api.js';
-import './Leaderboard.css';
+import './MIS.css';
 import ongcLogo from '../../assets/ongc-logo.png';
-import UploadPage from '../upload/UploadPage';
-import { Button, CombinedPanel, DataTable, Pagination, SchemaEditor, EditPage } from '../../components';
+import UploadPage from '../upload/UploadPage.jsx';
+import { Button, CombinedPanel, DataTable, Pagination, SchemaEditor, EditPage } from '../../components/index.js';
 
 const formatDateForAPI = (dateString) => {
   if (!dateString || typeof dateString !== 'string') return '';

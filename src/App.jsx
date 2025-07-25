@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import LoginPage from './pages/login/LoginPage'; 
-import Leaderboard from './pages/ongc-contracts/Leaderboard';
+import MIS from './pages/management-info-system/MIS';
 
 const ProtectedRoute = ({ isAuthenticated, children }) => {
   if (!isAuthenticated) {
@@ -15,7 +15,7 @@ const LoginRoute = ({ onLogin }) => {
 
   const handleLoginSuccess = () => {
     onLogin(); 
-    navigate('/ongc-contracts'); 
+    navigate('/MIS'); 
   };
 
   return <LoginPage onLogin={handleLoginSuccess} />;
@@ -25,7 +25,9 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLogin = () => setIsAuthenticated(true);
-  const handleLogout = () => setIsAuthenticated(false);
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
 
   return (
     <Router>
@@ -36,10 +38,10 @@ function App() {
         />
 
         <Route 
-          path="/ongc-contracts" 
+          path="/MIS" 
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <Leaderboard onLogout={handleLogout} />
+              <MIS onLogout={handleLogout} />
             </ProtectedRoute>
           } 
         />
@@ -47,7 +49,7 @@ function App() {
         <Route 
           path="*" 
           element={
-            <Navigate to={isAuthenticated ? "/ongc-contracts" : "/login"} replace />
+            <Navigate to={isAuthenticated ? "/MIS" : "/login"} replace />
           } 
         />
       </Routes>
