@@ -53,12 +53,8 @@ const LoginPage = ({ onLogin }) => {
   return (
     <div className="ongc-login-container">
       <div className="ongc-login-left-panel">
-        <img
-          src={ongcLogo}
-          alt="ONGC Logo"
-          className="ongc-login-logo"
-          onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/150x50/ffffff/000000?text=ONGC'; }}
-        />
+        <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
+        <h1 className="ongc-login-main-heading">mainsys</h1>
       </div>
 
       <div className="ongc-login-right-form">

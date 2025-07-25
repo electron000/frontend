@@ -153,8 +153,8 @@ const Leaderboard = ({ onLogout }) => {
     return (
         <div className="leaderboard-container">
             <div className="leaderboard-header">
-                <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
                 <div className="header-actions">
+                    <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
                     <Button variant="danger" onClick={onLogout} className="logout-button">Logout</Button>
                 </div>
             </div>
