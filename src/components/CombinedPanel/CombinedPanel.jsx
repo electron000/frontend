@@ -76,7 +76,7 @@ const CombinedPanel = ({
                 return;
             }
 
-            const finalFileNameForSave = fileName || "Contracts_Details";
+            const finalFileNameForSave = fileName || "mainsys";
             const cleanFilters = getCleanFilters();
 
             const params = new URLSearchParams({
