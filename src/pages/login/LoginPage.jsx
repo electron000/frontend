@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
-import ongcLogo from '../../assets/ongc-logo.png';
+import mainsysLogo from '../../assets/mainsys-login.png';
 import api from '../../utils/api.js';
 
 const LoginPage = ({ onLogin }) => {
-  const [loginMode, setLoginMode] = useState('user'); 
+  const [loginMode, setLoginMode] = useState('user');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,10 +14,10 @@ const LoginPage = ({ onLogin }) => {
     if (loginMode === 'admin') {
       setUsername('Infocom-Admin');
     } else {
-      setUsername('Infocom-User'); 
+      setUsername('Infocom-User');
     }
-    setError(''); 
-    setPassword(''); 
+    setError('');
+    setPassword('');
   }, [loginMode]);
 
   const handleSubmit = async (e) => {
@@ -37,7 +37,7 @@ const LoginPage = ({ onLogin }) => {
       if (token) {
         localStorage.setItem('authToken', token);
         console.log('Login successful, token stored.');
-        onLogin(token); 
+        onLogin(token);
       } else {
         setError('Login failed: No token received.');
       }
@@ -51,18 +51,17 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div className="ongc-login-container">
-      <div className="ongc-login-left-panel">
-        <img src={ongcLogo} alt="ONGC Logo" className="ongc-logo" />
-        <h1 className="ongc-login-main-heading">mainsys</h1>
+    <div className="mainsys-login-container">
+      <div className="mainsys-login-left-panel">
+         <img src={mainsysLogo} alt="MAINSYS Logo" className="mainsys-login-logo"/>
       </div>
 
-      <div className="ongc-login-right-form">
-        <div className="ongc-login-mode-toggle">
+      <div className="mainsys-login-right-form">
+        <div className="mainsys-login-mode-toggle">
           <span className={loginMode === 'user' ? 'active' : ''}>User</span>
           <label className="switch">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={loginMode === 'admin'}
               onChange={() => setLoginMode(prev => prev === 'user' ? 'admin' : 'user')}
             />
@@ -71,12 +70,12 @@ const LoginPage = ({ onLogin }) => {
           <span className={loginMode === 'admin' ? 'active' : ''}>Admin</span>
         </div>
 
-        <h2 className="ongc-login-sub-heading">{loginMode === 'user' ? 'User Login' : 'Admin Login'}</h2>
-        <p className="ongc-login-sub-description">Please enter your credentials to continue</p>
+        <h2 className="mainsys-login-sub-heading">{loginMode === 'user' ? 'User Login' : 'Admin Login'}</h2>
+        <p className="mainsys-login-sub-description">Please enter your credentials to continue</p>
 
-        <form onSubmit={handleSubmit} className="ongc-login-form">
-          <div className="ongc-input-group">
-            <span className="ongc-input-icon">
+        <form onSubmit={handleSubmit} className="mainsys-login-form">
+          <div className="mainsys-input-group">
+            <span className="mainsys-input-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </span>
             <input
@@ -91,8 +90,8 @@ const LoginPage = ({ onLogin }) => {
             />
           </div>
 
-          <div className="ongc-input-group">
-            <span className="ongc-input-icon">
+          <div className="mainsys-input-group">
+            <span className="mainsys-input-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </span>
             <input
@@ -107,10 +106,10 @@ const LoginPage = ({ onLogin }) => {
             />
           </div>
 
-          {error && <p id="error-message" className="ongc-login-error-message">{error}</p>}
+          {error && <p id="error-message" className="mainsys-login-error-message">{error}</p>}
 
-          <button type="submit" className="ongc-login-submit-button" disabled={isLoading}>
-            {isLoading ? <span className="ongc-login-spinner"></span> : 'Log In'}
+          <button type="submit" className="mainsys-login-submit-button" disabled={isLoading}>
+            {isLoading ? <div className="loading-spinner"></div> : 'Log In'}
           </button>
         </form>
       </div>

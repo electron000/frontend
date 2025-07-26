@@ -45,17 +45,17 @@
 
 
 .edit-page-container h2 {
-    color: var(--ongc-green-dark, #22543D);
+    color: var(--mainsys-green-dark, #22543D);
     margin-top: 0;
     margin-bottom: var(--space-md, 1rem);
-    border-bottom: 2px solid var(--ongc-green, #2D6A4F);
+    border-bottom: 2px solid var(--mainsys-green, #2D6A4F);
     padding-bottom: var(--space-sm, 0.5rem);
     font-size: var(--font-xl, 1.25rem);
 }
 
 .edit-page-container p {
     margin-bottom: 1.5rem;
-    color: var(--ongc-medium-gray);
+    color: var(--mainsys-medium-gray);
 }
 
 .edit-form .form-grid {
@@ -72,7 +72,7 @@
 
 .form-group label {
     font-weight: 600;
-    color: var(--ongc-dark-gray, #334155);
+    color: var(--mainsys-dark-gray, #334155);
     margin-bottom: var(--space-sm, 0.5rem);
     font-size: var(--font-sm, 0.875rem);
 }
@@ -80,19 +80,19 @@
 .form-input {
     width: 100%;
     padding: 10px 14px;
-    border: 1.5px solid var(--ongc-medium-gray);
+    border: 1.5px solid var(--mainsys-medium-gray);
     border-radius: var(--radius-sm, 0.375rem);
     font-size: var(--font-base, 1rem);
-    background-color: var(--ongc-light-gray);
+    background-color: var(--mainsys-light-gray);
     transition: all 0.2s ease;
-    color: var(--ongc-dark-gray);
+    color: var(--mainsys-dark-gray);
     box-sizing: border-box;
 }
 
 .form-input:focus {
    outline: none; 
    background-color: #ffffff;
-   border-color: var(--ongc-green, #2D6A4F); 
+   border-color: var(--mainsys-green, #2D6A4F); 
    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
@@ -118,31 +118,31 @@ textarea.form-input {
 
 .btn--toggle-yes,
 .btn--toggle-no {
-    background-color: var(--ongc-white);
-    border: 1.5px solid var(--ongc-border);
+    background-color: var(--mainsys-white);
+    border: 1.5px solid var(--mainsys-border);
     box-shadow: none;
 }
-.btn--toggle-yes { color: var(--ongc-green-dark); }
-.btn--toggle-no { color: var(--ongc-maroon); }
+.btn--toggle-yes { color: var(--mainsys-green-dark); }
+.btn--toggle-no { color: var(--mainsys-maroon); }
 
 .btn--toggle-yes.active {
-    background: var(--ongc-green);
-    color: var(--ongc-white);
-    border-color: var(--ongc-green);
+    background: var(--mainsys-green);
+    color: var(--mainsys-white);
+    border-color: var(--mainsys-green);
 }
 .btn--toggle-no.active {
-    background: var(--ongc-maroon);
-    color: var(--ongc-white);
-    border-color: var(--ongc-maroon);
+    background: var(--mainsys-maroon);
+    color: var(--mainsys-white);
+    border-color: var(--mainsys-maroon);
 }
 
 .form-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Changed to align buttons to the right */
     align-items: center;
     margin-top: var(--space-lg, 1.5rem);
     padding-top: var(--space-lg, 1.5rem);
-    border-top: 1px solid var(--ongc-border, #E2E8F0);
+    border-top: 1px solid var(--mainsys-border, #E2E8F0);
     flex-wrap: nowrap;
     gap: var(--space-md, 1rem);
 }
@@ -158,7 +158,7 @@ textarea.form-input {
     .edit-page-overlay {
         padding: 0;
         backdrop-filter: none;
-        background-color: var(--ongc-white, #fff);
+        background-color: var(--mainsys-white, #fff);
         align-items: flex-start;
     }
     .edit-page-container {
@@ -171,17 +171,11 @@ textarea.form-input {
         padding: 1.5rem 1rem;
     }
     .form-actions {
-        flex-direction: column-reverse;
+        flex-direction: column;
         gap: 0.75rem;
         align-items: stretch;
     }
-    .form-actions > .btn {
-        order: 2;
-        width: 100%;
-        max-width: 100%;
-    }
     .form-actions .action-buttons-group {
-        order: 1;
         width: 100%;
         margin-left: 0;
         justify-content: space-between;
@@ -194,45 +188,4 @@ textarea.form-input {
         font-size: 0.8rem;
         padding: 8px 6px;
     }
-}
-
-.confirmation-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.65);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2100;
-    animation: fadeIn 0.2s ease;
-}
-
-.confirmation-modal {
-    background: var(--ongc-white);
-    padding: 2rem 2.5rem;
-    border-radius: var(--radius-md);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    text-align: center;
-    max-width: 400px;
-    animation: slideIn 0.3s ease-out;
-}
-
-.confirmation-modal h3 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    color: var(--ongc-dark-gray);
-}
-
-.confirmation-modal p {
-    color: var(--ongc-medium-gray);
-    margin-bottom: 1.5rem;
-}
-
-.confirmation-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
 }

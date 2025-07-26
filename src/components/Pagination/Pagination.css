@@ -16,7 +16,7 @@
   border: 1px solid transparent;
   outline: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 1px 3px var(--ongc-shadow);
+  box-shadow: 0 1px 3px var(--mainsys-shadow);
   min-width: 36px;
   min-height: 36px;
   height: 36px;
@@ -26,8 +26,8 @@
 }
 
 .pagination button:disabled {
-  background: var(--ongc-medium-gray);
-  color: var(--ongc-white);
+  background: var(--mainsys-medium-gray);
+  color: var(--mainsys-white);
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
@@ -39,32 +39,32 @@
 }
 
 .PButtons {
-  background: linear-gradient(135deg, #ffffff, var(--ongc-white));
-  color: var(--ongc-dark-gray);
-  border-color: var(--ongc-border);
+  background: linear-gradient(135deg, #ffffff, var(--mainsys-white));
+  color: var(--mainsys-dark-gray);
+  border-color: var(--mainsys-border);
 }
 
 .PButtons:hover {
-  background: linear-gradient(135deg,#E0F2F1, var(--ongc-light-gray));
-  border-color: var(--ongc-green);
+  background: linear-gradient(135deg,#E0F2F1, var(--mainsys-light-gray));
+  border-color: var(--mainsys-green);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--ongc-shadow-hover);
+  box-shadow: 0 4px 12px var(--mainsys-shadow-hover);
 }
 
 .PNpage,
 .active-page {
-  background: linear-gradient(135deg, var(--ongc-maroon), var(--ongc-orange-rust));
-  color: var(--ongc-white);
+  background: linear-gradient(135deg, var(--mainsys-maroon), var(--mainsys-orange-rust));
+  color: var(--mainsys-white);
   font-weight: 700;
 }
 
 .PNpage:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px var(--ongc-shadow-hover);
+  box-shadow: 0 4px 12px var(--mainsys-shadow-hover);
 }
 
 .active-page {
-  box-shadow: 0 0 0 3px var(--ongc-yellow);
+  box-shadow: 0 0 0 3px var(--mainsys-yellow);
   transform: scale(1.05);
 }
 
@@ -72,7 +72,7 @@
   padding: 4px 6px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--ongc-medium-gray);
+  color: var(--mainsys-medium-gray);
   line-height: 1;
 }
 

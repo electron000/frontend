@@ -1,3 +1,11 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 #root {
   box-sizing: border-box;
 }
@@ -6,18 +14,18 @@
   box-sizing: inherit;
 }
 
-.ongc-login-container {
+.mainsys-login-container {
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background-color: var(--ongc-white);
+  background-color: var(--mainsys-white);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.ongc-login-left-panel {
+.mainsys-login-left-panel {
   flex: 1;
-  background: linear-gradient(160deg, var(--ongc-primary-brand-dark), var(--ongc-error-color));
-  color: var(--ongc-white);
+  background: linear-gradient(160deg, var(--mainsys-primary-brand-dark), var(--mainsys-error-color));
+  color: var(--mainsys-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,22 +35,15 @@
   gap: 1.5rem;
 }
 
-.ongc-login-logo {
-  height: 500px;
-  width: 500px;
+.mainsys-login-logo {
+  height: 600px;
+  width: 600px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   margin-bottom: 1rem;
 }
 
-.ongc-login-description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  opacity: 0.9;
-  max-width: 400px;
-}
-
-.ongc-login-right-form {
+.mainsys-login-right-form {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -51,71 +52,60 @@
   padding: 3rem 2rem;
   background-color: #ffffff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 100%;
 }
 
-.ongc-login-sub-heading {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #B94A48; 
-  margin-bottom: 0.5rem;
-}
-
-.ongc-login-sub-description {
-  font-size: 1rem;
-  color: var(--ongc-medium-gray);
-  margin-bottom: 2rem;
-}
-
-.ongc-login-form {
+.mainsys-login-form {
   width: 100%;
   max-width: 380px;
 }
 
-.ongc-input-group {
+.mainsys-input-group {
   position: relative;
   margin-bottom: 1.5rem;
 }
 
-.ongc-input-group input {
+.mainsys-input-group input {
   width: 100%;
   height: 55px;
   padding: 0 1rem 0 3.5rem;
-  border: 1px solid var(--ongc-border);
+  border: 1px solid var(--mainsys-border);
   border-radius: var(--radius-md);
   font-size: 1.1rem;
-  background: var(--ongc-light-bg);
-  color: var(--ongc-dark-gray);
+  background: var(--mainsys-light-bg);
+  color: var(--mainsys-dark-gray);
   transition: all 0.2s ease;
 }
 
-.ongc-input-group input:focus {
+.mainsys-input-group input:focus {
   outline: none;
-  background-color: var(--ongc-light-bg);
+  background-color: var(--mainsys-light-bg);
 }
 
-.ongc-input-group input::placeholder {
-  color: var(--ongc-medium-gray);
+.mainsys-input-group input::placeholder {
+  color: var(--mainsys-medium-gray);
   opacity: 0.8;
 }
 
-.ongc-input-icon {
+.mainsys-input-icon {
   position: absolute;
   top: 50%;
   left: 1.2rem;
   transform: translateY(-50%);
-  color: var(--ongc-medium-gray);
+  color: var(--mainsys-medium-gray);
   pointer-events: none;
   font-size: 1.2rem;
 }
 
-.ongc-login-submit-button {
+.mainsys-login-submit-button {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   padding: 1rem;
-  background-color: var(--ongc-error-color);
-  color: var(--ongc-white);
+  background-color: var(--mainsys-error-color);
+  color: var(--mainsys-white);
   border: none;
   border-radius: var(--radius-md);
   font-weight: 600;
@@ -125,256 +115,237 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.ongc-login-submit-button:hover {
-  background-color: var(--ongc-primary-brand-dark);
+.mainsys-login-submit-button:hover {
+  background-color: var(--mainsys-primary-brand-dark);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-.ongc-login-submit-button:disabled {
+.mainsys-login-submit-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-  background-color: var(--ongc-primary-brand);
+  background-color: var(--mainsys-primary-brand);
   box-shadow: none;
 }
 
-.ongc-login-error-message {
-  color: var(--ongc-error-color);
+.mainsys-login-error-message {
+  color: var(--mainsys-error-color);
   font-size: 0.95rem;
   margin-top: -1rem;
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
-.ongc-login-spinner {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (max-width: 1024px) {
-  .ongc-login-container {
+  .mainsys-login-container {
     flex-direction: column;
     min-height: 100vh;
   }
 
-  .ongc-login-left-panel {
+  .mainsys-login-left-panel {
     padding: 2rem 1.5rem;
     height: auto;
     flex: none;
   }
 
-  .ongc-login-logo {
-    height: 80px;
+  .mainsys-login-logo {
+    height: 180px;
     margin-bottom: 0.5rem;
   }
 
-  .ongc-login-main-heading {
+  .mainsys-login-main-heading {
     font-size: 2rem;
   }
 
-  .ongc-login-description {
+  .mainsys-login-description {
     font-size: 1rem;
     max-width: 80%;
   }
 
-  .ongc-login-right-form {
+  .mainsys-login-right-form {
     padding: 2.5rem 1.5rem;
     flex: 1;
     box-shadow: none;
+    width: 100%;
+    max-width: 100%;
   }
 
-  .ongc-login-sub-heading {
+  .mainsys-login-sub-heading {
     font-size: 1.8rem;
-    color: #B94A48; 
   }
 
-  .ongc-login-sub-description {
+  .mainsys-login-sub-description {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
   }
 
-  .ongc-login-form {
+  .mainsys-login-form {
     max-width: 350px;
+    width: 100%;
   }
 
-  .ongc-input-group input {
+  .mainsys-input-group input {
     height: 50px;
     font-size: 1rem;
     padding: 0 1rem 0 3rem;
   }
 
-  .ongc-input-icon {
+  .mainsys-input-icon {
     left: 1rem;
     font-size: 1.1rem;
   }
 
-  .ongc-login-submit-button {
+  .mainsys-login-submit-button {
     padding: 0.9rem;
     font-size: 1rem;
   }
 }
 
 @media (max-width: 768px) {
-  .ongc-login-left-panel {
+  .mainsys-login-left-panel {
     height: auto;
     padding: 1.5rem 1rem;
     gap: 1rem;
   }
 
-  .ongc-login-logo {
-    height: 60px;
+  .mainsys-login-logo {
+    height: 200px;
     margin-bottom: 0.5rem;
   }
 
-  .ongc-login-main-heading {
-    font-size: 1.8rem;
+  .mainsys-login-main-heading {
+    font-size: 1.6rem;
   }
 
-  .ongc-login-description {
-    font-size: 0.9rem;
+  .mainsys-login-description {
+    font-size: 0.85rem;
     max-width: 90%;
   }
 
-  .ongc-login-right-form {
+  .mainsys-login-right-form {
     padding: 1.5rem 1rem;
   }
 
-  .ongc-login-sub-heading {
-    font-size: 1.6rem;
-    color: #B94A48; 
+  .mainsys-login-sub-heading {
+    font-size: 1.5rem;
   }
 
-  .ongc-login-sub-description {
-    font-size: 0.9rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .ongc-login-form {
-    max-width: 300px;
-  }
-
-  .ongc-input-group {
+  .mainsys-login-sub-description {
+    font-size: 0.85rem;
     margin-bottom: 1rem;
   }
 
-  .ongc-input-group input {
+  .mainsys-login-form {
+    max-width: 300px;
+  }
+
+  .mainsys-input-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .mainsys-input-group input {
     height: 45px;
     font-size: 0.95rem;
     padding: 0 0.8rem 0 2.5rem;
   }
 
-  .ongc-input-icon {
+  .mainsys-input-icon {
     left: 0.8rem;
     font-size: 1rem;
   }
 
-  .ongc-login-submit-button {
+  .mainsys-login-submit-button {
     padding: 0.8rem;
     font-size: 0.95rem;
   }
 
-  .ongc-login-error-message {
-    font-size: 0.85rem;
-    margin-bottom: 1rem;
+  .mainsys-login-error-message {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
-  .ongc-login-left-panel {
+  .mainsys-login-left-panel {
     height: auto;
     padding: 1rem 0.8rem;
   }
 
-  .ongc-login-logo {
-    height: 50px;
+  .mainsys-login-logo {
+    height: 160px;
   }
 
-  .ongc-login-main-heading {
-    font-size: 1.5rem;
+  .mainsys-login-main-heading {
+    font-size: 1.3rem;
   }
 
-  .ongc-login-description {
-    font-size: 0.8rem;
+  .mainsys-login-description {
+    font-size: 0.75rem;
     max-width: 95%;
   }
 
-  .ongc-login-right-form {
-    padding: 1.5rem 0.8rem;
+  .mainsys-login-right-form {
+    padding: 1.2rem 0.8rem;
   }
 
-  .ongc-login-sub-heading {
-    font-size: 1.4rem;
-    color: #B94A48; 
+  .mainsys-login-sub-heading {
+    font-size: 1.2rem;
   }
 
-  .ongc-login-sub-description {
-    font-size: 0.8rem;
-    margin-bottom: 1rem;
+  .mainsys-login-sub-description {
+    font-size: 0.75rem;
+    margin-bottom: 0.8rem;
   }
 
-  .ongc-login-form {
+  .mainsys-login-form {
     max-width: 280px;
   }
 
-  .ongc-input-group {
-    margin-bottom: 0.8rem;
+  .mainsys-input-group {
+    margin-bottom: 0.6rem;
   }
 
-  .ongc-input-group input {
-    height: 40px;
-    font-size: 0.9rem;
-    padding: 0 0.6rem 0 2.2rem;
+  .mainsys-input-group input {
+    height: 38px;
+    font-size: 0.85rem;
+    padding: 0 0.6rem 0 2rem;
   }
 
-  .ongc-input-icon {
+  .mainsys-input-icon {
     left: 0.6rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
-  .ongc-login-submit-button {
-    padding: 0.7rem;
-    font-size: 0.9rem;
+  .mainsys-login-submit-button {
+    padding: 0.6rem;
+    font-size: 0.85rem;
   }
 
-  .ongc-login-error-message {
-    font-size: 0.8rem;
-    margin-bottom: 0.8rem;
+  .mainsys-login-error-message {
+    font-size: 0.75rem;
+    margin-bottom: 0.6rem;
   }
 }
 
-/* --- NEW: Styles for the Login Mode Toggle Switch --- */
-.ongc-login-mode-toggle {
+.mainsys-login-mode-toggle {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
   gap: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.ongc-login-mode-toggle span {
+.mainsys-login-mode-toggle span {
   font-size: 1rem;
   color: #888;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.ongc-login-mode-toggle span.active {
-  color: #FF5722; /* ONGC Saffron color */
+.mainsys-login-mode-toggle span.active {
+  color: #9B1C1C;
   font-weight: 700;
 }
 
-/* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -382,14 +353,12 @@
   height: 28px;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* The slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -415,11 +384,11 @@
 }
 
 input:checked + .slider {
-  background-color: #FF5722; /* ONGC Saffron color */
+  background-color: var(--mainsys-error-color);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #FF5722;
+  box-shadow: 0 0 1px var(--mainsys-error-color);
 }
 
 input:checked + .slider:before {
@@ -428,7 +397,6 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 34px;
 }

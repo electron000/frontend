@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import LoginPage from './pages/login/LoginPage'; 
+import LoginPage from './pages/login/LoginPage';
 import MIS from './pages/management-info-system/MIS';
 
 const ProtectedRoute = ({ isAuthenticated, children }) => {
@@ -14,8 +14,8 @@ const LoginRoute = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const handleLoginSuccess = () => {
-    onLogin(); 
-    navigate('/MIS'); 
+    onLogin();
+    navigate('/MIS');
   };
 
   return <LoginPage onLogin={handleLoginSuccess} />;
@@ -30,27 +30,27 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Routes>
-        <Route 
-          path="/login" 
-          element={<LoginRoute onLogin={handleLogin} />} 
+        <Route
+          path="/login"
+          element={<LoginRoute onLogin={handleLogin} />}
         />
 
-        <Route 
-          path="/MIS" 
+        <Route
+          path="/MIS"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
               <MIS onLogout={handleLogout} />
             </ProtectedRoute>
-          } 
+          }
         />
 
-        <Route 
-          path="*" 
+        <Route
+          path="*"
           element={
             <Navigate to={isAuthenticated ? "/MIS" : "/login"} replace />
-          } 
+          }
         />
       </Routes>
     </Router>

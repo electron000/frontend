@@ -1,181 +1,123 @@
-.leaderboard-container {
+.mis-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; 
+  gap: 0.5rem;
   padding: 1rem;
   max-width: 1600px;
-  margin-left: auto;  
-  margin-right: auto; 
-  width: 100%;        
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
   box-sizing: border-box;
 }
 
-
-.leaderboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0rem;
-    position: relative;
-    height: 50px;
+.mis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  height: 60px;
+  margin-bottom: 1rem;
 }
 
-.ongc-logo {
-   position: absolute;
-    width: 60px;
-    height: 60px;
-    top: 10%;
-    left: 0.3rem;
+.mainsys-logo {
+  height: 50px;
+  width: auto;
 }
 
 .header-actions {
-    position: absolute;
-    top: 50%;
-    right: 1rem;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .logout-button {
-    border: none;
-    outline: none;
+  border: none;
+  outline: none;
 }
 
 .logout-button:focus,
 .logout-button:active {
-    outline: none;
-    box-shadow: none; 
+  outline: none;
+  box-shadow: none;
 }
 
-
 .bottom-action-buttons-container {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    width: 100%;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
 }
 
 .data-section {
-    position: relative;
-    min-height: 200px;
+  position: relative;
+  min-height: 200px;
 }
 
 .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: var(--ongc-dark-gray);
-    z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  z-index: 100;
 }
+
+.loading-overlay .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--mainsys-maroon);
+}
+
 
 .error-message,
 .no-results {
-    text-align: center;
-    padding: 2rem;
-    font-weight: 500;
-    color: var(--ongc-medium-gray);
-    background-color: var(--ongc-white);
-    border: 1px solid var(--ongc-border);
-    border-radius: var(--radius-md);
+  text-align: center;
+  padding: 2rem;
+  font-weight: 500;
 }
 
 .error-message {
-    color: var(--ongc-maroon);
-    background-color: #fee2e2;
-    border-color: #fca5a5;
-}
-
-@media (max-width: 768px) {
-    .leaderboard-container {
-        padding: 1rem;
-    }
-
-    .leaderboard-header {
-        height: 55px;
-        margin-bottom: 1rem;
-    }
-
-    .logout-button {
-        height: 36px;
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .leaderboard-container {
-        padding: 0.5rem;
-    }
-
-    .leaderboard-header {
-        padding: 0 0.5rem;
-        height: 50px;
-    }
-    
-    .header-actions {
-        right: 0.5rem;
-        gap: 0.5rem;
-    }
+  color: var(--mainsys-maroon);
+  background-color: #fee2e2;
+  border-color: #fca5a5;
 }
 
 .notification-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; 
-    z-index: 2100;
-    padding-top: 20px;
-    animation: fadeIn 0.3s ease;
-    pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 2100;
+  padding-top: 20px;
 }
 
 .notification-modal {
-    color: var(--ongc-white);
-    padding: 1rem 1.5rem;
-    border-radius: var(--radius-md);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    text-align: center;
-    animation: slideDown 0.4s ease-out;
-    pointer-events: all;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: var(--mainsys-white);
+  transition: all 0.3s ease-in-out;
+  transform: translateY(0);
+  animation: slideInFromTop 0.5s ease-out forwards;
 }
 
-.notification-modal--success {
-    background: var(--ongc-green);
-}
-
-.notification-modal--info {
-    background: var(--ongc-info);
-}
-
-.notification-modal--error {
-    background: var(--ongc-error-color);
-}
-
-.notification-modal p {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-@keyframes slideDown {
+@keyframes slideInFromTop {
   from {
-    transform: translateY(-100%);
+    transform: translateY(-50px);
     opacity: 0;
   }
   to {
@@ -184,11 +126,98 @@
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+.notification-modal--success {
+  background: var(--mainsys-green);
+}
+
+.notification-modal--info {
+  background: var(--mainsys-info);
+}
+
+.notification-modal--error {
+  background: var(--mainsys-error-color);
+}
+
+.notification-modal p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.confirmation-modal {
+  background: var(--mainsys-white);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.confirmation-modal h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  color: var(--mainsys-black);
+}
+
+.confirmation-modal p {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--mainsys-dark-gray);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+
+@media (max-width: 768px) {
+  .mis-container {
+    padding: 1rem;
   }
-  to {
-    opacity: 1;
+
+  .mis-header {
+    height: 55px;
+    margin-bottom: 1rem;
+  }
+
+  .logout-button {
+    height: 36px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mis-container {
+    padding: 0.5rem;
+  }
+
+  .mis-header {
+    padding: 0 0.5rem;
+    height: 50px;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
   }
 }

@@ -4,16 +4,10 @@ import Modal from '../Modal.jsx';
 import Button from '../Button.jsx';
 import ActionButtons from '../ActionButtons.jsx';
 
-// --- HELPER FUNCTIONS for Date Formatting ---
-
-/**
- * Converts a date string (like yyyy-mm-dd) to dd-mm-yyyy for display.
- */
 const formatDateForDisplay = (dateString) => {
   if (!dateString || typeof dateString !== 'string') return '';
-  // Handles both 'yyyy-mm-dd' and full ISO strings
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return ''; // Return empty if date is invalid
+  if (isNaN(date.getTime())) return '';
   
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -22,25 +16,20 @@ const formatDateForDisplay = (dateString) => {
   return `${day}-${month}-${year}`;
 };
 
-/**
- * Converts a date string from dd-mm-yyyy to yyyy-mm-dd for the API.
- */
 const formatDateForAPI = (dateString) => {
   if (!dateString || typeof dateString !== 'string') return '';
   const parts = dateString.split(/[-/]/);
-  if (parts.length !== 3 || parts[2]?.length !== 4) return ''; // Basic validation
+  if (parts.length !== 3 || parts[2]?.length !== 4) return '';
   const [day, month, year] = parts;
   return `${year}-${month}-${day}`;
 };
 
 
-const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, fieldTypes }) => {
+const EditPage = ({ rowData, onSave, onCancel, headers, isNew, fieldTypes }) => {
   const [formData, setFormData] = useState({});
-  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    // When rowData changes, format any date fields for display
     const formattedData = { ...rowData };
     if (fieldTypes && fieldTypes.date) {
         fieldTypes.date.forEach(dateField => {
@@ -50,10 +39,6 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, fieldTy
         });
     }
     setFormData(formattedData);
-
-    if (isNew) {
-      setIsConfirmingDelete(false);
-    }
   }, [rowData, isNew, fieldTypes]);
 
   const handleChange = (e) => {
@@ -66,7 +51,6 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, fieldTy
     e.preventDefault();
     setIsSaving(true);
     
-    // Create a copy of the form data to re-format dates for the API
     const dataToSend = { ...formData };
     if (fieldTypes && fieldTypes.date) {
         fieldTypes.date.forEach(dateField => {
@@ -77,26 +61,9 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, fieldTy
     }
 
     try {
-      await onSave(dataToSend); // Send the correctly formatted data
+      await onSave(dataToSend);
     } finally {
       setIsSaving(false);
-    }
-  };
-
-  const handleDeleteClick = () => {
-    setIsConfirmingDelete(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (onDelete) {
-      setIsSaving(true);
-      try {
-        await onDelete();
-        setIsConfirmingDelete(false);
-        onCancel();
-      } finally {
-        setIsSaving(false);
-      }
     }
   };
 
@@ -148,7 +115,6 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, fieldTy
 
     switch (fieldType) {
       case 'date':
-        // Use a text input for dd-mm-yyyy format
         return <input type="text" placeholder="dd-mm-yyyy" {...commonProps} />;
       case 'numeric':
         return <input type="number" step="any" placeholder="0" {...commonProps} />;
@@ -174,26 +140,11 @@ const EditPage = ({ rowData, onSave, onCancel, onDelete, headers, isNew, fieldTy
           </div>
 
           <div className="form-actions">
-            {!isNew && (
-              <Button variant="danger" onClick={handleDeleteClick}>Delete Contract</Button>
-            )}
+            {/* Delete button has been removed from this component */}
             <ActionButtons onSave={handleSave} onCancel={onCancel} loading={isSaving} />
           </div>
         </form>
       </Modal>
-
-      {isConfirmingDelete && (
-        <div className="confirmation-overlay">
-          <div className="confirmation-modal">
-            <h3>Are you sure?</h3>
-            <p>This action cannot be undone.</p>
-            <div className="confirmation-buttons">
-              <Button variant="danger" onClick={handleConfirmDelete}>Yes, Delete</Button>
-              <Button variant="outline" onClick={() => setIsConfirmingDelete(false)}>Cancel</Button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

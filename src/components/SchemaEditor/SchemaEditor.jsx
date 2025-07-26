@@ -11,7 +11,8 @@ const Icon = ({ name, onClick }) => {
         edit: <path d="M14.06,9.02l.92.92L5.87,19H5v-.87l9.06-9.11M17.66,3c-.25,0-.51.1-.7.29l-1.83,1.83,3.75,3.75,1.83-1.83c.39-.39.39-1.02,0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29m-3.6,3.19L3,17.25V21h3.75L17.81,9.94l-3.75-3.75Z" />,
         save: <path d="M17,3H5C3.89,3,3,3.9,3,5v14c0,1.1,0.89,2,2,2h14c1.1,0,2-0.9,2-2V7l-4-4M12,19c-1.66,0-3-1.34-3-3s1.34-3,3-3,3,1.34,3,3-1.34,3-3,3M15,9H5V5h10v4Z" />,
         cancel: <path d="M19,6.41L17.59,5,12,10.59,6.41,5,5,6.41,10.59,12,5,17.59,6.41,19,12,13.41,17.59,19,19,17.59,13.41,12,19,6.41Z" />,
-        add: <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+        add: <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />,
+        delete: <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
     };
     if (!icons[name]) return null;
 
@@ -28,12 +29,13 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
     const [initialSchema, setInitialSchema] = useState([]);
     const [workingSchema, setWorkingSchema] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [editingColumnName, setEditingColumnName] = useState(null);
+    const [editingColumnUuid, setEditingColumnUuid] = useState(null);
     const [newColumnData, setNewColumnData] = useState({ name: '', type: 'text' });
     const dragItem = useRef();
     const dragOverItem = useRef();
 
     const fetchSchema = async () => {
+        setLoading(true);
         try {
             const response = await api.get('/schema');
             setInitialSchema(response.data);
@@ -49,30 +51,19 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
         fetchSchema();
     }, []); 
 
-    const handleLocalUpdate = (oldName, updatedColumn) => {
+    const handleLocalUpdate = (targetUuid, updatedColumn) => {
         if (!updatedColumn.name.trim()) {
             showNotification('Column name cannot be empty.', 'error');
             return;
         }
-        if (updatedColumn.name !== oldName && workingSchema.some(col => col.name.toLowerCase() === updatedColumn.name.toLowerCase())) {
+        if (workingSchema.some(col => col.column_uuid !== targetUuid && col.name.toLowerCase() === updatedColumn.name.toLowerCase())) {
             showNotification(`A column with the name "${updatedColumn.name}" already exists.`, 'error');
             return;
         }
-
-        setWorkingSchema(prev => prev.map(col => {
-            if (col.name === oldName) {
-                const newCol = { ...col, ...updatedColumn };
-                const wasInitiallyPresent = initialSchema.some(ic => ic.name === oldName);
-                if (updatedColumn.name !== oldName && wasInitiallyPresent) {
-                    newCol._oldNameForRename = oldName;
-                } else {
-                    delete newCol._oldNameForRename;
-                }
-                return newCol;
-            }
-            return col;
-        }));
-        setEditingColumnName(null);
+        setWorkingSchema(prev => prev.map(col => 
+            col.column_uuid === targetUuid ? { ...col, ...updatedColumn } : col
+        ));
+        setEditingColumnUuid(null);
     };
 
     const handleLocalAdd = (e) => {
@@ -85,8 +76,16 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
             showNotification('A column with this name already exists.', 'error');
             return;
         }
-        setWorkingSchema(prev => [...prev, newColumnData]);
+        setWorkingSchema(prev => [...prev, { ...newColumnData, column_uuid: `new_${Date.now()}`, _isNew: true }]); 
         setNewColumnData({ name: '', type: 'text' });
+    };
+
+    const handleLocalDelete = (columnToDelete) => {
+        if (columnToDelete.name === 'SL No') {
+            showNotification('The "SL No" column cannot be deleted.', 'error');
+            return;
+        }
+        setWorkingSchema(prev => prev.filter(col => col.column_uuid !== columnToDelete.column_uuid));
     };
 
     const handleDragStart = (e, position) => { dragItem.current = position; };
@@ -104,57 +103,52 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
     const handleSaveChanges = async () => {
         setLoading(true);
         try {
-            const initialSchemaMap = new Map(initialSchema.map(col => [col.name, col]));
-
-            const addedColumns = [];
-            const modifiedColumns = [];
-
-            for (const initialCol of initialSchema) {
-                const correspondingWorkingCol = workingSchema.find(wc =>
-                    wc.name === initialCol.name || wc._oldNameForRename === initialCol.name
-                );
-
-                if (correspondingWorkingCol) {
-                    const isRenamed = correspondingWorkingCol._oldNameForRename === initialCol.name;
-                    const isTypeChanged = initialCol.type !== correspondingWorkingCol.type;
-
-                    if (isRenamed || isTypeChanged) {
-                        modifiedColumns.push({
-                            oldName: initialCol.name,
-                            newName: correspondingWorkingCol.name,
-                            newType: correspondingWorkingCol.type
-                        });
-                    }
-                }
+            const initialSchemaMap = new Map(initialSchema.map(col => [col.column_uuid, col]));
+            const workingSchemaMap = new Map(workingSchema.map(col => [col.column_uuid, col]));
+    
+            const addedColumns = workingSchema.filter(col => col._isNew);
+            const deletedColumns = initialSchema.filter(col => !workingSchemaMap.has(col.column_uuid));
+            const modifiedColumns = workingSchema.filter(col => {
+                if (col._isNew) return false;
+                const initialCol = initialSchemaMap.get(col.column_uuid);
+                return initialCol && (initialCol.name !== col.name || initialCol.type !== col.type);
+            });
+    
+            // Perform deletions first
+            for (const col of deletedColumns) {
+                await api.delete(`/schema/columns/${col.column_uuid}`);
             }
-
-            for (const workingCol of workingSchema) {
-                if (!initialSchemaMap.has(workingCol.name) && !workingCol._oldNameForRename) {
-                    addedColumns.push(workingCol);
-                }
-            }
+    
+            // Perform additions and modifications. We can do these in parallel.
+            const updatePromises = modifiedColumns.map(col => 
+                api.put(`/schema/columns/${col.column_uuid}`, { name: col.name, type: col.type })
+            );
             
-            for (const modCol of modifiedColumns) {
-                await api.put(`/schema/columns/${modCol.oldName}`, {
-                    name: modCol.newName,
-                    type: modCol.newType
-                });
+            // For additions, we need to get the new UUID from the backend to use for reordering
+            const tempAddedColumns = [];
+            for (const col of addedColumns) {
+                const response = await api.post('/schema/columns', { name: col.name, type: col.type });
+                tempAddedColumns.push({ ...col, new_uuid: response.data.new_uuid });
             }
-            for (const newCol of addedColumns) {
-                await api.post('/schema/columns', newCol);
-            }
+            await Promise.all(updatePromises);
+    
+            // Finally, perform reordering with the final list of UUIDs
+            const finalSchemaWithNewUuids = workingSchema.map(wsCol => {
+                if (wsCol._isNew) {
+                    const found = tempAddedColumns.find(ac => ac.column_uuid === wsCol.column_uuid);
+                    return { ...wsCol, column_uuid: found.new_uuid };
+                }
+                return wsCol;
+            });
 
-            const finalOrder = workingSchema.map(c => c.name);
-            const initialOrder = initialSchema.map(c => c.name);
-            if (JSON.stringify(finalOrder) !== JSON.stringify(initialOrder)) {
-                 await api.post('/schema/reorder', finalOrder);
-            }
-
-            showNotification('Columns updated successfully!', 'success');
-            await fetchSchema();
+            const finalOrderUuids = finalSchemaWithNewUuids.map(c => c.column_uuid);
+            await api.post('/schema/reorder', finalOrderUuids);
+    
+            showNotification('Schema updated successfully!', 'success');
             onSchemaUpdate();
         } catch (error) {
             showNotification(error.response?.data?.error || 'Failed to save changes.', 'error');
+            await fetchSchema(); // Re-fetch on error to reset state
         } finally {
             setLoading(false);
         }
@@ -172,8 +166,8 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
                     <option value="date">Date</option>
                 </select>
                 <div className="schema-actions">
-                    <Icon name="save" onClick={() => handleLocalUpdate(col.name, { name: editedName, type: editedType })} />
-                    <Icon name="cancel" onClick={() => setEditingColumnName(null)} />
+                    <Icon name="save" onClick={() => handleLocalUpdate(col.column_uuid, { name: editedName, type: editedType })} />
+                    <Icon name="cancel" onClick={() => setEditingColumnUuid(null)} />
                 </div>
             </div>
         )
@@ -185,12 +179,12 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
                 <div className="schema-editor-content">
                     {loading ? <p>Loading schema...</p> : workingSchema.map((col, index) => {
                         const isFixed = col.name === 'SL No';
-                        if (editingColumnName === col.name) {
-                            return <EditableColumnRow col={col} key={col.name}/>
+                        if (editingColumnUuid === col.column_uuid) {
+                            return <EditableColumnRow col={col} key={col.column_uuid}/>
                         }
                         return (
                             <div
-                                key={col.name}
+                                key={col.column_uuid}
                                 className={`schema-row ${isFixed ? 'fixed' : ''}`}
                                 draggable={!isFixed}
                                 onDragStart={!isFixed ? (e) => handleDragStart(e, index) : null}
@@ -205,7 +199,8 @@ const SchemaEditor = ({ onCancel, onSchemaUpdate, showNotification }) => {
                                 <span className="schema-type-badge" data-type={col.type}>{col.type}</span>
                                 {!isFixed && (
                                     <div className="schema-actions">
-                                        <Icon name="edit" onClick={() => setEditingColumnName(col.name)} />
+                                        <Icon name="edit" onClick={() => setEditingColumnUuid(col.column_uuid)} />
+                                        <Icon name="delete" onClick={() => handleLocalDelete(col)} /> 
                                     </div>
                                 )}
                             </div>
