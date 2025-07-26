@@ -63,7 +63,8 @@ html, body {
 
 .mainsys-input-group {
   position: relative;
-  margin-bottom: 1.5rem;
+  /* Adjusted margin-bottom to create space for the error message */
+  margin-bottom: 0.75rem; 
 }
 
 .mainsys-input-group input {
@@ -130,8 +131,10 @@ html, body {
 .mainsys-login-error-message {
   color: var(--mainsys-error-color);
   font-size: 0.95rem;
-  margin-top: -1rem;
-  margin-bottom: 1.5rem;
+  /* Changed negative margin-top to positive to push it down */
+  margin-top: 0.5rem;
+  /* Adjusted margin-bottom to control spacing to the button */
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -239,7 +242,8 @@ html, body {
   }
 
   .mainsys-input-group {
-    margin-bottom: 0.8rem;
+    /* Adjusted margin-bottom for smaller screens */
+    margin-bottom: 0.4rem;
   }
 
   .mainsys-input-group input {
@@ -260,7 +264,10 @@ html, body {
 
   .mainsys-login-error-message {
     font-size: 0.8rem;
-    margin-bottom: 0.8rem;
+    /* Added margin-top for smaller screens */
+    margin-top: 0.4rem;
+    /* Adjusted margin-bottom for smaller screens */
+    margin-bottom: 0.6rem;
   }
 }
 
@@ -301,7 +308,8 @@ html, body {
   }
 
   .mainsys-input-group {
-    margin-bottom: 0.6rem;
+    /* Adjusted margin-bottom for very small screens */
+    margin-bottom: 0.3rem;
   }
 
   .mainsys-input-group input {
@@ -322,7 +330,10 @@ html, body {
 
   .mainsys-login-error-message {
     font-size: 0.75rem;
-    margin-bottom: 0.6rem;
+    /* Added margin-top for very small screens */
+    margin-top: 0.3rem;
+    /* Adjusted margin-bottom for very small screens */
+    margin-bottom: 0.5rem;
   }
 }
 
