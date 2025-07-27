@@ -36,8 +36,8 @@ html, body {
 }
 
 .mainsys-login-logo {
-  height: 600px;
-  width: 600px;
+  height: 500px;
+  width: 500px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   margin-bottom: 1rem;
@@ -151,7 +151,7 @@ html, body {
   }
 
   .mainsys-login-logo {
-    height: 180px;
+    height: 200px;
     margin-bottom: 0.5rem;
   }
 
@@ -278,7 +278,7 @@ html, body {
   }
 
   .mainsys-login-logo {
-    height: 160px;
+    height: 280px;
   }
 
   .mainsys-login-main-heading {
