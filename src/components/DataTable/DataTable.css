@@ -83,6 +83,12 @@
     text-align: center;
 }
 
+.data-table-wrapper th.col-remarks,
+.data-table-wrapper td.col-remarks {
+  width: 380px;
+  max-width: 380px;
+}
+
 .data-table-wrapper th.action-header {
   cursor: default;
   text-align: center;
@@ -96,6 +102,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  height: 100%;
 }
 
 .data-table-wrapper .no-data {

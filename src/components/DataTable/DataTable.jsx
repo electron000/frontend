@@ -16,134 +16,146 @@ const DeleteIcon = ({ onClick }) => (
 );
 
 const DataTable = ({
-  data = [],
-  headers = [],
-  selectedFields = [],
-  sortConfig,
-  setSortConfig,
-  onEdit,
-  onDelete,
-  onEditSchema,
-  fieldTypes = { numeric: [], date: [], text: [] },
+    data = [],
+    headers = [],
+    selectedFields = [],
+    sortConfig,
+    setSortConfig,
+    onEdit,
+    onDelete,
+    onEditSchema,
+    fieldTypes = { numeric: [], date: [], text: [] },
 }) => {
 
-  const isSortable = (field) => {
-    if (!fieldTypes || typeof fieldTypes !== 'object') return false;
-    if (field === 'SL No') return true;
-    return fieldTypes.numeric?.includes(field) || fieldTypes.date?.includes(field);
-  };
+    const isSortable = (field) => {
+        if (!fieldTypes || typeof fieldTypes !== 'object') return false;
+        if (field === 'SL No') return true;
+        return fieldTypes.numeric?.includes(field) || fieldTypes.date?.includes(field);
+    };
 
-  const handleSort = (field) => {
-    if (!isSortable(field)) return;
+    const handleSort = (field) => {
+        if (!isSortable(field)) return;
 
-    if (typeof setSortConfig === "function") {
-      const isAsc = sortConfig?.field === field && sortConfig.direction === 'asc';
-      setSortConfig({ field, direction: isAsc ? 'desc' : 'asc' });
-    }
-  };
+        if (typeof setSortConfig === "function") {
+            const isAsc = sortConfig?.field === field && sortConfig.direction === 'asc';
+            setSortConfig({ field, direction: isAsc ? 'desc' : 'asc' });
+        }
+    };
 
-  const getSortIndicator = (field) => {
-    if (sortConfig?.field === field) {
-      return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
-    }
-    return '';
-  };
+    const getSortIndicator = (field) => {
+        if (sortConfig?.field === field) {
+            return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
+        }
+        return '';
+    };
 
-  const visibleHeaders = headers.filter(header => selectedFields.includes(header));
+    const visibleHeaders = headers.filter(header => selectedFields.includes(header));
 
-  const formatDate = (date) => {
-    if (!date || date === 'nan' || date.trim() === '') return "-";
-    try {
-      const d = new Date(date);
-      if (isNaN(d.getTime())) return "-";
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear();
-      return `${day}-${month}-${year}`; // Changed format here
-    } catch (e) {
-      console.error("Error formatting date:", date, e);
-      return "-";
-    }
-  };
+    const formatDate = (date) => {
+        if (!date || date === 'nan' || date.trim() === '') return "-";
+        try {
+            const d = new Date(date);
+            if (isNaN(d.getTime())) return "-";
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}-${month}-${year}`;
+        } catch (e) {
+            console.error("Error formatting date:", date, e);
+            return "-";
+        }
+    };
 
-  const getColumnClassName = (header) => {
-    return `col-${header.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '')}`;
-  };
+    // This function generates a CSS-friendly class name from a header string.
+    const getColumnClassName = (header) => {
+        return `col-${header.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '')}`;
+    };
 
-  return (
-    <div className="data-table-wrapper">
-      <div className="table-scroll">
-        <table className="custom-table">
-          <thead>
-            <tr>
-              {visibleHeaders.map((header) => (
-                <th
-                  key={header}
-                  className={`${isSortable(header) ? 'sortable-header' : ''} ${header === 'SL No' ? getColumnClassName(header) : 'common-column-width'}`}
-                  onClick={() => handleSort(header)}
-                >
-                  {header}
-                  {isSortable(header) && <span className="sort-indicator">{getSortIndicator(header)}</span>}
-                </th>
-              ))}
-              {(onEdit || onDelete) && (
-                <th className="action-header">
-                    {onEditSchema ? (
-                        <button onClick={onEditSchema} className="action-header-button" title="Edit Table Columns">
-                            <span>ACTION</span>
-                            <SettingsIcon />
-                        </button>
-                    ) : (
-                        <span>ACTION</span>
-                    )}
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {data.length > 0 ? (
-              data.map((row, rowIndex) => {
-                const rowKey = row.id || `row-${rowIndex}`;
+    // This function determines the appropriate class for a cell based on the header.
+    const getCellClass = (header) => {
+        const upperCaseHeader = header.toUpperCase();
+        if (upperCaseHeader === 'SL NO' || upperCaseHeader === 'REMARKS') {
+            return getColumnClassName(header);
+        }
+        return 'common-column-width';
+    };
 
-                return (
-                  <tr key={rowKey} className={`${rowIndex % 2 === 0 ? 'even' : 'odd'}`}>
-                    {visibleHeaders.map((header) => (
-                      <td
-                        key={`${rowKey}-${header}`}
-                        className={header === 'SL No' ? getColumnClassName(header) : 'common-column-width'}
-                      >
-                        {fieldTypes.date?.includes(header)
-                          ? formatDate(row[header])
-                          : row[header] || "-"}
-                      </td>
-                    ))}
-                    {(onEdit || onDelete) && (
-                      <td className="action-cell">
-                        {onEdit && (
-                            <button
-                              className="edit-button"
-                              onClick={() => onEdit(row)}>
-                              Edit
-                            </button>
+    return (
+        <div className="data-table-wrapper">
+            <div className="table-scroll">
+                <table className="custom-table">
+                    <thead>
+                        <tr>
+                            {visibleHeaders.map((header) => (
+                                <th
+                                    key={header}
+                                    className={`${isSortable(header) ? 'sortable-header' : ''} ${getCellClass(header)}`}
+                                    onClick={() => handleSort(header)}
+                                >
+                                    {header}
+                                    {isSortable(header) && <span className="sort-indicator">{getSortIndicator(header)}</span>}
+                                </th>
+                            ))}
+                            {(onEdit || onDelete) && (
+                                <th className="action-header">
+                                    {onEditSchema ? (
+                                        <button onClick={onEditSchema} className="action-header-button" title="Edit Table Columns">
+                                            <span>ACTION</span>
+                                            <SettingsIcon />
+                                        </button>
+                                    ) : (
+                                        <span>ACTION</span>
+                                    )}
+                                </th>
+                            )}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.length > 0 ? (
+                            data.map((row, rowIndex) => {
+                                const rowKey = row.id || `row-${rowIndex}`;
+
+                                return (
+                                    <tr key={rowKey} className={`${rowIndex % 2 === 0 ? 'even' : 'odd'}`}>
+                                        {visibleHeaders.map((header) => (
+                                            <td
+                                                key={`${rowKey}-${header}`}
+                                                className={getCellClass(header)}
+                                            >
+                                                {fieldTypes.date?.includes(header)
+                                                    ? formatDate(row[header])
+                                                    : row[header] || "-"}
+                                            </td>
+                                        ))}
+                                        {(onEdit || onDelete) && (
+                                            <td className="action-cell-wrapper">
+                                                <div className="action-cell">
+                                                    {onEdit && (
+                                                        <button
+                                                            className="edit-button"
+                                                            onClick={() => onEdit(row)}>
+                                                            Edit
+                                                        </button>
+                                                    )}
+                                                    {onDelete && <DeleteIcon onClick={() => onDelete(row)} />}
+                                                </div>
+                                            </td>
+                                        )}
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan={(onEdit || onDelete) ? visibleHeaders.length + 1 : visibleHeaders.length} className="no-data">
+                                    No data found
+                                </td>
+                            </tr>
                         )}
-                        {onDelete && <DeleteIcon onClick={() => onDelete(row)} />}
-                      </td>
-                    )}
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={(onEdit || onDelete) ? visibleHeaders.length + 1 : visibleHeaders.length} className="no-data">
-                  No data found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
 };
 
 export default DataTable;
