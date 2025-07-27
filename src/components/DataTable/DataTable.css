@@ -54,7 +54,7 @@
 .data-table-wrapper td {
   padding: 5.5px 10px;
   color: var(--mainsys-black);
-  font-size: 12px;
+  font-size: 13px;
   text-align: left;
   vertical-align: middle;
   border-bottom: 1px solid var(--mainsys-medium-gray);
@@ -85,9 +85,14 @@
 
 .data-table-wrapper th.col-remarks,
 .data-table-wrapper td.col-remarks {
-  width: 380px;
-  max-width: 380px;
+  width: 450px;
+  max-width: 450px;
 }
+
+.data-table-wrapper td.col-remarks {
+  font-size: 11px;
+}
+
 
 .data-table-wrapper th.action-header {
   cursor: default;
