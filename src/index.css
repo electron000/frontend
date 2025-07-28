@@ -165,8 +165,7 @@ body {
 }
 
 .action-buttons-group > .btn--green {
-    flex: 2;
-    min-width: 0;
+    flex: 1;
     box-sizing: border-box;
     font-size: 0.9rem;
     padding: 10px 8px;
@@ -175,7 +174,6 @@ body {
 
 .action-buttons-group > .btn--outline {
     flex: 1;
-    min-width: 0;
     box-sizing: border-box;
     font-size: 0.9rem;
     padding: 10px 8px;
