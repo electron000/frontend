@@ -42,6 +42,7 @@
 }
 
 .bottom-action-buttons-container {
+  margin-bottom: 25px;
   margin-top: 15px;
   display: flex;
   justify-content: center;
